@@ -1,0 +1,8 @@
+app:
+  authentication:
+    audience: holy-shop
+    issuer: holy-shop
+    access-token-expiration-minutes: 400000
+    refresh-token-expiration-minutes: 400000
+    access-token-secret: ${SPRING_SECURITY_ACCESS_TOKEN_SECRET}
+    refresh-token-secret: ${SPRING_SECURITY_REFRESH_TOKEN_SECRET}

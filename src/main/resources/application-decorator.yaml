@@ -1,0 +1,15 @@
+logging:
+  level:
+    net:
+      ttddyy:
+        dsproxy:
+          listener: debug
+    root: ERROR
+    sql: INFO
+
+openapi:
+  service:
+    title: "Đồ Án 2 API Ecommerce"
+    server: 'http://localhost:8081'
+    version: "1.0.0"
+    group: "PHONG ECOMMERCE API"

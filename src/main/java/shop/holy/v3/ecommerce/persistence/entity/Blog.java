@@ -1,0 +1,24 @@
+package shop.holy.v3.ecommerce.persistence.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.util.Date;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Entity
+@Table(name = "blogs")
+public class Blog extends EntityBase {
+
+    private String title;
+    private String subtitle;
+
+    private String content;
+    private Date publishedAt;
+    private String imageUrlId;
+
+
+}
