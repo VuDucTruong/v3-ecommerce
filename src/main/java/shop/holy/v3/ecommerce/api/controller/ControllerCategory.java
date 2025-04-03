@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.api.controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import shop.holy.v3.ecommerce.service.biz.CategoryService;
 
 import java.io.IOException;
 
+@Tag(name = "Categories")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("accounts")

@@ -29,6 +29,7 @@ public class Product extends EntityBase {
     private Date availableFrom;
     private Date availableTo;
 
+    @Column(name = "group_id")
     private String groupId; // Foreign key to ProductVariantGroup
 
     @OneToMany(mappedBy = "product")
@@ -49,4 +50,11 @@ public class Product extends EntityBase {
     })
     private ProductVariantGroup productVariantGroup;
 
+    @ManyToMany
+    @JoinTable(
+            name = "product_favorites",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "profile_id")
+    )
+    private List<Profile> followers;
 }

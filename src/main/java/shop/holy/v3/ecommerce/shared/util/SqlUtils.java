@@ -6,7 +6,7 @@ import jakarta.persistence.criteria.Predicate;
 
 public class SqlUtils {
 
-    public static Predicate lowerCaseLike(CriteriaBuilder criteriaBuilder, Expression<String> expression, String value) {
+    public static Predicate likeIgnoreCase(CriteriaBuilder criteriaBuilder, Expression<String> expression, String value) {
         return criteriaBuilder.like(criteriaBuilder.lower(expression), "%" + value.toLowerCase() + "%");
     }
 }

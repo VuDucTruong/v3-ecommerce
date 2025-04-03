@@ -11,8 +11,7 @@ import shop.holy.v3.ecommerce.api.dto.category.ResponseCategory;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 
 @Mapper(componentModel = "spring")
-@MapperConfig(
-        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class CategoryMapper extends IBaseMapper {
 
     public abstract Category fromCreateRequestToEntity(RequestCategoryCreate categoryCreateRequest);

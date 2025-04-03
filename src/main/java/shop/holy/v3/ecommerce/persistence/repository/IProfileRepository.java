@@ -13,7 +13,7 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
     @Query("""
             UPDATE Profile p
             SET p.fullName = :#{#profile.fullName},
-                p.imageUrl = :#{#profile.imageUrl},
+                p.imageUrlId = :#{#profile.imageUrl},
                 p.phone = :#{#profile.phone}
             WHERE p.accountId = :#{#profile.accountId}
             """)

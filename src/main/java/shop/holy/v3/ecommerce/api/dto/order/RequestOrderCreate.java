@@ -8,7 +8,7 @@ public record RequestOrderCreate(
 ) {
 
     public record RequestOrderDetail(
-            String productId,
+            long productId,
             int quantity
     ) {}
 }

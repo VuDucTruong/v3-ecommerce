@@ -19,7 +19,6 @@ public abstract class CouponMapper extends IBaseMapper {
 
     public abstract Coupon fromRequestUpdateToEntity(RequestCouponUpdate request);
 
-    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
     public abstract ResponseCoupon fromEntityToResponse(Coupon coupon);
 
     public Specification<Coupon> fromRequestToSpecification(RequestCouponSearch searchReq) {
@@ -30,7 +29,7 @@ public abstract class CouponMapper extends IBaseMapper {
 
             if (StringUtils.hasLength(searchReq.search())) {
                 predicate = criteriaBuilder.and(predicate,
-                        SqlUtils.lowerCaseLike(criteriaBuilder, root.get("name"), searchReq.search()));
+                        SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("name"), searchReq.search()));
             }
             if (StringUtils.hasLength(searchReq.type().name())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("type"), searchReq.type().toString()));

@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import shop.holy.v3.ecommerce.api.dto.account.token.ResponseLogin;
 import shop.holy.v3.ecommerce.service.biz.AccountService;
 import shop.holy.v3.ecommerce.service.security.AuthService;
 
+@Tag(name = "Accounts")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("accounts")
