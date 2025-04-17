@@ -73,7 +73,7 @@ public class UserService {
     public ResponsePagination<ResponseUser> search(RequestUserSearch requestSearch) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (!authAccount.isAdmin())
-            throw new UnAuthorisedException("You are not authorized to search users");
+            throw new UnAuthorisedException("You are not authorized to code users");
 
         Specification<Account> spec = accountMapper.fromRequestToSpecification(requestSearch);
         Pageable pageable = accountMapper.fromRequestPageableToPageable(requestSearch.pageRequest());

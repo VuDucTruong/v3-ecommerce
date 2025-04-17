@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Entity
@@ -24,12 +25,12 @@ public class Profile extends EntityBase {
     private Account account;
 
     @OneToMany(mappedBy = "profile")
-    private List<Order> orders;
+    private Set<Order> orders;
 
     @ManyToMany(mappedBy = "followers")
-    private List<Product> favoriteProducts;
+    private Set<Product> favoriteProducts;
 
     @OneToMany(mappedBy = "profile")
-    private List<Comment> comments;
+    private Set<Comment> comments;
 
 }

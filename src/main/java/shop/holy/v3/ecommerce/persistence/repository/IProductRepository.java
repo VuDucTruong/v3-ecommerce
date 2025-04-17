@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.persistence.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,14 @@ import java.util.Optional;
 
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    // Add this method to override the default findAll
+    @Override
+    @EntityGraph(attributePaths = {
+            "productDescription",
+            "categories",
+            "variants"
+    })
+    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
     @Modifying
     @Query("""

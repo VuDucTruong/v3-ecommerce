@@ -1,6 +1,6 @@
 package shop.holy.v3.ecommerce.api.dto.product;
 
-import shop.holy.v3.ecommerce.persistence.entity.Category;
+import shop.holy.v3.ecommerce.api.dto.category.ResponseCategory;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -15,7 +15,7 @@ public record ResponseProduct(
         BigDecimal originalPrice,
         Date availableFrom,
         Date availableTo,
-        Category[] categories,
+        ResponseCategory[] categories,
         ResponseProductMetadata[] variants
 ) {
 }

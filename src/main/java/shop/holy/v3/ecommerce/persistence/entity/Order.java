@@ -7,8 +7,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Data
@@ -40,6 +40,6 @@ public class Order extends EntityBase {
     private Payment payment;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderDetail> orderDetails;
+    private Set<OrderDetail> orderDetails;
 
 }

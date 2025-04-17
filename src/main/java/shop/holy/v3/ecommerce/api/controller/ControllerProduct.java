@@ -31,7 +31,8 @@ public class ControllerProduct {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable int id,
                                             @RequestParam(required = false) boolean deleted) {
-        return ResponseEntity.ok(productService.findById(id, deleted));
+        ResponseProduct res = productService.findById(id, deleted);
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

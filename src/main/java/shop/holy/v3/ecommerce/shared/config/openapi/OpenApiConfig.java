@@ -17,6 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
+import shop.holy.v3.ecommerce.shared.exception.BaseBizException;
+import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
+import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -98,21 +103,31 @@ public class OpenApiConfig {
     private static StringBuilder getStringBuilder() {
         StringBuilder markdown = new StringBuilder();
         markdown.append("### Exception Catalog\n\n");
-        markdown.append("| Error Code        | Message                        | Description                     |\n");
-        markdown.append("|-------------------|--------------------------------|---------------------------------|\n");
+        markdown.append("| Error Code              | HTTP Status | Message                         |\n");
+        markdown.append("|-------------------------|-------------|--------------------------------|\n");
 
-        // Simulate loading your exception types dynamically
-        List<String[]> errors = List.of(
-                new String[]{"LOGIN_FAILED", "Invalid credentials", "Email or password is incorrect"},
-                new String[]{"EMAIL_NOT_FOUND", "No user registered with email", "Account lookup failed"},
-                new String[]{"ACCESS_DENIED", "Unauthorized access", "Insufficient privileges"}
-        );
+        for (BizErrors error : BizErrors.values()) {
+            BaseBizException exception = error.exception();
+            String httpStatus = getHttpStatus(exception);
 
-        for (String[] error : errors) {
-            markdown.append(String.format("| %-17s | %-30s | %-31s |\n",
-                    error[0], error[1], error[2]));
+            markdown.append(String.format("| %-23s | %-11s | %-32s |\n",
+                    error.name(),
+                    httpStatus,
+                    exception.getMessage()));
         }
         return markdown;
+    }
+
+
+    private static String getHttpStatus(BaseBizException exception) {
+        if (exception instanceof UnAuthorisedException) {
+            return "401";
+        } else if (exception instanceof ResourceNotFoundException) {
+            return "404";
+        } else if (exception instanceof BadRequestException) {
+            return "400";
+        }
+        return "500";
     }
 
     private Map<String, Schema<?>> extractFieldsFromModel(Schema<?> schema, Components components) {

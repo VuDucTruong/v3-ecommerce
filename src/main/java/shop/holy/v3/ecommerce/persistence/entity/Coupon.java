@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,8 +20,8 @@ public class Coupon extends EntityBase {
     private String code;
 
     private String type;
-    private Date availableFrom;
-    private Date availableTo;
+    private LocalDate availableFrom;
+    private LocalDate availableTo;
     private BigDecimal value;
     @ColumnDefault("-1")
     private int minQTY = -1;
@@ -32,4 +33,6 @@ public class Coupon extends EntityBase {
     private int usageLimit;
     private String description;
 
+    @OneToOne(mappedBy = "coupon")
+    private Order order;
 }

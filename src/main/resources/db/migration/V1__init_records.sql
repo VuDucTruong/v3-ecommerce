@@ -20,11 +20,8 @@ SET row_security = off;
 -- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.accounts (disable_date, enable_date, is_verified, otp, created_at, deleted_at, id, otp_expiry, password, role, email) VALUES ('2026-04-17', '2025-04-17', false, NULL, '2025-04-17 14:03:37.543768', NULL, 1, NULL, 'string', 'ROLE_CUSTOMER', 'customer1@gmail.com');
-INSERT INTO public.accounts (disable_date, enable_date, is_verified, otp, created_at, deleted_at, id, otp_expiry, password, role, email) VALUES ('2026-04-17', '2025-04-17', false, NULL, '2025-04-17 14:06:24.94946', NULL, 2, NULL, 'string', 'ROLE_CUSTOMER', 'customer1@gmail.com');
-INSERT INTO public.accounts (disable_date, enable_date, is_verified, otp, created_at, deleted_at, id, otp_expiry, password, role, email) VALUES ('2026-04-17', '2025-04-17', false, NULL, '2025-04-17 14:07:38.571169', NULL, 3, NULL, 'string', 'ROLE_CUSTOMER', 'customer1@gmail.com');
-INSERT INTO public.accounts (disable_date, enable_date, is_verified, otp, created_at, deleted_at, id, otp_expiry, password, role, email) VALUES ('2026-04-17', '2025-04-17', false, NULL, '2025-04-17 14:09:04.700595', NULL, 4, NULL, 'string', 'ROLE_CUSTOMER', 'customer1@gmail.com');
-INSERT INTO public.accounts (disable_date, enable_date, is_verified, otp, created_at, deleted_at, id, otp_expiry, password, role, email) VALUES ('2026-04-17', '2025-04-17', false, NULL, '2025-04-17 14:11:35.385778', NULL, 5, NULL, 'string', 'ROLE_CUSTOMER', 'customer1@gmail.com');
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'ROLE_ADMIN');
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (5, '2025-04-17 14:11:35.385778', NULL, '2026-04-17', 'customer@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'ROLE_CUSTOMER');
 
 
 --
@@ -34,34 +31,38 @@ INSERT INTO public.accounts (disable_date, enable_date, is_verified, otp, create
 
 
 --
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name, product_id) VALUES (1, '2025-04-17 14:54:55.201424', NULL, 'math', NULL, 'edu', NULL);
+INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name, product_id) VALUES (2, '2025-04-17 14:57:37.941007', '2025-04-17 14:57:43.135256', '', NULL, 'deleted ones', NULL);
+
+
+--
 -- Data for Name: product_description; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (1, '2025-04-17 16:13:40.831946', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (6, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', 'string');
 
 
 --
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-
-
---
--- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: phong
---
-
-INSERT INTO public.categories (created_at, deleted_at, id, product_id, description, image_url_id, name) VALUES ('2025-04-17 14:54:55.201424', NULL, 1, NULL, 'math', NULL, 'edu');
-INSERT INTO public.categories (created_at, deleted_at, id, product_id, description, image_url_id, name) VALUES ('2025-04-17 14:57:37.941007', '2025-04-17 14:57:43.135256', 2, NULL, '', NULL, 'deleted ones');
+INSERT INTO public.products (id, created_at, deleted_at, available_from, available_to, image_url_id, name, original_price, parent_id, price, prod_desc_id, slug) VALUES (8, '2025-04-17 16:49:31.057025', NULL, '2025-04-17 14:52:08.325', '2025-04-17 14:52:08.325', NULL, 'the jakarta product', 1000.00, NULL, 50.00, 6, 'the-jakarta-product');
 
 
 --
 -- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.profiles (account_id, created_at, deleted_at, id, full_name, image_url_id, phone) VALUES (NULL, '2025-04-17 14:03:37.543768', NULL, 1, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (account_id, created_at, deleted_at, id, full_name, image_url_id, phone) VALUES (NULL, '2025-04-17 14:06:24.94946', NULL, 2, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (account_id, created_at, deleted_at, id, full_name, image_url_id, phone) VALUES (NULL, '2025-04-17 14:07:38.571169', NULL, 3, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (account_id, created_at, deleted_at, id, full_name, image_url_id, phone) VALUES (NULL, '2025-04-17 14:09:04.700595', NULL, 4, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (account_id, created_at, deleted_at, id, full_name, image_url_id, phone) VALUES (NULL, '2025-04-17 14:11:35.385778', NULL, 5, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (1, '2025-04-17 14:03:37.543768', NULL, NULL, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (2, '2025-04-17 14:06:24.94946', NULL, NULL, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (3, '2025-04-17 14:07:38.571169', NULL, NULL, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (4, '2025-04-17 14:09:04.700595', NULL, NULL, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (5, '2025-04-17 14:11:35.385778', NULL, NULL, 'phong', NULL, '01235567891');
 
 
 --
@@ -74,7 +75,7 @@ INSERT INTO public.profiles (account_id, created_at, deleted_at, id, full_name, 
 -- Data for Name: coupons; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-
+INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description, max_applied_amount, min_amount, minqty, type, usage_limit, value) VALUES (1, '2025-04-17 22:25:17.232006', NULL, '2025-04-17', '2025-04-17', 'PHONG', 0, 'string', 20000.00, 156000.00, 0, 'PERCENTAGE', 1, 12.00);
 
 
 --
@@ -114,6 +115,20 @@ INSERT INTO public.profiles (account_id, created_at, deleted_at, id, full_name, 
 
 
 --
+-- Data for Name: product_id; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+
+
+--
+-- Data for Name: products_categories; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 8);
+INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 8);
+
+
+--
 -- Name: accounts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
@@ -145,7 +160,7 @@ SELECT pg_catalog.setval('public.comments_id_seq', 1, false);
 -- Name: coupons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.coupons_id_seq', 1, false);
+SELECT pg_catalog.setval('public.coupons_id_seq', 1, true);
 
 
 --
@@ -187,14 +202,14 @@ SELECT pg_catalog.setval('public.payments_id_seq', 1, false);
 -- Name: product_description_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_description_id_seq', 1, false);
+SELECT pg_catalog.setval('public.product_description_id_seq', 6, true);
 
 
 --
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 1, false);
+SELECT pg_catalog.setval('public.products_id_seq', 8, true);
 
 
 --

@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.jsonwebtoken.Claims;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,13 +33,14 @@ public class AuthAccount implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton((GrantedAuthority) () -> role.name());
     }
 
     public void fromClaims(Claims claims) {
         id = claims.get("userId", Long.class);
-        code = claims.get("search", Integer.class);
+        code = claims.get("code", Integer.class);
         role = RoleEnum.valueOf(claims.get("role", String.class));
         enableDate = claims.get("enableDate", LocalDate.class);
         disableDate = claims.get("disableDate", LocalDate.class);

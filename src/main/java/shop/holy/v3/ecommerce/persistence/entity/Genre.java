@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.util.Set;
 
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
@@ -27,7 +27,7 @@ public class Genre extends EntityBase {
     private Blog blog;
 
     @OneToMany(mappedBy = "genre")
-    private List<Genre> genre2List;
+    private Set<Genre> genre2List;
 
     @ManyToOne
     @JoinColumn(name = "genre2_id", insertable = false, updatable = false)

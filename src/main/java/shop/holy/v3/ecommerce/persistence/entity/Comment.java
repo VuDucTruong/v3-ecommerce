@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Entity
@@ -22,7 +23,7 @@ public class Comment extends EntityBase {
     private Comment parent;
 
     @OneToMany(mappedBy = "parent", targetEntity = Comment.class)
-    private List<Comment> replies;
+    private Set<Comment> replies;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", insertable = false, updatable = false)

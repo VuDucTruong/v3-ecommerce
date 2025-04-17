@@ -6,15 +6,16 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public record RequestCouponCreate(
-        String search,
+        String code,
         CouponType type,
         Date availableFrom,
         Date availableTo,
         BigDecimal value,
-        Integer minQTY,
+        int minQTY,
         BigDecimal minAmount,
         Long maxAppliedAmount,
-        Integer usageLimit
+        int usageLimit,
+        String description
 ) {
 
 }

@@ -13,7 +13,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Blog;
 import shop.holy.v3.ecommerce.persistence.entity.Genre;
 import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
 
-import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 @MapperConfig(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
@@ -26,7 +26,7 @@ public abstract class BlogMapper extends IBaseMapper {
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
     public abstract ResponseBlog fromEntityToResponse(Blog blog);
 
-    public String[] fromGenreToStringArray(List<Genre> genres) {
+    public String[] fromGenreToStringArray(Set<Genre> genres) {
         return genres.stream().map(Genre::getName).toArray(String[]::new);
     }
 

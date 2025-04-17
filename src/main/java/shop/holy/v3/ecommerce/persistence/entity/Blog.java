@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Data
@@ -23,5 +24,5 @@ public class Blog extends EntityBase {
     private String imageUrlId;
 
     @OneToMany(mappedBy = "blog")
-    private List<Genre> genres;
+    private Set<Genre> genres;
 }

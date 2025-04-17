@@ -28,10 +28,16 @@ public class ControllerCoupon {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getCouponById(@PathVariable String id) {
-        return ResponseEntity.ok(couponService.findByCode(id));
+    @GetMapping("/{id:\\d+}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(couponService.findById(id));
     }
+
+    @GetMapping("/{code:[a-zA-Z0-9]+}")
+    public ResponseEntity<?> getByCode(@PathVariable String code) {
+        return ResponseEntity.ok(couponService.findByCode(code));
+    }
+
 
     @PostMapping(value = "")
     public ResponseEntity<?> createCoupon(@RequestBody RequestCouponCreate request) {
