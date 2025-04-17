@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
 
+import java.util.Optional;
+
 @Repository
 public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
     @Modifying
@@ -14,4 +16,7 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
             update Order o set o.deletedAt = current_timestamp where o.id = :id
             """)
     int updateOrderDeletedAt(long id);
+
+    Optional<Order> findFirstByIdEqualsAndDeletedAtIsNull(long id);
+
 }

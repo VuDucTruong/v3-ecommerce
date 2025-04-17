@@ -4,12 +4,20 @@ logging:
       ttddyy:
         dsproxy:
           listener: debug
+    org:
+      flywaydb.core.internal.sqlscript.DefaultSqlScriptExecutor: debug
+      flywaydb.core.FlywayExecutor: debug
+    shop.holy.v3.ecommerce:
+      shared:
+        config:
+          openapi:
+            OpenApiConfig: INFO
     root: ERROR
     sql: INFO
 
 openapi:
   service:
-    title: "Đồ Án 2 API Ecommerce"
-    server: 'http://localhost:8081'
+    title: "KLTN Ecommerce"
+    server: 'http://localhost:8080'
     version: "1.0.0"
-    group: "PHONG ECOMMERCE API"
+    group: "ECOMMERCE API Holy Shop"

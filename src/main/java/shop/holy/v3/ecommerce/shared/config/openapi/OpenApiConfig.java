@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.shared.config;
+package shop.holy.v3.ecommerce.shared.config.openapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.core.jackson.ModelResolver;
@@ -7,8 +7,10 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.servers.ServerVariable;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +19,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Configuration
 public class OpenApiConfig {
     @Bean
@@ -28,10 +32,7 @@ public class OpenApiConfig {
             @Value("${openapi.service.group}") String apiDocs,
             OpenApiCustomizer openApiCustomizer) {
         return GroupedOpenApi.builder()
-                .group(apiDocs) // /v3/api-docs/api-service
-//                .packagesToScan(
-//                        "shop.holy.v3.ecommerce.api.controller"
-//                )
+                .group(apiDocs) // /v3/api-docs/api-service.
                 .addOpenApiCustomizer(openApiCustomizer)
                 .build();
     }
@@ -47,7 +48,9 @@ public class OpenApiConfig {
             @Value("${openapi.service.version}") String version,
             @Value("${openapi.service.server}") String serverUrl
     ) {
+        StringBuilder markdown = getStringBuilder();
         return new OpenAPI()
+
                 .components(
                         new Components()
                                 .addSchemas("Byte", new Schema<>().
@@ -56,14 +59,15 @@ public class OpenApiConfig {
                                         type("string").format("date-time").description("This is a global schema for Date type").example("2021-09-01 00:00:00"))
                 )
                 .info(new Info().title(title)
-                        .description("API documents")
-                        .license(new License().name("Apache 2.0").url("https://springdoc.org")));
+                        .description(markdown.toString())
+                        .license(new License().name("Phong license").url("https://springdoc.org")));
     }
 
     @Bean
     @Primary
     public OpenApiCustomizer customOpenApiCustomizer() {
         return openApi -> {
+
             openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {
                 RequestBody requestBody = operation.getRequestBody();
                 if (requestBody == null) {
@@ -85,17 +89,27 @@ public class OpenApiConfig {
                     }
                 });
             }));
-            for (Map.Entry<String, Schema> schema : openApi.getComponents().getSchemas().entrySet()) {
-                LinkedHashMap<String, Object> propertiesMap = (LinkedHashMap<String, Object>) schema.getValue().getProperties();
-                for (var entry : propertiesMap.entrySet()) {
-                    if (entry.getValue() instanceof StringSchema) {
-                        if (Objects.equals(((StringSchema) entry.getValue()).getFormat(), "byte")) {
-                            ((StringSchema) entry.getValue()).format("int32").type("integer");
-                        }
-                    }
-                }
-            }
         };
+    }
+
+    private static StringBuilder getStringBuilder() {
+        StringBuilder markdown = new StringBuilder();
+        markdown.append("### Exception Catalog\n\n");
+        markdown.append("| Error Code        | Message                        | Description                     |\n");
+        markdown.append("|-------------------|--------------------------------|---------------------------------|\n");
+
+        // Simulate loading your exception types dynamically
+        List<String[]> errors = List.of(
+                new String[]{"LOGIN_FAILED", "Invalid credentials", "Email or password is incorrect"},
+                new String[]{"EMAIL_NOT_FOUND", "No user registered with email", "Account lookup failed"},
+                new String[]{"ACCESS_DENIED", "Unauthorized access", "Insufficient privileges"}
+        );
+
+        for (String[] error : errors) {
+            markdown.append(String.format("| %-17s | %-30s | %-31s |\n",
+                    error[0], error[1], error[2]));
+        }
+        return markdown;
     }
 
     private Map<String, Schema<?>> extractFieldsFromModel(Schema<?> schema, Components components) {
@@ -108,8 +122,10 @@ public class OpenApiConfig {
                     if (fieldSchema.get$ref() != null) {
                         String ref = fieldSchema.get$ref().replace("#/components/schemas/", "");
                         Schema<?> nestedSchema = components.getSchemas().get(ref);
-                        parts.putAll(extractFieldsFromModel(nestedSchema, components).entrySet().stream()
-                                .collect(Collectors.toMap(e -> fieldName + "." + e.getKey(), Map.Entry::getValue)));
+                        log.info("Nested schema: {}", ref);
+                        parts.putAll(
+                                extractFieldsFromModel(nestedSchema, components).entrySet().stream()
+                                        .collect(Collectors.toMap(e -> fieldName + "." + e.getKey(), Map.Entry::getValue)));
                     } else {
                         if (Objects.equals(fieldSchema.getFormat(), "binary")) {
                             fieldSchema.nullable(true);
@@ -129,5 +145,6 @@ public class OpenApiConfig {
 
         return multipartSchema;
     }
+
 
 }

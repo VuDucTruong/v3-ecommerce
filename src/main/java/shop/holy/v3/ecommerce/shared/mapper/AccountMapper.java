@@ -49,9 +49,10 @@ public abstract class AccountMapper extends IBaseMapper {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("profile").get("fullName"), searchReq.fullName()));
             }
 
-            if (searchReq.deleted()) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNotNull(root.get("deletedAt")));
+            if (!searchReq.deleted()) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
+
             if (searchReq.createdAtFrom() != null) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), searchReq.createdAtFrom()));

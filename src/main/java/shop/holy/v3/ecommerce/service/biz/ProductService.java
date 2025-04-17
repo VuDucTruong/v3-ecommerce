@@ -34,16 +34,23 @@ public class ProductService {
 
     @SneakyThrows
     public ResponsePagination<ResponseProduct> search(RequestProductSearch searchReq) {
+        Pageable pageable = productMapper.fromRequestPageableToPageable(searchReq.pageRequest());
         Specification<Product> spec = productMapper.fromRequestSearchToSpec(searchReq);
-        Page<Product> products = productRepository.findAll(spec, searchReq.pageRequest());
+        Page<Product> products = productRepository.findAll(spec, pageable);
         Page<ResponseProduct> responses = products.map(productMapper::fromEntityToResponse);
         return ResponsePagination.fromPage(responses);
     }
 
-    public ResponseProduct findById(long code) {
-        Product product = productRepository.findById(code)
-                .orElseThrow(() -> new ResourceNotFoundException("PRODUCT NOT FOUND"));
+    public ResponseProduct findById(long id, boolean deleted) {
+        Product product;
+        if (deleted)
+            product = productRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("PRODUCT NOT FOUND"));
+        else
+            product = productRepository.findFirstByIdEqualsAndDeletedAtIsNull(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("PRODUCT NOT FOUND"));
         return productMapper.fromEntityToResponse(product);
+
     }
 
     @Transactional

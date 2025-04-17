@@ -1,7 +1,12 @@
 package shop.holy.v3.ecommerce.api.dto.blog;
 
-public record ResponseBlog(String name,
-                           String description,
-                           String image,
+
+import java.util.Date;
+
+public record ResponseBlog(String title,
+                           String subtitle,
+                           String[] genres,
+                           Date publishedAt,
+                           String imageUrl,
                            String content) {
 }

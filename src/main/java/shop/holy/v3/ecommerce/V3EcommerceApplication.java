@@ -2,8 +2,9 @@ package shop.holy.v3.ecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {FlywayAutoConfiguration.class})
 public class V3EcommerceApplication {
 
     public static void main(String[] args) {

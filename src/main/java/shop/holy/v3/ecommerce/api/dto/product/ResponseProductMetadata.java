@@ -8,7 +8,7 @@ public record ResponseProductMetadata(
         String name,
         String imageUrl,
         BigDecimal price,
-        Double discountPercent,
+        BigDecimal originalPrice,
         List<String> categoryIds
 ) {
 }

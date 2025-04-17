@@ -18,16 +18,15 @@ import java.io.IOException;
 @Tag(name = "Categories")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("accounts")
+@RequestMapping("categories")
 public class ControllerCategory {
 
     private final CategoryService categoryService;
 
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable long id,
                                     @RequestParam(required = false) boolean deleted) {
-        return ResponseEntity.ok(categoryService.getCategoryByCode(id, false));
+        return ResponseEntity.ok(categoryService.getCategoryByCode(id,deleted));
     }
 
     @PostMapping("/searches")
@@ -42,7 +41,6 @@ public class ControllerCategory {
         ResponseCategory res = categoryService.insert(request);
         return ResponseEntity.ok(res);
     }
-
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseCategory> updateCategory(@ModelAttribute RequestCategoryUpdate request) throws IOException {

@@ -3,6 +3,7 @@ package shop.holy.v3.ecommerce.service.biz;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,11 +14,10 @@ import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogUpdate;
 import shop.holy.v3.ecommerce.api.dto.blog.ResponseBlog;
 import shop.holy.v3.ecommerce.persistence.entity.Blog;
 import shop.holy.v3.ecommerce.persistence.repository.IBlogRepository;
-import shop.holy.v3.ecommerce.service.cloud.CloudinaryService;
+import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.BlogMapper;
-import shop.holy.v3.ecommerce.shared.property.CloudinaryProperties;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -28,8 +28,8 @@ public class BlogService {
 
     private final IBlogRepository blogRepository;
     private final BlogMapper blogMapper;
-    private final CloudinaryService cloudinaryService;
-    private final CloudinaryProperties cloudinaryProperties;
+    private final CloudinaryFacadeService cloudinaryService;
+
 
     public ResponseBlog createBlog(RequestBlogCreation request) {
         Blog blogPost = blogMapper.fromRequestCreateToEntity(request);
@@ -60,10 +60,7 @@ public class BlogService {
     private ResponseBlog upsertAndReturnChanges(Blog blogPost, MultipartFile image) throws BadRequestException {
         try {
             if (image != null) {
-
-                String imageUrl = cloudinaryService.uploadFile(image, cloudinaryProperties.getBlogDir(),
-                        blogPost.getId().toString());
-
+                String imageUrl = cloudinaryService.uploadBlogBlob(image);
                 blogPost.setImageUrlId(imageUrl);
             }
         } catch (IOException e) {
@@ -75,7 +72,8 @@ public class BlogService {
 
     public ResponsePagination<ResponseBlog> search(RequestBlogSearch searchReq) {
         Specification<Blog> spec = blogMapper.fromSearchRequestToSpec(searchReq);
-        Page<Blog> blogs = blogRepository.findAll(spec, searchReq.pageRequest());
+        Pageable pageable = blogMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Page<Blog> blogs = blogRepository.findAll(spec, pageable);
         return ResponsePagination.fromPage(blogs.map(blogMapper::fromEntityToResponse));
     }
 

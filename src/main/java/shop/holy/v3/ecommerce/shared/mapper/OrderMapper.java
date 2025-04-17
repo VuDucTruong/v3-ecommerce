@@ -14,7 +14,7 @@ import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 @Mapper(componentModel = "spring")
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class OrderMapper {
+public abstract class OrderMapper extends IBaseMapper {
 
     public abstract Order fromCreateRequestToEntity(RequestOrderCreate categoryCreateRequest);
 
@@ -24,7 +24,7 @@ public abstract class OrderMapper {
         return ((root, query, criteriaBuilder) -> {
             if (searchReq == null) return criteriaBuilder.conjunction();
             Predicate predicate = criteriaBuilder.conjunction();
-            if (StringUtils.hasLength(searchReq.search())){
+            if (StringUtils.hasLength(searchReq.search())) {
                 predicate = criteriaBuilder.and(predicate,
                         SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("id"), searchReq.search()));
             }
@@ -40,9 +40,11 @@ public abstract class OrderMapper {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.lessThanOrEqualTo(root.get("total"), searchReq.totalTo()));
             }
+            if (!searchReq.deleted()) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
+            }
 
-
-            return criteriaBuilder.conjunction();
+            return predicate;
         });
     }
 

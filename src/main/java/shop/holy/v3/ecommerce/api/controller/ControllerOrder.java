@@ -22,8 +22,9 @@ public class ControllerOrder {
     private final OrderService orderService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(@PathVariable long id) {
-        return ResponseEntity.ok(orderService.findByCode(id));
+    public ResponseEntity<?> getOrderById(@PathVariable long id,
+                                          @RequestParam boolean deleted) {
+        return ResponseEntity.ok(orderService.findByCode(id, deleted));
     }
 
 

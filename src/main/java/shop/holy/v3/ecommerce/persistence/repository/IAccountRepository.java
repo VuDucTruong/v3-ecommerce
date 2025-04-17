@@ -30,6 +30,6 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
             """, nativeQuery = true)
     int changePassword(String otp, String password);
 
-    Optional<Account> findByIdAndDeletedAtIsNotNull(long id);
+    Optional<Account> findByIdAndDeletedAtIsNull(long id);
 
 }

@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.service.biz;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
@@ -28,13 +29,15 @@ public class CategoryService {
 
     public ResponsePagination<ResponseCategory> search(RequestCategorySearch searchReq) {
         var spec = categoryMapper.fromRequestSearchToSpec(searchReq);
-        Page<Category> categories = categoryRepository.findAll(spec, searchReq.pageRequest());
+        Pageable pageable = categoryMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Page<Category> categories = categoryRepository.findAll(spec, pageable);
         Page<ResponseCategory> responses = categories.map(categoryMapper::fromEntityToResponse);
         return ResponsePagination.fromPage(responses);
     }
 
     public ResponseCategory getCategoryByCode(long id, boolean deleted) {
         Optional<Category> optionalCategory;
+
         if (deleted)
             optionalCategory = categoryRepository.findFirstByIdAndDeletedAtIsNotNull(id);
         else

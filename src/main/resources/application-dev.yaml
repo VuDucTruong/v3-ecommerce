@@ -1,0 +1,17 @@
+spring:
+  flyway:
+    enabled: true
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    url: ${SPRING_DATASOURCE_URL}
+    user: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:/db/migration
+    # Ensure Flyway only processes insert statements
+    sql-migration-prefix: V
+    sql-migration-suffixes: .sql
+    out-of-order: false
+  jpa:
+    hibernate:
+      ddl-auto: update

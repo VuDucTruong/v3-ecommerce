@@ -1,13 +1,13 @@
 package shop.holy.v3.ecommerce.api.dto.coupon;
 
-import org.springframework.data.domain.Pageable;
+import shop.holy.v3.ecommerce.api.dto.RequestPageable;
 import shop.holy.v3.ecommerce.shared.constant.CouponType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record RequestCouponSearch(
-        Pageable pageRequest,
+        RequestPageable pageRequest,
         String search,
         CouponType type,
         LocalDate availableFrom,
@@ -15,6 +15,7 @@ public record RequestCouponSearch(
         BigDecimal valueFrom,
         BigDecimal valueTo,
         Integer minQTYFrom,
-        Integer minQTYTo
+        Integer minQTYTo,
+        boolean deleted
 ) {
 }

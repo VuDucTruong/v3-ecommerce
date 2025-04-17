@@ -43,6 +43,10 @@ public abstract class CouponMapper extends IBaseMapper {
                         criteriaBuilder.lessThanOrEqualTo(root.get("availableTo"), searchReq.availableTo()));
             }
 
+            if (!searchReq.deleted()) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
+            }
+
             if (searchReq.valueFrom() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("value"), searchReq.valueFrom()));
             }

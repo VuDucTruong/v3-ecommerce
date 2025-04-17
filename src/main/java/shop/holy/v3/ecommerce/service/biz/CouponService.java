@@ -3,6 +3,7 @@ package shop.holy.v3.ecommerce.service.biz;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,8 @@ public class CouponService {
 
     public ResponsePagination<ResponseCoupon> search(RequestCouponSearch searchReq) {
         Specification<Coupon> spec = couponMapper.fromRequestToSpecification(searchReq);
-        Page<Coupon> coupons = couponRepository.findAll(spec, searchReq.pageRequest());
+        Pageable pageable = couponMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Page<Coupon> coupons = couponRepository.findAll(spec, pageable);
         Page<ResponseCoupon> responses = coupons.map(couponMapper::fromEntityToResponse);
         return ResponsePagination.fromPage(responses);
     }

@@ -6,11 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 
-public record RequestBlogUpdate(String title,
+public record RequestBlogUpdate(long id,
+                                String title,
                                 String subtitle,
-                                List<String> tags,
-                                Date publishedTime,
+                                Long genreId,
+                                Date publishedAt,
                                 MultipartFile image,
-                                String content) {
-
+                                String content
+) {
 }

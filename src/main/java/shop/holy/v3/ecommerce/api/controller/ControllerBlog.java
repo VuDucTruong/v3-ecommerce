@@ -46,4 +46,9 @@ public class ControllerBlog {
         return blogService.getBlog(id, deleted);
     }
 
+    @DeleteMapping(value = "{id}")
+    public int deleteBlog(@PathParam("id") long id) {
+        return blogService.deleteBlog(id);
+    }
+
 }

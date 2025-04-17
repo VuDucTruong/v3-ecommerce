@@ -1,10 +1,9 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.service.biz.UserService;
 
 import java.io.IOException;
-import java.util.Set;
 
 @RestController
 @RequestMapping("users")
@@ -36,13 +34,14 @@ public class ControllerUser {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseUser> getAccount(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestParam(required = false) boolean deleted) {
         ResponseUser account = userService.getById(id, deleted);
         return ResponseEntity.ok(account);
     }
 
     @PostMapping("searches")
+    @Operation(summary = "Search users", description = "Search users with pagination")
     public ResponseEntity<?> search(
             @RequestBody RequestUserSearch searchSpecs
     ) {

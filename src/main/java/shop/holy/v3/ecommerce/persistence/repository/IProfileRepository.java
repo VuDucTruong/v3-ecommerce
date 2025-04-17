@@ -26,6 +26,6 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
                 p.phone = :#{#profile.phone}
             WHERE p.accountId = :#{#profile.accountId}
             """)
-    void updateProfileExcludeId(Profile profile);
+    void updateProfileExcludeImage(Profile profile);
 
 }

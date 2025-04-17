@@ -14,41 +14,37 @@ import java.util.List;
 @Table(name = "products")
 public class Product extends EntityBase {
 
-
-    @Column(name = "tos_id")
-    private Long tosId;
+    @Column(name = "prod_desc_id")
+    private Long prodDescId;
 
     private String slug;
     private String name;
     private String imageUrlId;
 
-    private String description;
+    private BigDecimal originalPrice;
     private BigDecimal price;
-    private Double discountPercent;
 
     private Date availableFrom;
     private Date availableTo;
 
-    @Column(name = "group_id")
-    private String groupId; // Foreign key to ProductVariantGroup
+    @Column(name = "parent_id")
+    private long parentId; // Foreign key to ProductVariantGroup
 
     @OneToMany(mappedBy = "product")
     private List<Category> category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tos_id", insertable = false, updatable = false)
-    private TOS tos;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prod_desc_id", insertable = false, updatable = false)
+    private ProductDescription productDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "group_id",
-                    referencedColumnName = "group_id",
-                    insertable = false, updatable = false),
-            @JoinColumn(name = "id",
-                    referencedColumnName = "root_product_id",
-                    insertable = false, updatable = false)
-    })
-    private ProductVariantGroup productVariantGroup;
+    @JoinColumn(name = "parent_id",
+            referencedColumnName = "id",
+            insertable = false, updatable = false)
+    private Product parent;
+
+    @OneToMany(mappedBy = "parent", targetEntity = Product.class)
+    private List<Product> variants;
 
     @ManyToMany
     @JoinTable(
@@ -57,4 +53,9 @@ public class Product extends EntityBase {
             inverseJoinColumns = @JoinColumn(name = "profile_id")
     )
     private List<Profile> followers;
+
+    @OneToMany(mappedBy = "product")
+    private List<Comment> comments;
+
+
 }

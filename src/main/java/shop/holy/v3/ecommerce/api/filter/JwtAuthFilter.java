@@ -72,9 +72,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         }
 
         grantAuthorisationBeforeNextChain(request, response, chain, authAccount);
-
         chain.doFilter(request, response);
-
         grantNewTokensOnResponse(response, authAccount);
     }
 
@@ -84,7 +82,6 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
                 authAccount, null, authAccount.getAuthorities());
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        chain.doFilter(request, response);
     }
 
     private void grantNewTokensOnResponse(HttpServletResponse response, AuthAccount authAccount) {

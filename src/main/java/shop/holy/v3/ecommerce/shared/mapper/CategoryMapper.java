@@ -30,6 +30,9 @@ public abstract class CategoryMapper extends IBaseMapper {
             if (StringUtils.hasLength(searchReq.search())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("name"), "%" + searchReq.search().toLowerCase() + "%"));
             }
+            if (!searchReq.deleted()) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
+            }
             return predicate;
         });
     }

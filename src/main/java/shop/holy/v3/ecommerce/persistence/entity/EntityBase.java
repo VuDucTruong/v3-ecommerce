@@ -20,6 +20,7 @@ public abstract class EntityBase {
     private Date createdAt;
 
     @Column(name = "deleted_at")
+    @ColumnDefault("null")
     private Date deletedAt;
 
 }

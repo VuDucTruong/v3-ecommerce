@@ -1,12 +1,12 @@
 package shop.holy.v3.ecommerce.api.dto.user;
 
-import org.springframework.data.domain.Pageable;
+import shop.holy.v3.ecommerce.api.dto.RequestPageable;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public record RequestUserSearch(
-        Pageable pageRequest,
+        RequestPageable pageRequest,
         List<Long> ids,
         String citizenId,
         String fullName,

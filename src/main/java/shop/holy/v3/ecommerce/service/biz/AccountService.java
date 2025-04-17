@@ -10,6 +10,7 @@ import shop.holy.v3.ecommerce.api.dto.account.RequestPasswordUpdate;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.service.smtp.SmtpService;
+import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
@@ -46,6 +47,7 @@ public class AccountService {
 
     public void registerAccount(RequestAccountRegistration registration) {
         Account account = accountMapper.fromRegistrationRequestToEntity(registration);
+        account.setRole(RoleEnum.ROLE_CUSTOMER.name());
         accountRepository.save(account);
     }
 

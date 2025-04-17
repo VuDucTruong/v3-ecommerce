@@ -33,7 +33,7 @@ public class AuthAccount implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton((GrantedAuthority) () -> role.getRole());
+        return Collections.singleton((GrantedAuthority) () -> role.name());
     }
 
     public void fromClaims(Claims claims) {
@@ -44,6 +44,22 @@ public class AuthAccount implements UserDetails {
         disableDate = claims.get("disableDate", LocalDate.class);
         deletedAt = claims.get("deletedAt", Date.class);
         isVerified = claims.get("isVerified", Boolean.class);
+    }
+
+    public boolean isAdmin() {
+        return role == RoleEnum.ROLE_ADMIN;
+    }
+
+    public boolean isCustomer() {
+        return role == RoleEnum.ROLE_CUSTOMER;
+    }
+
+    public boolean isNotSelf(long id) {
+        return this.id != id;
+    }
+
+    public boolean isNotSelfNotAdmin(long id) {
+        return this.id != id && role != RoleEnum.ROLE_ADMIN;
     }
 
     @Override

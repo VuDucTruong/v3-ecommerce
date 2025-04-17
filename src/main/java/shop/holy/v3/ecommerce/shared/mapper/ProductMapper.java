@@ -42,18 +42,16 @@ public abstract class ProductMapper extends IBaseMapper {
             if (searchReq.priceTo() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("price"), searchReq.priceTo()));
             }
-            if (searchReq.discountPercentFrom() != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("discountPercent"), searchReq.discountPercentFrom()));
-            }
-            if (searchReq.discountPercentTo() != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("discountPercent"), searchReq.discountPercentTo()));
-            }
             if (searchReq.availableFrom() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("availableFrom"), searchReq.availableFrom()));
             }
             if (searchReq.availableTo() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("availableTo"), searchReq.availableTo()));
             }
+            if (!searchReq.deleted()) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
+            }
+
 
             return predicate;
         });

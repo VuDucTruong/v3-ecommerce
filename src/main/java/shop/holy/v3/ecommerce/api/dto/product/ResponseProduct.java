@@ -6,13 +6,12 @@ import java.util.List;
 
 public record ResponseProduct(
         long id,
-        Long tosId,
+        ResponseDescription productDescription,
         String slug,
         String name,
         String imageUrl,
-        String description,
         BigDecimal price,
-        Double discountPercent,
+        BigDecimal originalPrice,
         Date availableFrom,
         Date availableTo,
         List<String> categoryIds,

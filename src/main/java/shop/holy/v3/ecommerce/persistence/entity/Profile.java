@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -29,4 +28,8 @@ public class Profile extends EntityBase {
 
     @ManyToMany(mappedBy = "followers")
     private List<Product> favoriteProducts;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Comment> comments;
+
 }

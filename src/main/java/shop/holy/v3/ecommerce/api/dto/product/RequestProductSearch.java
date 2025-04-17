@@ -1,22 +1,20 @@
 package shop.holy.v3.ecommerce.api.dto.product;
 
-import org.springframework.data.domain.Pageable;
+import shop.holy.v3.ecommerce.api.dto.RequestPageable;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public record RequestProductSearch(
-        Pageable pageRequest,
-        Set<Long> ids,
+        RequestPageable pageRequest,
+        long[] ids,
         List<Long> categoryIds,
         String search,
         BigDecimal priceFrom,
         BigDecimal priceTo,
-        Double discountPercentFrom,
-        Double discountPercentTo,
         Date availableFrom,
-        Date availableTo
+        Date availableTo,
+        boolean deleted
 ) {
 }

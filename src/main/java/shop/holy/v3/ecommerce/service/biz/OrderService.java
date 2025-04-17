@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +41,14 @@ public class OrderService {
     private final CouponService couponService;
 
 
-    public ResponseOrder findByCode(long code) {
-        Order order = orderRepository.findById(code)
+    public ResponseOrder findByCode(long id, boolean deleted) {
+        Order order;
+        if (deleted) {
+            return orderRepository.findFirstByIdEqualsAndDeletedAtIsNull(id)
+                    .map(orderMapper::fromEntityToResponse)
+                    .orElseThrow(() -> new ResourceNotFoundException("ORDER NOT FOUND"));
+        }
+        order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ORDER NOT FOUND"));
 //        List<Long> productIds = order.getOrderDetails().stream()
 //                .map(OrderDetail::getProductId)
@@ -61,8 +68,8 @@ public class OrderService {
             specs = specs.and((root, query, criteriaBuilder)
                     -> criteriaBuilder.equal(root.get("accountId"), authAccount.getId()));
         } else throw new UnAuthorisedException("UNAUTHORIZED");
-
-        Page<Order> orders = orderRepository.findAll(specs, searchReq.pageRequest());
+        Pageable pageable = orderMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Page<Order> orders = orderRepository.findAll(specs, pageable);
         return ResponsePagination.fromPage(orders.map(orderMapper::fromEntityToResponse));
     }
 
@@ -81,8 +88,6 @@ public class OrderService {
         BigDecimal amount = products.stream()
                 .map(product -> product.getPrice()
                         .multiply(BigDecimal.valueOf(productQuantities.get(product.getId())))
-                        .multiply(BigDecimal.valueOf(1).subtract(
-                                BigDecimal.valueOf(product.getDiscountPercent()).divide(BigDecimal.valueOf(100))))
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         Order order = orderMapper.fromCreateRequestToEntity(request);

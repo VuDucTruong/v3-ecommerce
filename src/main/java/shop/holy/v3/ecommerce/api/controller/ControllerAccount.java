@@ -36,13 +36,13 @@ public class ControllerAccount {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/registration")
+    @PostMapping("")
     public ResponseEntity<?> register(@RequestBody RequestAccountRegistration request) {
         accountService.registerAccount(request);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("")
+    @PostMapping("/tokens")
     public ResponseEntity<?> getTokens(@RequestBody RequestLogin loginRequest, HttpServletResponse response) {
         ResponseLogin loginResponse = authService.authenticateAccount(loginRequest);
         Cookie[] cookies = authService.makeCookies(loginResponse);

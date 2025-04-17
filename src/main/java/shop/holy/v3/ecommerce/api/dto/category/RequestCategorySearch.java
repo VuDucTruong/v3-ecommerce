@@ -1,9 +1,10 @@
 package shop.holy.v3.ecommerce.api.dto.category;
 
-import org.springframework.data.domain.Pageable;
+import shop.holy.v3.ecommerce.api.dto.RequestPageable;
 
 public record RequestCategorySearch(
-        Pageable pageRequest,
-        String search
+        RequestPageable pageRequest,
+        String search,
+        boolean deleted
 ) {
 }
