@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 
@@ -13,13 +14,13 @@ public class SecurityUtil {
     public static AuthAccount getAuthNonNull() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new UnAuthorisedException("Unauthorised Null");
+            throw BizErrors.AUTHORISATION_NULL.exception();
         } else if (authentication instanceof AnonymousAuthenticationToken) {
-            throw new UnAuthorisedException("Unauthorised Anonymous");
+            throw BizErrors.AUTHORISATION_ANNONYMOUS.exception();
         } else if (authentication instanceof UsernamePasswordAuthenticationToken) {
             Object authAccount = authentication.getPrincipal();
             if (authAccount == null) {
-                throw new UnAuthorisedException("Unauthorised");
+                throw BizErrors.AUTHORISATION_INVALID.exception();
             }
             return (AuthAccount) authAccount;
         }

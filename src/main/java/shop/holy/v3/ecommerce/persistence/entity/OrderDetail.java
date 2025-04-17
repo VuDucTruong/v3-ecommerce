@@ -19,7 +19,7 @@ public class OrderDetail {
 
     private long productId;
     private BigDecimal price;
-    private Double discountPercent;
+    private BigDecimal bigDecimal;
     private BigDecimal appliedDiscount;
 
     private int qty;

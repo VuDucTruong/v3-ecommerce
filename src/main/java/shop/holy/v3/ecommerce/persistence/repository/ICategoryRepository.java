@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ICategoryRepository extends JpaRepository<Category, Long>, JpaSpecificationExecutor<Category> {
 
-    Optional<Category> findFirstByIdAndDeletedAtIsNotNull(Long id);
+    Optional<Category> findFirstByIdAndDeletedAtIsNull(Long id);
 
     @Modifying
     @Query("UPDATE Category c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id = :id")

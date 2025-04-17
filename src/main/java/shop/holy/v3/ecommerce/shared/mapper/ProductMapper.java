@@ -11,16 +11,20 @@ import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ProductMapper extends IBaseMapper {
 
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
+
     public abstract ResponseProduct fromEntityToResponse(Product product);
 
     public abstract Product fromRequestUpdateToEntity(RequestProductUpdate request);
 
     public abstract Product fromCreateRequestToEntity(RequestProductCreate request);
+
 
     public Specification<Product> fromRequestSearchToSpec(RequestProductSearch searchReq) {
         return ((root, query, criteriaBuilder) -> {

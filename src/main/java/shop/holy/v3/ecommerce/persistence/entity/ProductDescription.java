@@ -9,32 +9,27 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "product_description")
 @Data
 public class ProductDescription extends EntityBase {
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "description")
     private String description;
 
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "info")
     private String info;
 
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "platform")
     private String platform;
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "policy")
     private String policy;
 
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "tutorial")
     private String tutorial;
 

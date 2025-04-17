@@ -1,32 +1,48 @@
 package shop.holy.v3.ecommerce.shared.constant;
 
 import lombok.RequiredArgsConstructor;
+import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
+import shop.holy.v3.ecommerce.shared.exception.BaseBizException;
+import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
+import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 
 @RequiredArgsConstructor
 public enum BizErrors {
-    LOGIN_FAILED("Login failed", 1001),
-    USER_NOT_FOUND("User not found", 1002),
-    INVALID_PASSWORD("Invalid password", 1003),
-    USERNAME_ALREADY_EXISTS("Username already exists", 1004),
-    EMAIL_ALREADY_EXISTS("Email already exists", 1005),
-    INVALID_EMAIL("Invalid email format", 1006),
-    PASSWORD_TOO_WEAK("Password is too weak", 1007),
-    PRODUCT_NOT_FOUND("Product not found", 2001),
-    PRODUCT_OUT_OF_STOCK("Product out of stock", 2002),
-    CART_EMPTY("Cart is empty", 3001),
-    ORDER_NOT_FOUND("Order not found", 4001),
-    PAYMENT_FAILED("Payment failed", 5001),
-    INVALID_COUPON("Invalid coupon", 6001),
-    COUPON_EXPIRED("Coupon expired", 6002),
-    COUPON_ALREADY_USED("Coupon already used", 6003),
-    INVALID_ADDRESS("Invalid address", 7001),
-    ADDRESS_NOT_FOUND("Address not found", 7002),
-    INVALID_PHONE_NUMBER("Invalid phone number", 8001),
-    PHONE_NUMBER_ALREADY_EXISTS("Phone number already exists", 8002),
-    INVALID_DATE("Invalid date format", 9001);
 
+    LOGIN_FAILED(new UnAuthorisedException("Login failed")),
+    USER_NOT_FOUND(new ResourceNotFoundException("User not found")),
+    INVALID_PASSWORD(new UnAuthorisedException("Invalid password")),
+    USERNAME_ALREADY_EXISTS(new BadRequestException("Username already exists")),
 
-    private final String message;
-    private final int code;
+    EMAIL_ALREADY_EXISTS(new ResourceNotFoundException("Email already exists")),
+    INVALID_EMAIL(new BadRequestException("Invalid email format")),
+    PASSWORD_TOO_WEAK(new BadRequestException("Password is too weak")),
+
+    ACCOUNT_NOT_FOUND(new ResourceNotFoundException("Account not found")),
+    PRODUCT_NOT_FOUND(new ResourceNotFoundException("Product not found")),
+    PRODUCT_OUT_OF_STOCK(new BadRequestException("Product out of stock")),
+    OTP_NOT_FOUND(new ResourceNotFoundException("OTP not found")),
+
+    AUTHORISATION_NULL(new UnAuthorisedException("Authorisation null")),
+    AUTHORISATION_ANNONYMOUS(new UnAuthorisedException("Authorisation user is anonymous")),
+    AUTHORISATION_INVALID(new UnAuthorisedException("Authorisation invalid")),
+
+    CART_EMPTY(new BadRequestException("Cart is empty")),
+    ORDER_NOT_FOUND(new ResourceNotFoundException("Order not found")),
+    PAYMENT_FAILED(new BadRequestException("Payment failed")),
+    INVALID_COUPON(new BadRequestException("Invalid coupon")),
+    COUPON_EXPIRED(new BadRequestException("Coupon expired")),
+    COUPON_ALREADY_USED(new BadRequestException("Coupon already used")),
+    INVALID_ADDRESS(new BadRequestException("Invalid address")),
+    ADDRESS_NOT_FOUND(new ResourceNotFoundException("Address not found")),
+    INVALID_PHONE_NUMBER(new BadRequestException("Invalid phone number")),
+    PHONE_NUMBER_ALREADY_EXISTS(new BadRequestException("Phone number already exists")),
+    INVALID_DATE(new BadRequestException("Invalid date format"));
+
+    private final BaseBizException exception;
+
+    public BaseBizException exception() {
+        return exception;
+    }
 
 }

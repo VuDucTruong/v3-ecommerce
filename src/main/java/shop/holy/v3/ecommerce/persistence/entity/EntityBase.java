@@ -3,16 +3,21 @@ package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Date;
+import java.util.Objects;
 
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 public abstract class EntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @lombok.EqualsAndHashCode.Include
     private Long id;
 
     @ColumnDefault("now()")
@@ -23,4 +28,14 @@ public abstract class EntityBase {
     @ColumnDefault("null")
     private Date deletedAt;
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof EntityBase that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

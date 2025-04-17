@@ -39,9 +39,9 @@ public class CategoryService {
         Optional<Category> optionalCategory;
 
         if (deleted)
-            optionalCategory = categoryRepository.findFirstByIdAndDeletedAtIsNotNull(id);
-        else
             optionalCategory = categoryRepository.findById(id);
+        else
+            optionalCategory = categoryRepository.findFirstByIdAndDeletedAtIsNull(id);
         return optionalCategory.map(categoryMapper::fromEntityToResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("CATEGORY NOT FOUND BY ID " + id));
     }

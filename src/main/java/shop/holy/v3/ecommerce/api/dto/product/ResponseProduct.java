@@ -1,8 +1,9 @@
 package shop.holy.v3.ecommerce.api.dto.product;
 
+import shop.holy.v3.ecommerce.persistence.entity.Category;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 public record ResponseProduct(
         long id,
@@ -14,7 +15,7 @@ public record ResponseProduct(
         BigDecimal originalPrice,
         Date availableFrom,
         Date availableTo,
-        List<String> categoryIds,
-        List<ResponseProductMetadata> variants
+        Category[] categories,
+        ResponseProductMetadata[] variants
 ) {
 }

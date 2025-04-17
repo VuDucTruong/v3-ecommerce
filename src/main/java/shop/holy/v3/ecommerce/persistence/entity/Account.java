@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 import java.time.LocalDate;
 import java.util.Date;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Data
 @Entity
 @Table(name = "accounts")

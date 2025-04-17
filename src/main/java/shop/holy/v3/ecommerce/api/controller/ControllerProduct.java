@@ -30,7 +30,7 @@ public class ControllerProduct {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable int id,
-                                            @RequestParam boolean deleted) {
+                                            @RequestParam(required = false) boolean deleted) {
         return ResponseEntity.ok(productService.findById(id, deleted));
     }
 

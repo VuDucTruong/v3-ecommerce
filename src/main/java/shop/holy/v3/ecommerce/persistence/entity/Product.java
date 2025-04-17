@@ -3,12 +3,13 @@ package shop.holy.v3.ecommerce.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Data
 @Entity
 @Table(name = "products")
@@ -28,12 +29,13 @@ public class Product extends EntityBase {
     private Date availableTo;
 
     @Column(name = "parent_id")
-    private long parentId; // Foreign key to ProductVariantGroup
+    private Long parentId; // Foreign key to ProductVariantGroup
 
-    @OneToMany(mappedBy = "product")
-    private List<Category> category;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "products")
+    @BatchSize(size = 20)
+    private List<Category> categories;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "prod_desc_id", insertable = false, updatable = false)
     private ProductDescription productDescription;
 
@@ -43,6 +45,7 @@ public class Product extends EntityBase {
             insertable = false, updatable = false)
     private Product parent;
 
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "parent", targetEntity = Product.class)
     private List<Product> variants;
 

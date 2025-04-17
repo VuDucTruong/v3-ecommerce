@@ -26,9 +26,11 @@ VALUES ('description1', 1, 'category1'),
 
 drop table flyway_schema_history;
 
+delete from products;
 
 
 SELECT * FROM flyway_schema_history;
 select * from accounts;
 
 select * from profiles;
+select * from products;

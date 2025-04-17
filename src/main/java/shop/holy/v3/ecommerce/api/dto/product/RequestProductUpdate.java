@@ -8,15 +8,17 @@ import java.util.List;
 
 public record RequestProductUpdate(
         long id,
-        Long tosId,
+        RequestProductDescription productDescription,
         String slug,
         String name,
+        Long parentId,
         MultipartFile image,
         String description,
         BigDecimal price,
-        Double discountPercent,
+        BigDecimal originalPrice,
         Date availableFrom,
         Date availableTo,
-        List<String> categoryIds
+        List<Long> catIdsToDelete,
+        List<Long> catIdsToAdd
 ) {
 }

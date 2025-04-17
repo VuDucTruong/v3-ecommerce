@@ -17,7 +17,7 @@ import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.ProductMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
@@ -44,11 +44,11 @@ public class ProductService {
     public ResponseProduct findById(long id, boolean deleted) {
         Product product;
         if (deleted)
-            product = productRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("PRODUCT NOT FOUND"));
+            product = productRepository.findByIdWithJoinFetch(id)
+                    .orElseThrow(BizErrors.PRODUCT_NOT_FOUND::exception);
         else
             product = productRepository.findFirstByIdEqualsAndDeletedAtIsNull(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("PRODUCT NOT FOUND"));
+                    .orElseThrow(BizErrors.PRODUCT_NOT_FOUND::exception);
         return productMapper.fromEntityToResponse(product);
 
     }
@@ -58,13 +58,23 @@ public class ProductService {
         Product product = productMapper.fromCreateRequestToEntity(request);
         this.uploadSingleImageAndSetEntity(product, request.image());
         productRepository.save(product);
+        request.categoryIds().forEach(catId -> {
+            productRepository.insertProductCategories(product.getId(), catId);
+        });
         return productMapper.fromEntityToResponse(product);
     }
 
     @Transactional
     public ResponseProduct update(RequestProductUpdate request) throws IOException {
         Product product = productMapper.fromRequestUpdateToEntity(request);
+        long productId = request.id();
         this.uploadSingleImageAndSetEntity(product, request.image());
+        request.catIdsToDelete().forEach(catId -> {
+            productRepository.deleteProductCategories(productId, catId);
+        });
+        request.catIdsToAdd().forEach(catId -> {
+            productRepository.insertProductCategories(productId, catId);
+        });
         productRepository.save(product);
         return productMapper.fromEntityToResponse(product);
     }

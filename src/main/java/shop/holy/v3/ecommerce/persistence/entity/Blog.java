@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Date;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Data
 @Entity
 @Table(name = "blogs")

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+import java.util.List;
+
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Entity
 @Data
 @Table(name = "categories")
@@ -17,7 +19,10 @@ public class Category extends EntityBase {
     private String description;
     private String imageUrlId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id",insertable = false,updatable = false)
-    private Product product;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "products_categories",
+            uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "category_id"}),
+            joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    private List<Product> products;
 }

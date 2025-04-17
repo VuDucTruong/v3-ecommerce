@@ -78,8 +78,11 @@ public class OpenApiConfig {
                         Schema<?> schema = content.getSchema();
                         if (schema.get$ref() != null) {
                             // Get the referenced model schema
+
                             String ref = schema.get$ref();
-                            Schema<?> modelSchema = openApi.getComponents().getSchemas().get(ref.replace("#/components/schemas/", ""));
+                            Schema<?> modelSchema = openApi.getComponents()
+                                    .getSchemas().get(ref.replace("#/components/schemas/", ""));
+
                             if (modelSchema != null) {
                                 // Recursively introspect and add individual fields as parts
                                 Map<String, Schema<?>> parts = extractFieldsFromModel(modelSchema, openApi.getComponents());
@@ -119,6 +122,7 @@ public class OpenApiConfig {
             schema.getProperties().forEach((fieldName, fieldSchema) -> {
                 if (fieldSchema != null) {
                     // Handle nested objects recursively
+
                     if (fieldSchema.get$ref() != null) {
                         String ref = fieldSchema.get$ref().replace("#/components/schemas/", "");
                         Schema<?> nestedSchema = components.getSchemas().get(ref);

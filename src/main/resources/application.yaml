@@ -14,8 +14,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_batch_fetch_size: 100
+        jdbc:
+          batch_size: 20
     hibernate:
       ddl-auto: update
+
   servlet:
     multipart:
       max-file-size: 10MB

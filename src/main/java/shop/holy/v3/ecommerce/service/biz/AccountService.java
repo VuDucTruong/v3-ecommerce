@@ -10,8 +10,10 @@ import shop.holy.v3.ecommerce.api.dto.account.RequestPasswordUpdate;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.service.smtp.SmtpService;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
+import shop.holy.v3.ecommerce.shared.exception.BaseBizException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
 
@@ -33,7 +35,7 @@ public class AccountService {
 
         smtpService.sendOTPEmail(otpRequest.email(), otp);
         if (changes == 0) {
-            throw new BadRequestException("Account not found");
+            throw BizErrors.ACCOUNT_NOT_FOUND.exception();
         }
     }
 
@@ -41,7 +43,7 @@ public class AccountService {
     public void changePassword(RequestPasswordUpdate request) {
         int changes = accountRepository.changePassword(request.otp(), request.password());
         if (changes == 0) {
-            throw new ResourceNotFoundException("Invalid OTP or Account not found");
+            throw BizErrors.OTP_NOT_FOUND.exception();
         }
     }
 

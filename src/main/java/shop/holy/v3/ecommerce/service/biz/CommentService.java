@@ -11,7 +11,6 @@ import shop.holy.v3.ecommerce.persistence.repository.ICommentRepository;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
