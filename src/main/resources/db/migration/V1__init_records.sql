@@ -16,12 +16,61 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
+
+CREATE OR REPLACE FUNCTION public.insert_product_items_with_conflict_detection(
+    product_ids BIGINT[],
+    product_keys TEXT[],
+    regions TEXT[]
+)
+    RETURNS TABLE
+            (
+                rejected_product_key TEXT
+            )
+AS
+$$
+BEGIN
+    -- Create temporary table to hold input data
+    CREATE TEMP TABLE temp_product_items
+    (
+        product_id  BIGINT,
+        product_key TEXT,
+        region      TEXT
+    ) ON COMMIT DROP;
+
+    -- Insert data from arrays into temporary table
+    INSERT INTO temp_product_items (product_id, product_key, region)
+    SELECT product_ids[i], product_keys[i], regions[i]
+    FROM generate_subscripts(product_ids, 1) as i
+    WHERE i <= least(
+            coalesce(array_length(product_ids, 1), 0),
+            coalesce(array_length(product_keys, 1), 0),
+            coalesce(array_length(regions, 1), 0)
+               );
+
+    -- Insert non-conflicting items and return conflicting keys
+    RETURN QUERY
+        WITH inserted AS (
+            INSERT INTO public.product_items (product_id, product_key, region)
+                SELECT product_id, product_key, region FROM temp_product_items
+                ON CONFLICT (product_key) DO NOTHING
+                RETURNING product_key)
+        SELECT t.product_key
+        FROM temp_product_items t
+                 LEFT JOIN inserted i ON t.product_key = i.product_key
+        WHERE i.product_key IS NULL;
+END;
+$$ LANGUAGE plpgsql;
 -- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'ROLE_ADMIN');
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (5, '2025-04-17 14:11:35.385778', NULL, '2026-04-17', 'customer@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'ROLE_CUSTOMER');
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry,
+                             password, role)
+VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', false, NULL, NULL,
+        'string', 'ROLE_ADMIN');
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry,
+                             password, role)
+VALUES (5, '2025-04-17 14:11:35.385778', NULL, '2026-04-17', 'customer@gmail.com', '2025-04-17', false, NULL, NULL,
+        'string', 'ROLE_CUSTOMER');
 
 
 --
@@ -29,40 +78,52 @@ INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, en
 --
 
 
-
 --
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name, product_id) VALUES (1, '2025-04-17 14:54:55.201424', NULL, 'math', NULL, 'edu', NULL);
-INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name, product_id) VALUES (2, '2025-04-17 14:57:37.941007', '2025-04-17 14:57:43.135256', '', NULL, 'deleted ones', NULL);
+INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name, product_id)
+VALUES (1, '2025-04-17 14:54:55.201424', NULL, 'math', NULL, 'edu', NULL);
+INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name, product_id)
+VALUES (2, '2025-04-17 14:57:37.941007', '2025-04-17 14:57:43.135256', '', NULL, 'deleted ones', NULL);
 
 
 --
 -- Data for Name: product_description; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (1, '2025-04-17 16:13:40.831946', NULL, 'string', 'string', 'string', 'string', 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (6, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial)
+VALUES (1, '2025-04-17 16:13:40.831946', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial)
+VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial)
+VALUES (6, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', 'string');
 
 
 --
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.products (id, created_at, deleted_at, available_from, available_to, image_url_id, name, original_price, parent_id, price, prod_desc_id, slug) VALUES (8, '2025-04-17 16:49:31.057025', NULL, '2025-04-17 14:52:08.325', '2025-04-17 14:52:08.325', NULL, 'the jakarta product', 1000.00, NULL, 50.00, 6, 'the-jakarta-product');
+INSERT INTO public.products (id, created_at, deleted_at, image_url_id, name, original_price, parent_id, price,
+                             prod_desc_id, slug)
+VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL,
+        'the jakarta product', 1000.00, NULL, 50.00, 6, 'the-jakarta-product');
 
 
 --
 -- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (1, '2025-04-17 14:03:37.543768', NULL, NULL, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (2, '2025-04-17 14:06:24.94946', NULL, NULL, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (3, '2025-04-17 14:07:38.571169', NULL, NULL, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (4, '2025-04-17 14:09:04.700595', NULL, 1, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (5, '2025-04-17 14:11:35.385778', NULL, 5, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone)
+VALUES (1, '2025-04-17 14:03:37.543768', NULL, NULL, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone)
+VALUES (2, '2025-04-17 14:06:24.94946', NULL, NULL, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone)
+VALUES (3, '2025-04-17 14:07:38.571169', NULL, NULL, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone)
+VALUES (4, '2025-04-17 14:09:04.700595', NULL, 1, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone)
+VALUES (5, '2025-04-17 14:11:35.385778', NULL, 5, 'phong', NULL, '01235567891');
 
 
 --
@@ -70,12 +131,14 @@ INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, 
 --
 
 
-
 --
 -- Data for Name: coupons; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description, max_applied_amount, min_amount, minqty, type, usage_limit, value) VALUES (1, '2025-04-17 22:25:17.232006', NULL, '2025-04-17', '2025-04-17', 'PHONG', 0, 'string', 20000.00, 156000.00, 0, 'PERCENTAGE', 1, 12.00);
+INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description,
+                            max_applied_amount, min_amount, minqty, type, usage_limit, value)
+VALUES (1, '2025-04-17 22:25:17.232006', NULL, '2025-04-17', '2025-04-17', 'PHONG', 0, 'string', 20000.00, 156000.00, 0,
+        'PERCENTAGE', 1, 12.00);
 
 
 --
@@ -83,11 +146,9 @@ INSERT INTO public.coupons (id, created_at, deleted_at, available_from, availabl
 --
 
 
-
 --
 -- Data for Name: keywords; Type: TABLE DATA; Schema: public; Owner: phong
 --
-
 
 
 --
@@ -95,11 +156,9 @@ INSERT INTO public.coupons (id, created_at, deleted_at, available_from, availabl
 --
 
 
-
 --
 -- Data for Name: order_details; Type: TABLE DATA; Schema: public; Owner: phong
 --
-
 
 
 --
@@ -107,11 +166,9 @@ INSERT INTO public.coupons (id, created_at, deleted_at, available_from, availabl
 --
 
 
-
 --
 -- Data for Name: product_favorites; Type: TABLE DATA; Schema: public; Owner: phong
 --
-
 
 
 --
@@ -119,13 +176,14 @@ INSERT INTO public.coupons (id, created_at, deleted_at, available_from, availabl
 --
 
 
-
 --
 -- Data for Name: products_categories; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 8);
-INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 8);
+INSERT INTO public.products_categories (category_id, product_id)
+VALUES (1, 8);
+INSERT INTO public.products_categories (category_id, product_id)
+VALUES (2, 8);
 
 
 --
@@ -222,4 +280,3 @@ SELECT pg_catalog.setval('public.profiles_id_seq', 5, true);
 --
 -- PostgreSQL database dump complete
 --
-

@@ -17,11 +17,13 @@ public record RequestProductCreate(
         String description,
         BigDecimal price,
         BigDecimal originalPrice,
-        Date availableFrom,
-        Date availableTo,
+
         List<Long> categoryIds
 ) {
-    public RequestProductCreate(RequestProductDescription productDescription, String slug, String name,Long parentId, MultipartFile image, String description, BigDecimal price, BigDecimal originalPrice, Date availableFrom, Date availableTo, List<Long> categoryIds) {
+    public RequestProductCreate(RequestProductDescription productDescription, String slug,
+                                String name,Long parentId, MultipartFile image,
+                                String description, BigDecimal price, BigDecimal originalPrice,
+                                List<Long> categoryIds) {
         this.productDescription = productDescription;
         this.parentId = parentId;
 
@@ -36,8 +38,7 @@ public record RequestProductCreate(
         this.description = description;
         this.price = price;
         this.originalPrice = originalPrice;
-        this.availableFrom = availableFrom;
-        this.availableTo = availableTo;
+
         this.categoryIds = categoryIds;
     }
 }

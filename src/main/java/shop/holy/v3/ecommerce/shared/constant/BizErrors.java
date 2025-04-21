@@ -22,6 +22,7 @@ public enum BizErrors {
     PRODUCT_NOT_FOUND(new ResourceNotFoundException("Product not found")),
     PRODUCT_OUT_OF_STOCK(new BadRequestException("Product out of stock")),
     OTP_NOT_FOUND(new ResourceNotFoundException("OTP not found")),
+    RESOURCE_NOT_FOUND(new ResourceNotFoundException("Resource not found")),
 
     AUTHORISATION_NULL(new UnAuthorisedException("Authorisation null")),
     AUTHORISATION_ANNONYMOUS(new UnAuthorisedException("Authorisation user is anonymous")),

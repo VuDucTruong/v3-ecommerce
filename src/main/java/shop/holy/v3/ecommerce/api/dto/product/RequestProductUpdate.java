@@ -16,8 +16,8 @@ public record RequestProductUpdate(
         String description,
         BigDecimal price,
         BigDecimal originalPrice,
-        Date availableFrom,
-        Date availableTo,
+//        Date availableFrom,
+//        Date availableTo,
         List<Long> catIdsToDelete,
         List<Long> catIdsToAdd
 ) {

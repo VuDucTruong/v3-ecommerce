@@ -26,12 +26,12 @@ public record RequestProductSearch(
 
         @Schema(description = "Filter by maximum price", example = "1000.00")
         BigDecimal priceTo,
-
-        @Schema(description = "Filter by availability start date", format = "date-time", example = "2023-01-01T00:00:00Z")
-        Date availableFrom,
-
-        @Schema(description = "Filter by availability end date", format = "date-time", example = "2023-12-31T23:59:59Z")
-        Date availableTo,
+//
+//        @Schema(description = "Filter by availability start date", format = "date-time", example = "2023-01-01T00:00:00Z")
+//        Date availableFrom,
+//
+//        @Schema(description = "Filter by availability end date", format = "date-time", example = "2023-12-31T23:59:59Z")
+//        Date availableTo,
 
         @Schema(description = "Include deleted products", example = "false", defaultValue = "false")
         boolean deleted

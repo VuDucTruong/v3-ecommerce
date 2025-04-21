@@ -3,7 +3,6 @@ spring:
     name: v2-ecommerce-holy-shop
   profiles:
     active: decorator,security,dev
-
   datasource:
     driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
     url: ${SPRING_DATASOURCE_URL}
@@ -36,5 +35,5 @@ spring:
           auth: true
           starttls:
             enable: true
-
-
+server:
+  port: 8081

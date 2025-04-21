@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Data
 @Entity
 @Table(name = "products")
@@ -25,8 +26,13 @@ public class Product extends EntityBase {
     private BigDecimal originalPrice;
     private BigDecimal price;
 
-    private Date availableFrom;
-    private Date availableTo;
+    @Column(name = "group_id")
+    private long groupId;
+
+    // JSON
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "tags")
+    private String[] tags;
 
     @Column(name = "parent_id")
     private Long parentId; // Foreign key to ProductVariantGroup
@@ -59,6 +65,13 @@ public class Product extends EntityBase {
 
     @OneToMany(mappedBy = "product")
     private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "product")
+    private Set<ProductItem> productItems;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id", insertable = false, updatable = false)
+    private ProductGroup group;
 
 
 }

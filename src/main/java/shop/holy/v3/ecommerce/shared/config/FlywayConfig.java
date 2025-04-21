@@ -19,6 +19,7 @@ public class FlywayConfig {
         return Flyway.configure()
                 .dataSource(props.getUrl(), props.getUser(), props.getPassword())
                 .driver(props.getDriverClassName())
+                .defaultSchema(props.getDefaultSchema())
                 .baselineOnMigrate(props.isBaselineOnMigrate())
                 .baselineVersion(props.getBaselineVersion())
                 .locations(props.getLocations().getFirst())

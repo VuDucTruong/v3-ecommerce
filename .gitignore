@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 flyway.conf
 src/main/resources/secret/*
-**/*.env
+**/*
 
 ### STS ###
 .apt_generated
