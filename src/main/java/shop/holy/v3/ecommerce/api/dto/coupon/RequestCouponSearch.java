@@ -14,8 +14,6 @@ public record RequestCouponSearch(
         LocalDate availableTo,
         BigDecimal valueFrom,
         BigDecimal valueTo,
-        Integer minQTYFrom,
-        Integer minQTYTo,
         boolean deleted
 ) {
 }

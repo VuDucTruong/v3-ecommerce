@@ -12,7 +12,6 @@ public record ResponseCoupon(
         LocalDate availableFrom,
         LocalDate availableTo,
         BigDecimal value,
-        int minQTY,
         BigDecimal minAmount,
         Long maxAppliedAmount,
         int usageLimit,

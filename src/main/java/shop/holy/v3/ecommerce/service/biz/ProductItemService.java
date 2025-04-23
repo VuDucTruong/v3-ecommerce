@@ -11,6 +11,7 @@ import shop.holy.v3.ecommerce.api.dto.product.item.*;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.mapper.ProductItemMapper;
 
 import java.util.Arrays;
@@ -30,13 +31,20 @@ public class ProductItemService {
     }
 
     public ResponseProductItem getByIdentifier(long id, String productKey, boolean deleted) {
-        if (id == Integer.MIN_VALUE && productKey == null)
+        if (id == DefaultValues.ID && productKey == null)
             return null;
-        if (id != Integer.MIN_VALUE) {
-            ProductItem rs = productItemRepository.findById(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-            return mapper.fromEntityToResponse(rs);
+        ProductItem rs;
+        if (id != DefaultValues.ID) {
+            if (deleted)
+                rs = productItemRepository.findById(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+            else
+                rs = productItemRepository.findFirstByIdAndDeletedAtIsNull(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+        } else {
+            if (deleted)
+                rs = productItemRepository.findFirstByProductKey(productKey).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+            else
+                rs = productItemRepository.findFirstByProductKeyAndDeletedAtIsNull(productKey).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
         }
-        ProductItem rs = productItemRepository.findById(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
         return mapper.fromEntityToResponse(rs);
     }
 

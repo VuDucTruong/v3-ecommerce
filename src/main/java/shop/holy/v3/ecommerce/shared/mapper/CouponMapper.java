@@ -55,13 +55,6 @@ public abstract class CouponMapper extends IBaseMapper {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("value"), searchReq.valueTo()));
             }
 
-            if (searchReq.minQTYFrom() != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("minQuantity"), searchReq.minQTYFrom()));
-            }
-            if (searchReq.minQTYTo() != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("minQuantity"), searchReq.minQTYFrom()));
-            }
-
             return predicate;
         };
     }

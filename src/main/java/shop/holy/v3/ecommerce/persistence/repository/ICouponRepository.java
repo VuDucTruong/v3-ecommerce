@@ -17,7 +17,9 @@ public interface ICouponRepository extends JpaRepository<Coupon, Long>, JpaSpeci
     @Query("DELETE FROM Coupon c WHERE c.id = :id")
     int deleteCouponById(UUID id);
 
-    Optional<Coupon> findByCode(String code);
+    Optional<Coupon> findFirstByCode(String code);
+    Optional<Coupon> findFirstByIdAndDeletedAtIsNull(long id);
+    Optional<Coupon> findFirstByCodeAndDeletedAtIsNull(String code);
 
     @Query(value = """
             update coupons c set current_usage = current_usage + 1

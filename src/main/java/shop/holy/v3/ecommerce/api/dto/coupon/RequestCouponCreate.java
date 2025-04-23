@@ -11,7 +11,6 @@ public record RequestCouponCreate(
         Date availableFrom,
         Date availableTo,
         BigDecimal value,
-        int minQuantity,
         BigDecimal minAmount,
         Long maxAppliedAmount,
         int usageLimit,

@@ -2,7 +2,6 @@ package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Entity
@@ -21,8 +20,7 @@ public class OrderDetail {
     private BigDecimal price;
     private BigDecimal bigDecimal;
     private BigDecimal appliedDiscount;
-
-    private int qty;
+    private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id",insertable = false,updatable = false)

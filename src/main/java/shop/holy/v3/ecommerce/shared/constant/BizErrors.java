@@ -20,8 +20,11 @@ public enum BizErrors {
 
     ACCOUNT_NOT_FOUND(new ResourceNotFoundException("Account not found")),
     PRODUCT_NOT_FOUND(new ResourceNotFoundException("Product not found")),
-    PRODUCT_OUT_OF_STOCK(new BadRequestException("Product out of stock")),
+    ORDER_NOT_FOUND(new ResourceNotFoundException("Order not found")),
     OTP_NOT_FOUND(new ResourceNotFoundException("OTP not found")),
+
+
+    PRODUCT_OUT_OF_STOCK(new BadRequestException("Product out of stock")),
     RESOURCE_NOT_FOUND(new ResourceNotFoundException("Resource not found")),
 
     AUTHORISATION_NULL(new UnAuthorisedException("Authorisation null")),
@@ -29,7 +32,6 @@ public enum BizErrors {
     AUTHORISATION_INVALID(new UnAuthorisedException("Authorisation invalid")),
 
     CART_EMPTY(new BadRequestException("Cart is empty")),
-    ORDER_NOT_FOUND(new ResourceNotFoundException("Order not found")),
     PAYMENT_FAILED(new BadRequestException("Payment failed")),
     INVALID_COUPON(new BadRequestException("Invalid coupon")),
     COUPON_EXPIRED(new BadRequestException("Coupon expired")),

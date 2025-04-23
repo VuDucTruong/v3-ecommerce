@@ -18,6 +18,9 @@ import shop.holy.v3.ecommerce.persistence.entity.Order;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.repository.IOrderRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
+import shop.holy.v3.ecommerce.shared.constant.PaymentStatus;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
@@ -46,10 +49,11 @@ public class OrderService {
         if (deleted) {
             return orderRepository.findFirstByIdEqualsAndDeletedAtIsNull(id)
                     .map(orderMapper::fromEntityToResponse)
-                    .orElseThrow(() -> new ResourceNotFoundException("ORDER NOT FOUND"));
+                    .orElseThrow(() -> BizErrors.ORDER_NOT_FOUND.exception());
         }
         order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ORDER NOT FOUND"));
+                .orElseThrow(() -> BizErrors.ORDER_NOT_FOUND.exception());
+
 //        List<Long> productIds = order.getOrderDetails().stream()
 //                .map(OrderDetail::getProductId)
 //                .toList();
@@ -70,21 +74,34 @@ public class OrderService {
         } else throw new UnAuthorisedException("UNAUTHORIZED");
         Pageable pageable = orderMapper.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Order> orders = orderRepository.findAll(specs, pageable);
-        return ResponsePagination.fromPage(orders.map(orderMapper::fromEntityToResponse));
+
+        return ResponsePagination.fromPage(orders.map(order -> {
+            OrderStatus status;
+            if (order.getPayment() == null)
+                return orderMapper.fromEntityToResponseWithStatus(order, OrderStatus.PENDING);
+            status = orderMapper.fromPaymentStatusToOrderStatus(order.getPayment().getStatus());
+            if (status != null) {
+                return orderMapper.fromEntityToResponseWithStatus(order, status);
+            }
+            return orderMapper.fromEntityToResponse(order);
+        }));
     }
 
 
     @Transactional
     public ResponseOrder insert(RequestOrderCreate request) {
+
         Map<Long, Integer> productQuantities = request.orderDetails().stream()
                 .collect(Collectors.toMap(RequestOrderDetail::productId, RequestOrderDetail::quantity));
         List<Long> productIds = new ArrayList<>(productQuantities.keySet());
         Collections.sort(productIds);
-        List<Product> products = productRepository.findAllByIdIn(productIds);
+
+        List<Product> products = productRepository.findProductsByIdIn(productIds);
         if (products.size() != productIds.size()) {
-            throw new ResourceNotFoundException("PRODUCT NOT FOUND");
+            throw BizErrors.PRODUCT_NOT_FOUND.exception();
         }
 
+        ///  SUM(Price X quantities,...)
         BigDecimal amount = products.stream()
                 .map(product -> product.getPrice()
                         .multiply(BigDecimal.valueOf(productQuantities.get(product.getId())))
@@ -96,9 +113,10 @@ public class OrderService {
             amount = couponResult.b;
             order.setCouponId(couponResult.a.getId());
         }
+
         order.setTotal(amount);
         Order result = orderRepository.findById(order.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("ORDER NOT FOUND"));
+                .orElseThrow(BizErrors.ORDER_NOT_FOUND::exception);
         return orderMapper.fromEntityToResponse(result);
     }
 

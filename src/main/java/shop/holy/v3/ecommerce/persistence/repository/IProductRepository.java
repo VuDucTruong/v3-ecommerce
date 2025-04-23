@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
@@ -25,9 +27,8 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @Modifying
     @Query("""
     update Product p set p.deletedAt = current_timestamp where p.id = :id
-            """)
+           """)
     int updateProductDeletedAt(Long id);
-
 
     @Modifying
     @Transactional
@@ -48,7 +49,7 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             """, nativeQuery = true)
     Page<Product> findFavorites(long accountId, Pageable pageable);
 
-    List<Product> findAllByIdIn(Iterable<Long> ids);
+    List<Product> findProductsByIdIn(Collection<Long> id);
 
     @Query(value = """
                             SELECT p FROM Product p
@@ -65,12 +66,13 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     Optional<Product> findByIdWithJoinFetch(long id);
 
 
-    @EntityGraph(attributePaths = {
-        "productDescription",
-        "categories"
-    })
+    @EntityGraph(attributePaths = {"productDescription","categories","group","group.variants"})
     @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND p.id = :id")
     Optional<Product> findFirstByIdEqualsAndDeletedAtIsNull(long id);
+    @EntityGraph(attributePaths = {"productDescription","categories","group","group.variants"})
+    Optional<Product> findFirstBySlugEqualsAndDeletedAtIsNull(String slug);
+    @EntityGraph(attributePaths = {"productDescription","categories","group","group.variants"})
+    Optional<Product> findFirstBySlug(String slug);
 
     @Modifying
     @Query(value = """
@@ -78,14 +80,19 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             VALUES (:productId, :categoryId)
             ON CONFLICT (product_id, category_id) DO NOTHING
             """, nativeQuery = true)
-    int insertProductCategories(long productId, long categoryId);
+    void insertProductCategories(long productId, long categoryId);
 
     @Modifying
     @Query(value = """
             DELETE FROM products_categories
             WHERE product_id = :productId AND category_id = :categoryId
             """, nativeQuery = true)
-    int deleteProductCategories(long productId, long categoryId);
+    void deleteProductCategories(long productId, long categoryId);
+
+
+
+
+
 
 
 }

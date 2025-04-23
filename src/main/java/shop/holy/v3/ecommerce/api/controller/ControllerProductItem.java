@@ -10,6 +10,7 @@ import shop.holy.v3.ecommerce.api.dto.product.item.RequestProductItemSearch;
 import shop.holy.v3.ecommerce.api.dto.product.item.RequestProductItemUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.item.ResponseProductItem;
 import shop.holy.v3.ecommerce.service.biz.ProductItemService;
+import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 
 @Tag(name = "Product Items")
 @RestController
@@ -26,10 +27,11 @@ public class ControllerProductItem {
 
     @GetMapping("")
     public ResponseProductItem getProductItemByUniqueIdentifier(
-            @RequestParam(required = false, defaultValue = Integer.MIN_VALUE + "") long id,
+            @RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
             @RequestParam(required = false) String productKey,
             @RequestParam(required = false) boolean deleted
     ) {
+
         return productItemService.getByIdentifier(id, productKey, deleted);
     }
 

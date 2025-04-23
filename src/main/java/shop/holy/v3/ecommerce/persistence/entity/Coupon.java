@@ -6,10 +6,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.ColumnDefault;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Table(name = "coupons")
@@ -23,8 +21,7 @@ public class Coupon extends EntityBase {
     private LocalDate availableFrom;
     private LocalDate availableTo;
     private BigDecimal value;
-    @ColumnDefault("-1")
-    private int minQTY = -1;
+
     private BigDecimal minAmount;
     private BigDecimal maxAppliedAmount;
 

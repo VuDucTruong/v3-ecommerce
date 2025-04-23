@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +17,23 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
+import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProdId_ProdItem;
+import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
+import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 import shop.holy.v3.ecommerce.shared.mapper.ProductMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +42,7 @@ public class ProductService {
 
     private final ProductMapper productMapper;
     private final IProductRepository productRepository;
+    private final IProductItemRepository productItemRepository;
     private final CloudinaryFacadeService cloudinaryFacadeService;
 
     @SneakyThrows
@@ -37,20 +50,45 @@ public class ProductService {
         Pageable pageable = productMapper.fromRequestPageableToPageable(searchReq.pageRequest());
         Specification<Product> spec = productMapper.fromRequestSearchToSpec(searchReq);
         Page<Product> products = productRepository.findAll(spec, pageable);
-        Page<ResponseProduct> responses = products.map(productMapper::fromEntityToResponse);
+
+        long[] ids = products.stream()
+                .mapToLong(Product::getId)
+                .toArray();
+
+        ProQ_ProdId_ProdItem[] pairs = productItemRepository.find_count_group_by_prodId(ids);
+
+        Map<Long, ProQ_ProdId_ProdItem> pairMap = Arrays.stream(pairs)
+                .collect(Collectors.toMap(ProQ_ProdId_ProdItem::getProductId, Function.identity()));
+
+        Page<ResponseProduct> responses = products.map(product -> {
+                    ProductStatus status = ProductStatus.fromCnt(pairMap.get(product.getId()).getCnt());
+                    return productMapper.fromEntityToResponseWithStatus(product, status);
+                }
+        );
+
         return ResponsePagination.fromPage(responses);
     }
 
-    public ResponseProduct findById(long id, boolean deleted) {
-        Product product;
-        if (deleted)
-            product = productRepository.findByIdWithJoinFetch(id)
-                    .orElseThrow(BizErrors.PRODUCT_NOT_FOUND::exception);
-        else
-            product = productRepository.findFirstByIdEqualsAndDeletedAtIsNull(id)
-                    .orElseThrow(BizErrors.PRODUCT_NOT_FOUND::exception);
-        return productMapper.fromEntityToResponse(product);
+    public ResponseProduct getByIdentifier(long id, String slug, boolean deleted) {
+        if (id == DefaultValues.ID && slug == null)
+            return null;
+        Product rs;
+        if (id != DefaultValues.ID) {
+            if (deleted)
+                rs = productRepository.findById(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+            else
+                rs = productRepository.findFirstByIdEqualsAndDeletedAtIsNull(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+        } else {
+            if (deleted)
+                rs = productRepository.findFirstBySlug(slug).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+            else
+                rs = productRepository.findFirstBySlugEqualsAndDeletedAtIsNull(slug).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+        }
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<ProductItem> productItems = productItemRepository.findAllByProductIdEquals(id, pageable);
+        rs.setProductItems(new HashSet<>(productItems.getContent()));
 
+        return productMapper.fromEntityToResponseWithStatus(rs, productMapper.fromCntToStatus(productItems.getTotalElements()));
     }
 
     @Transactional

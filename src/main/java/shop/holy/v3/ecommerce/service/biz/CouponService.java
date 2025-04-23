@@ -16,7 +16,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Coupon;
 import shop.holy.v3.ecommerce.persistence.repository.ICouponRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.CouponType;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
+import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.mapper.CouponMapper;
 
 import java.io.IOException;
@@ -40,7 +40,8 @@ public class CouponService {
 
     public Pair<Coupon, BigDecimal> evaluateDiscount(BigDecimal amount, String code) {
         Coupon coupon = couponRepository.updateCouponUsage(code)
-                .orElseThrow(() -> new ResourceNotFoundException("COUPON NOT FOUND OR EXPIRED"));
+                .orElseThrow(BizErrors.INVALID_COUPON::exception);
+
         if (coupon.getType().equals(CouponType.PERCENTAGE.name())) {
             BigDecimal discount = amount.multiply(coupon.getValue().divide(BigDecimal.valueOf(100)));
             amount = amount.subtract(discount);
@@ -49,22 +50,30 @@ public class CouponService {
             }
             return new Pair<>(coupon, amount);
         }
+
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             return new Pair<>(coupon, BigDecimal.ZERO);
         }
         return new Pair<>(coupon, amount.subtract(coupon.getValue()));
     }
 
-    public ResponseCoupon findByCode(String code) {
-        Coupon c = couponRepository.findByCode(code)
-                .orElseThrow(BizErrors.INVALID_COUPON::exception);
+    public ResponseCoupon findByIdentitfier(long id, String code, boolean deleted) {
+        Coupon c;
+        if (id != DefaultValues.ID) {
+            if (deleted)
+                c = couponRepository.findById(id).orElseThrow(BizErrors.INVALID_COUPON::exception);
+            else
+                c = couponRepository.findFirstByIdAndDeletedAtIsNull(id).orElseThrow(BizErrors.INVALID_COUPON::exception);
+        } else {
+            if (deleted)
+                c = couponRepository.findFirstByCode(code).orElseThrow(BizErrors.INVALID_COUPON::exception);
+            else
+                c = couponRepository.findFirstByCodeAndDeletedAtIsNull(code).orElseThrow(BizErrors.INVALID_COUPON::exception);
+        }
         return couponMapper.fromEntityToResponse(c);
+
     }
-    public ResponseCoupon findById(long id){
-        Coupon c = couponRepository.findById(id)
-                .orElseThrow(BizErrors.INVALID_COUPON::exception);
-        return couponMapper.fromEntityToResponse(c);
-    }
+
 
 
     @Transactional

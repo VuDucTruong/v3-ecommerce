@@ -23,6 +23,7 @@ update products
 SET prod_desc_id = 6
 where id = 8;
 
+select * from categories;
 
 select * from accounts;
 select * from coupons;

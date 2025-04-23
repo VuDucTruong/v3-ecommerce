@@ -1,8 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,8 +14,16 @@ public class ProductGroup extends EntityBase {
 
     private String name;
 
+    @Column(name = "represent_id", nullable = true)
+    private Long representId;
+
     @OneToMany(mappedBy = "group")
-    private Set<Product> products;
+    private Set<Product> variants;
+
+    @OneToOne()
+    @JoinColumn(name = "represent_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Product represent;
+
 
 
 }

@@ -21,7 +21,6 @@ public class Order extends EntityBase {
 
     @Column(name = "coupon_id")
     private Long couponId;
-    private String status;
     private BigDecimal total;
 
     @JdbcTypeCode(SqlTypes.JSON)

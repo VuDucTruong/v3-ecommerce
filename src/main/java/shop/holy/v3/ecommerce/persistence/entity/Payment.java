@@ -16,7 +16,7 @@ public class Payment extends EntityBase {
     @Column(name = "order_id")
     private Long orderId;
 
-    private Integer status;
+    private int status = 2;
     private String paymentMethod = "VNPAY";
     private String bankCode;
 

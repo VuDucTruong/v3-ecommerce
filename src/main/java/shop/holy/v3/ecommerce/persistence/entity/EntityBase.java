@@ -18,7 +18,7 @@ public abstract class EntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @lombok.EqualsAndHashCode.Include
-    private Long id;
+    private long id;
 
     @ColumnDefault("now()")
     @Column(name = "created_at",insertable = false,updatable = false)

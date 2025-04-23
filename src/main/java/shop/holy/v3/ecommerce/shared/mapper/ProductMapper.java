@@ -13,6 +13,7 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
+import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
@@ -20,11 +21,22 @@ import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 public abstract class ProductMapper extends IBaseMapper {
 
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
+    @Mapping(target = "status", constant = "OUT_OF_STOCK")
+    @Mapping(source = "product.group.variants", target = "variants")
     public abstract ResponseProduct fromEntityToResponse(Product product);
+
+    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
+    @Mapping(source = "status", target = "status")
+    @Mapping(source = "product.group.variants", target = "variants")
+    public abstract ResponseProduct fromEntityToResponseWithStatus(Product product, ProductStatus status);
 
     public abstract Product fromRequestUpdateToEntity(RequestProductUpdate request);
 
     public abstract Product fromCreateRequestToEntity(RequestProductCreate request);
+
+    public ProductStatus fromCntToStatus(long cnt) {
+        return cnt > 0 ? ProductStatus.IN_STOCK : ProductStatus.OUT_OF_STOCK;
+    }
 
 
     public Specification<Product> fromRequestSearchToSpec(RequestProductSearch searchReq) {
@@ -68,7 +80,6 @@ public abstract class ProductMapper extends IBaseMapper {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.lessThanOrEqualTo(root.get("price"), searchReq.priceTo()));
             }
-
 
 
             // Filter deleted products

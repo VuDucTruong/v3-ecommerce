@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -27,15 +28,14 @@ public class Product extends EntityBase {
     private BigDecimal price;
 
     @Column(name = "group_id")
-    private long groupId;
+    private Long groupId;
 
     // JSON
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "tags")
+    @ColumnDefault(value = "[]")
     private String[] tags;
 
-    @Column(name = "parent_id")
-    private Long parentId; // Foreign key to ProductVariantGroup
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "products")
     @BatchSize(size = 20)
@@ -44,16 +44,6 @@ public class Product extends EntityBase {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "prod_desc_id", insertable = false, updatable = false)
     private ProductDescription productDescription;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id",
-            referencedColumnName = "id",
-            insertable = false, updatable = false)
-    private Product parent;
-
-    @BatchSize(size = 20)
-    @OneToMany(mappedBy = "parent", targetEntity = Product.class)
-    private Set<Product> variants;
 
     @ManyToMany
     @JoinTable(

@@ -5,27 +5,29 @@ import org.springframework.web.multipart.MultipartFile;
 import shop.holy.v3.ecommerce.shared.util.SlugUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
+@Schema(description = "Product creation request")
 public record RequestProductCreate(
         RequestProductDescription productDescription,
-        String slug,
+        @Schema() String slug,
         String name,
-        @Schema(description = "marking parent || children ") Long parentId,
+        @Schema(description = "marking groups for variants ") Long groupId,
         MultipartFile image,
         String description,
         BigDecimal price,
         BigDecimal originalPrice,
-
+        String[] tags,
         List<Long> categoryIds
 ) {
+
     public RequestProductCreate(RequestProductDescription productDescription, String slug,
-                                String name,Long parentId, MultipartFile image,
+                                String name, Long groupId, MultipartFile image,
                                 String description, BigDecimal price, BigDecimal originalPrice,
+                                String[] tags,
                                 List<Long> categoryIds) {
         this.productDescription = productDescription;
-        this.parentId = parentId;
+        this.groupId = groupId;
 
         if (slug == null || slug.isBlank()) {
             this.slug = SlugUtils.INSTANCE.slugify(name);
@@ -38,7 +40,7 @@ public record RequestProductCreate(
         this.description = description;
         this.price = price;
         this.originalPrice = originalPrice;
-
+        this.tags = tags;
         this.categoryIds = categoryIds;
     }
 }

@@ -10,7 +10,7 @@ import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponSearch;
 import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponUpdate;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
 import shop.holy.v3.ecommerce.service.biz.CouponService;
-
+import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -28,14 +28,11 @@ public class ControllerCoupon {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/{id:\\d+}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(couponService.findById(id));
-    }
-
-    @GetMapping("/{code:[a-zA-Z0-9]+}")
-    public ResponseEntity<?> getByCode(@PathVariable String code) {
-        return ResponseEntity.ok(couponService.findByCode(code));
+    @GetMapping()
+    public ResponseEntity<?> getById(@RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
+                                     @RequestParam(required = false) String productKey,
+                                     @RequestParam(required = false) boolean deleted) {
+        return ResponseEntity.ok(couponService.findByIdentitfier(id, productKey, deleted));
     }
 
 
@@ -54,4 +51,5 @@ public class ControllerCoupon {
     public ResponseEntity<?> updateCoupon(@RequestBody RequestCouponUpdate request) throws IOException {
         return ResponseEntity.ok(couponService.update(request));
     }
+
 }
