@@ -32,4 +32,11 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
 
     Optional<Account> findByIdAndDeletedAtIsNull(long id);
 
+    @Modifying
+    @Query(value = """
+                update accounts set deleted_at = now()
+                where id = :id
+            """, nativeQuery = true)
+    int updateDeletedAtById(long id);
+
 }

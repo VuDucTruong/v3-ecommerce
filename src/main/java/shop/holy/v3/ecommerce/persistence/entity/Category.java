@@ -13,9 +13,6 @@ import java.util.Set;
 @Table(name = "categories")
 public class Category extends EntityBase {
 
-    @Column(name = "product_id")
-    private Long productId;
-
     private String name;
     private String description;
     private String imageUrlId;

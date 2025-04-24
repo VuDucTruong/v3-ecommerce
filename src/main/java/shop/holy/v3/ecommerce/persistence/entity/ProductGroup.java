@@ -14,16 +14,7 @@ public class ProductGroup extends EntityBase {
 
     private String name;
 
-    @Column(name = "represent_id", nullable = true)
-    private Long representId;
-
     @OneToMany(mappedBy = "group")
     private Set<Product> variants;
-
-    @OneToOne()
-    @JoinColumn(name = "represent_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Product represent;
-
-
 
 }

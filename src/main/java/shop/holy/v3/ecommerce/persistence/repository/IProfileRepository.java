@@ -13,7 +13,7 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
     @Query("""
             UPDATE Profile p
             SET p.fullName = :#{#profile.fullName},
-                p.imageUrlId = :#{#profile.imageUrl},
+                p.imageUrlId = :#{#profile.imageUrlId},
                 p.phone = :#{#profile.phone}
             WHERE p.accountId = :#{#profile.accountId}
             """)
@@ -27,5 +27,9 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
             WHERE p.accountId = :#{#profile.accountId}
             """)
     void updateProfileExcludeImage(Profile profile);
+
+    @Query("update Profile p set p.deletedAt = CURRENT_TIMESTAMP where p.accountId = :accountId")
+    @Modifying
+    int updateDeletedAtByAccountId(long accountId);
 
 }

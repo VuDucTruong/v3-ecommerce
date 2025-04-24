@@ -1,15 +1,14 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.type.SqlTypes;
 
-@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "product_description")
 @Data
@@ -18,10 +17,11 @@ public class ProductDescription extends EntityBase {
     @Column(name = "description")
     private String description;
 
-
     @Column(name = "info")
     private String info;
 
+    @Column(name = "product_id")
+    private long productId;
 
     @Column(name = "platform")
     private String platform;
@@ -29,10 +29,10 @@ public class ProductDescription extends EntityBase {
     @Column(name = "policy")
     private String policy;
 
-
     @Column(name = "tutorial")
     private String tutorial;
 
-    @OneToOne(mappedBy = "productDescription")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Product product;
 }

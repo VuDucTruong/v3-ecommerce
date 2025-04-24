@@ -7,12 +7,11 @@ import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
-import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
+import shop.holy.v3.ecommerce.api.dto.product.*;
+import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
+import shop.holy.v3.ecommerce.persistence.entity.ProductDescription;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
@@ -28,11 +27,16 @@ public abstract class ProductMapper extends IBaseMapper {
     @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "product.group.variants", target = "variants")
+    @Mapping(source = "product.productDescription", target = "productDescription", ignore = true)
     public abstract ResponseProduct fromEntityToResponseWithStatus(Product product, ProductStatus status);
 
+    @Mapping(source = "productDescription", target = "productDescription", ignore = true)
     public abstract Product fromRequestUpdateToEntity(RequestProductUpdate request);
 
+    @Mapping(source = "productDescription", target = "productDescription", ignore = true)
     public abstract Product fromCreateRequestToEntity(RequestProductCreate request);
+
+    public abstract ProductDescription fromRequestToDescription(RequestProductDescription request);
 
     public ProductStatus fromCntToStatus(long cnt) {
         return cnt > 0 ? ProductStatus.IN_STOCK : ProductStatus.OUT_OF_STOCK;
@@ -46,7 +50,6 @@ public abstract class ProductMapper extends IBaseMapper {
             if (query.getResultType() == Product.class) {
                 root.fetch("categories", JoinType.LEFT);
                 root.fetch("productDescription", JoinType.LEFT);
-                root.fetch("variants", JoinType.LEFT);
             }
 
             if (searchReq == null) return criteriaBuilder.conjunction();

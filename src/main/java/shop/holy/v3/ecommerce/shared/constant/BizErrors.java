@@ -1,10 +1,7 @@
 package shop.holy.v3.ecommerce.shared.constant;
 
 import lombok.RequiredArgsConstructor;
-import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
-import shop.holy.v3.ecommerce.shared.exception.BaseBizException;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
-import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
+import shop.holy.v3.ecommerce.shared.exception.*;
 
 @RequiredArgsConstructor
 public enum BizErrors {
@@ -40,6 +37,7 @@ public enum BizErrors {
     ADDRESS_NOT_FOUND(new ResourceNotFoundException("Address not found")),
     INVALID_PHONE_NUMBER(new BadRequestException("Invalid phone number")),
     PHONE_NUMBER_ALREADY_EXISTS(new BadRequestException("Phone number already exists")),
+    FORBIDDEN_ACTION(new ForbiddenException("You don't have permission to do this action")),
     INVALID_DATE(new BadRequestException("Invalid date format"));
 
     private final BaseBizException exception;

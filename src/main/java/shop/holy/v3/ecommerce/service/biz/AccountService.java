@@ -4,19 +4,15 @@ import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.holy.v3.ecommerce.api.dto.account.RequestOTP;
 import shop.holy.v3.ecommerce.api.dto.account.RequestAccountRegistration;
+import shop.holy.v3.ecommerce.api.dto.account.RequestOTP;
 import shop.holy.v3.ecommerce.api.dto.account.RequestPasswordUpdate;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.service.smtp.SmtpService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
-import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
-import shop.holy.v3.ecommerce.shared.exception.BaseBizException;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
-
 import java.util.Random;
 
 @RequiredArgsConstructor

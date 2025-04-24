@@ -14,6 +14,7 @@ import shop.holy.v3.ecommerce.api.dto.account.RequestProfileUpdate;
 import shop.holy.v3.ecommerce.api.dto.account.ResponseUser;
 import shop.holy.v3.ecommerce.api.dto.user.RequestUserCreate;
 import shop.holy.v3.ecommerce.api.dto.user.RequestUserSearch;
+import shop.holy.v3.ecommerce.api.dto.user.profile.RequestProfileCreate;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
@@ -27,9 +28,12 @@ public abstract class AccountMapper extends IBaseMapper {
 
     public abstract Account fromRegistrationRequestToEntity(RequestAccountRegistration accountRegistration);
 
+    @Mapping(source = "profile", target = "profile", ignore = true)
     public abstract Account fromUserCreateRequestToAccountEntity(RequestUserCreate request);
 
     public abstract Profile fromProfileUpdateRequestToEntity(RequestProfileUpdate request);
+
+    public abstract Profile fromProfileRequestToEntity(RequestProfileCreate request);
 
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
     public abstract ResponseProfile fromEntityToResponseProfile(Profile profile);

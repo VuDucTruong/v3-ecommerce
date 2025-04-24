@@ -11,10 +11,14 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Table(name = "product_items")
 @Entity
-@NamedStoredProcedureQuery(name = "ProductItem.insert_product_items_with_conflict_detection",
+@NamedStoredProcedureQuery(
+        name = "ProductItem.insert_product_items_with_conflict_detection",
         procedureName = "insert_product_items_with_conflict_detection",
         parameters = {
-                @StoredProcedureParameter(mode = ParameterMode.IN, name = "product_items", type = ProductItem[].class)
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "product_ids", type = Long[].class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "product_keys", type = String[].class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "regions", type = String[].class),
+                @StoredProcedureParameter(mode = ParameterMode.OUT, name = "rejected_product_key", type = String[].class)
         }
 )
 public class ProductItem extends EntityBase {

@@ -1,11 +1,13 @@
 package shop.holy.v3.ecommerce.service.biz;
 
+import com.ctc.wstx.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
@@ -14,7 +16,10 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.mapper.ProductItemMapper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,21 +53,24 @@ public class ProductItemService {
         return mapper.fromEntityToResponse(rs);
     }
 
+    @Transactional
     public ResponseProductItemCreate inserts(RequestProductItemCreate[] requests) {
         ProductItem[] productItems = Arrays.stream(requests).map(mapper::fromRequestToEntity)
                 .filter(item -> item.getProductKey() != null)
                 .toArray(ProductItem[]::new);
-        long[] productIds = new long[productItems.length];
-        String[] productKeys = new String[productItems.length];
-        String[] regions = new String[productItems.length];
-        for (int i = 0; i < productItems.length; i++) {
-            productIds[i] = productItems[i].getProductId();
-            productKeys[i] = productItems[i].getProductKey();
-            regions[i] = productItems[i].getRegion();
-        }
-        String[] rejected = productItemRepository.insertProductWithOnConflictReturning(productIds, productKeys, regions);
-        String[] inserted = Arrays.stream(productItems).map(ProductItem::getProductKey).toArray(String[]::new);
-        return new ResponseProductItemCreate(inserted, rejected);
+
+        String productIds = Arrays.stream(productItems).map(productItem -> productItem.getProductId() + "")
+                .collect(Collectors.joining(","));
+        String prodKeys = Arrays.stream(productItems).map(ProductItem::getProductKey)
+//                .filter(StringUtils::hasLength)
+                .collect(Collectors.joining(","));
+        String regions = Arrays.stream(productItems).map(ProductItem::getRegion)
+//                .filter(StringUtils::hasLength)
+                .collect(Collectors.joining(","));
+
+        List<String> rejected = productItemRepository.insertProductWithOnConflictReturning(productIds,prodKeys , regions);
+//        String[] inserted = Arrays.stream(productItems).map(ProductItem::getProductKey).toArray(String[]::new);
+        return new ResponseProductItemCreate(rejected.toArray(String[]::new));
     }
 
     public ResponseProductItem update(RequestProductItemUpdate request) {

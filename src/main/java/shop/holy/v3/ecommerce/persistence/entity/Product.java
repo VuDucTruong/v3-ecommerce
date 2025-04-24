@@ -1,11 +1,10 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -17,9 +16,8 @@ import java.util.Set;
 @Table(name = "products")
 public class Product extends EntityBase {
 
-    @Column(name = "prod_desc_id")
-    private Long prodDescId;
-
+//    @Column(name = "prod_desc_id")
+//    private Long prodDescId;
     private String slug;
     private String name;
     private String imageUrlId;
@@ -30,19 +28,19 @@ public class Product extends EntityBase {
     @Column(name = "group_id")
     private Long groupId;
 
+    private boolean isRepresent;
+
     // JSON
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "tags")
-    @ColumnDefault(value = "[]")
+    @ColumnDefault(value = "'[]'")
     private String[] tags;
-
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "products")
     @BatchSize(size = 20)
     private Set<Category> categories;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "prod_desc_id", insertable = false, updatable = false)
+    @OneToOne(mappedBy = "product")
     private ProductDescription productDescription;
 
     @ManyToMany

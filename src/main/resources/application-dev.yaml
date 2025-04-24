@@ -1,6 +1,6 @@
 spring:
   flyway:
-#    enabled: true
+    #    enabled: true
     driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
     url: ${SPRING_DATASOURCE_URL}
     user: ${SPRING_DATASOURCE_USERNAME}
@@ -13,6 +13,8 @@ spring:
     sql-migration-suffixes: .sql
     out-of-order: false
     default-schema: public
+    enabled: false
+
   jpa:
     properties:
       hibernate:

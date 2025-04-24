@@ -24,7 +24,7 @@ public class Account extends EntityBase {
     private LocalDate disableDate;
     private boolean isVerified;
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "account")
     private Profile profile;
 
     @Size(max = 6)

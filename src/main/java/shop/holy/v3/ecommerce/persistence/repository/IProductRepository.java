@@ -1,5 +1,7 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import jakarta.annotation.Nonnull;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,17 +19,13 @@ import java.util.Set;
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     // Add this method to override the default findAll
     @Override
-    @EntityGraph(attributePaths = {
-            "productDescription",
-            "categories",
-            "variants"
-    })
+    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
     @Modifying
     @Query("""
-    update Product p set p.deletedAt = current_timestamp where p.id = :id
-           """)
+            update Product p set p.deletedAt = current_timestamp where p.id = :id
+            """)
     int updateProductDeletedAt(Long id);
 
     @Modifying
@@ -52,26 +50,25 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     List<Product> findProductsByIdIn(Collection<Long> id);
 
     @Query(value = """
-                            SELECT p FROM Product p
-                            LEFT JOIN FETCH p.productDescription pd
-                            LEFT JOIN FETCH p.variants pv
-                            LEFT JOIN FETCH p.categories pc
-                                WHERE p.id = :id
+            SELECT p FROM Product p
+            LEFT JOIN FETCH p.productDescription pd
+            LEFT JOIN FETCH p.group pv
+            LEFT JOIN FETCH p.group.variants
+            LEFT JOIN FETCH p.categories pc
+                WHERE p.id = :id
             """)
-    @EntityGraph(attributePaths = {
-            "productDescription",
-            "categories",
-            "variants"
-    })
+    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
     Optional<Product> findByIdWithJoinFetch(long id);
 
 
-    @EntityGraph(attributePaths = {"productDescription","categories","group","group.variants"})
+    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
     @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND p.id = :id")
     Optional<Product> findFirstByIdEqualsAndDeletedAtIsNull(long id);
-    @EntityGraph(attributePaths = {"productDescription","categories","group","group.variants"})
+
+    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
     Optional<Product> findFirstBySlugEqualsAndDeletedAtIsNull(String slug);
-    @EntityGraph(attributePaths = {"productDescription","categories","group","group.variants"})
+
+    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
     Optional<Product> findFirstBySlug(String slug);
 
     @Modifying
@@ -88,11 +85,5 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             WHERE product_id = :productId AND category_id = :categoryId
             """, nativeQuery = true)
     void deleteProductCategories(long productId, long categoryId);
-
-
-
-
-
-
 
 }

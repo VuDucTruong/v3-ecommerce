@@ -8,9 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 
 public record RequestProfileCreate(
-        @Length String fullName,
+        @Length(max = 50, min = 1) String fullName,
         MultipartFile avatar, // File input for image
         @NumberFormat String phone,
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateOfBirth
+        Date dateOfBirth
 ) {
 }

@@ -6,11 +6,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProdId_ProdItem;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,7 +23,7 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
                         from product_items where product_id IN :productIds
                         GROUP BY product_id
             """, nativeQuery = true)
-    ProQ_ProdId_ProdItem[] find_count_group_by_prodId(long[] productIds);
+    List<ProQ_ProdId_ProdItem> find_count_group_by_prodId(long[] productIds);
 
     Page<ProductItem> findAllByProductIdEquals(long productId, org.springframework.data.domain.Pageable pageable);
 
@@ -31,12 +33,24 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
 
     Optional<ProductItem> findFirstByProductKey(String productKey);
 
+
     @Modifying
-    @Transactional
-//    @Procedure(name = "ProductItem.BATCH_INSERT_RETURN_CONFLICTED_PRODUCT_KEYS")
-//    String[] InsertProductWithOnConflictReturning(ProductItem[] productItems);
-    @Procedure(name = "ProductItem.insert_product_items_with_conflict_detection")
-    String[] insertProductWithOnConflictReturning(long[] productIds, String[] productKeys, String[] regions);
+    @Query(value = """
+        SELECT * FROM insert_product_items_with_conflict_detection(
+            string_to_array(:productIds, ',')::bigint[],
+            string_to_array(:productKeys, ',')::text[],
+            string_to_array(:regions, ',')::text[]
+        )
+        """, nativeQuery = true)
+    List<String> insertProductWithOnConflictReturning(
+            @Param("productIds") String productIds,
+            @Param("productKeys") String productKeys,
+            @Param("regions") String regions);
+
+
+
+
+
 
 
     @Modifying

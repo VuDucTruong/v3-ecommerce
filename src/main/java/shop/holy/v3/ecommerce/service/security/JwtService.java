@@ -4,13 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
-import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 import shop.holy.v3.ecommerce.shared.property.JwtProperties;
 
 import java.security.Key;
@@ -35,6 +30,7 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", account.getRole());
         claims.put("userId", account.getId());
+        claims.put("profileId", account.getProfileId());
         claims.put("enableDate", account.getEnableDate());
         claims.put("disableDate", account.getDisableDate());
         claims.put("deletedAt", account.getDeletedAt());

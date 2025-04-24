@@ -19,9 +19,8 @@ import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProfileRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
-import shop.holy.v3.ecommerce.shared.exception.ForbiddenException;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
@@ -37,37 +36,39 @@ public class UserService {
     private final AccountMapper accountMapper;
     private final CloudinaryFacadeService cloudinaryFacadeService;
 
-
     @Transactional
     public ResponseUser createUser(RequestUserCreate request) throws IOException {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (authAccount.getRole() != RoleEnum.ROLE_ADMIN) {
-            throw new ForbiddenException("You are not authorized to create a user");
+            throw BizErrors.FORBIDDEN_ACTION.exception();
         }
         Account account = accountMapper.fromUserCreateRequestToAccountEntity(request);
+        Profile profile = accountMapper.fromProfileRequestToEntity(request.profile());
         MultipartFile file = request.profile().avatar();
         if (file != null) {
             String blobUrl = cloudinaryFacadeService.uploadAccountBlob(file);
-            account.getProfile().setImageUrlId(blobUrl);
-            account.getProfile().setId(account.getId());
+            profile.setImageUrlId(blobUrl);
+            profile.setId(account.getId());
         }
         Account savedAccount = accountRepository.save(account);
+        profile.setAccountId(savedAccount.getId());
+        profileRepository.save(profile);
         return accountMapper.fromEntityToResponseAccountDetail(savedAccount);
     }
 
     public ResponseUser getById(Long id, boolean deleted) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (!authAccount.isAdmin() && authAccount.isNotSelf(id)) {
-            throw new UnAuthorisedException("You are not authorized to view this account");
+            throw BizErrors.FORBIDDEN_ACTION.exception();
         }
         if (deleted) {
             return accountRepository.findById(id)
                     .map(accountMapper::fromEntityToResponseAccountDetail)
-                    .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+                    .orElseThrow(BizErrors.ACCOUNT_NOT_FOUND::exception);
         }
         return accountRepository.findByIdAndDeletedAtIsNull(id)
                 .map(accountMapper::fromEntityToResponseAccountDetail)
-                .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+                .orElseThrow(BizErrors.ACCOUNT_NOT_FOUND::exception);
     }
 
     public ResponsePagination<ResponseUser> search(RequestUserSearch requestSearch) {
@@ -107,7 +108,11 @@ public class UserService {
 
     @Transactional
     public void deleteAccount(long id) {
-        accountRepository.deleteById(id);
+        int deletedPros = profileRepository.updateDeletedAtByAccountId(id);
+        int deletedAccs = accountRepository.updateDeletedAtById(id);
+        if (deletedAccs == 0 && deletedPros == 0) {
+            throw BizErrors.ACCOUNT_NOT_FOUND.exception();
+        }
     }
 
 

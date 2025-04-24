@@ -2,8 +2,8 @@ package shop.holy.v3.ecommerce.api.dto.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.multipart.MultipartFile;
+import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescription;
 import shop.holy.v3.ecommerce.shared.util.SlugUtils;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,7 +14,7 @@ public record RequestProductCreate(
         String name,
         @Schema(description = "marking groups for variants ") Long groupId,
         MultipartFile image,
-        String description,
+        boolean isRepresent,
         BigDecimal price,
         BigDecimal originalPrice,
         String[] tags,
@@ -23,7 +23,8 @@ public record RequestProductCreate(
 
     public RequestProductCreate(RequestProductDescription productDescription, String slug,
                                 String name, Long groupId, MultipartFile image,
-                                String description, BigDecimal price, BigDecimal originalPrice,
+                                boolean isRepresent,
+                                BigDecimal price, BigDecimal originalPrice,
                                 String[] tags,
                                 List<Long> categoryIds) {
         this.productDescription = productDescription;
@@ -37,10 +38,11 @@ public record RequestProductCreate(
 
         this.name = name;
         this.image = image;
-        this.description = description;
         this.price = price;
         this.originalPrice = originalPrice;
         this.tags = tags;
         this.categoryIds = categoryIds;
+        this.isRepresent = isRepresent;
+
     }
 }

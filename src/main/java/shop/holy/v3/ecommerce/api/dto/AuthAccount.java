@@ -16,6 +16,7 @@ import java.util.*;
 public class AuthAccount implements UserDetails {
 
     private long id;
+    private Long profileId;
     private Integer code;
     private LocalDate enableDate;
     private LocalDate disableDate;

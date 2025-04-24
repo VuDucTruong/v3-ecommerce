@@ -13,16 +13,19 @@ public class SecurityUtil {
 
     public static AuthAccount getAuthNonNull() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            throw BizErrors.AUTHORISATION_NULL.exception();
-        } else if (authentication instanceof AnonymousAuthenticationToken) {
-            throw BizErrors.AUTHORISATION_ANNONYMOUS.exception();
-        } else if (authentication instanceof UsernamePasswordAuthenticationToken) {
-            Object authAccount = authentication.getPrincipal();
-            if (authAccount == null) {
-                throw BizErrors.AUTHORISATION_INVALID.exception();
+        switch (authentication) {
+            case null -> throw BizErrors.AUTHORISATION_NULL.exception();
+            case AnonymousAuthenticationToken ignored ->
+                    throw BizErrors.AUTHORISATION_ANNONYMOUS.exception();
+            case UsernamePasswordAuthenticationToken ignored -> {
+                Object authAccount = authentication.getPrincipal();
+                if (authAccount == null) {
+                    throw BizErrors.AUTHORISATION_INVALID.exception();
+                }
+                return (AuthAccount) authAccount;
             }
-            return (AuthAccount) authAccount;
+            default -> {
+            }
         }
         throw new UnAuthorisedException("Unauthorised Unknown Error ");
     }

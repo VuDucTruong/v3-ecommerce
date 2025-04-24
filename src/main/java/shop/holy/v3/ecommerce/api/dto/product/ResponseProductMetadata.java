@@ -8,6 +8,7 @@ public record ResponseProductMetadata(
         String slug,
         String name,
         String imageUrl,
+        boolean isRepresent,
         BigDecimal price,
         BigDecimal originalPrice
 ) {
