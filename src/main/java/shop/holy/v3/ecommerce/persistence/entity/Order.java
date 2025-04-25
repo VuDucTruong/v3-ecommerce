@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Data
 @Entity
 @Table(name = "orders")
@@ -27,11 +27,11 @@ public class Order extends EntityBase {
     @Column(name = "request_info")
     private Map<String, String> requestInfo;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Coupon coupon;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Profile profile;
 

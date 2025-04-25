@@ -30,6 +30,7 @@ public class AuthService {
         }
         throw new UnAuthorisedException("Invalid username or password");
     }
+
     public Cookie[] makeCookies(ResponseLogin loginResponse) {
         Cookie accessTokenCookie = new Cookie(CookieKeys.ACCESS_TOKENS, loginResponse.accessToken());
         Cookie refreshTokenCookie = new Cookie(CookieKeys.REFRESH_TOKENS, loginResponse.refreshToken());

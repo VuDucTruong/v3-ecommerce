@@ -1,5 +1,9 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -12,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProdId_ProdItem;
 
+import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,9 +53,17 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
             @Param("regions") String regions);
 
 
-
-
-
+    @Query(value = """
+    INSERT INTO product_items (product_id, product_key, region)
+    SELECT id, key, region
+    FROM unnest(:productIds, :productKeys, :regions) as t(id, key, region)
+    ON CONFLICT (product_key) DO NOTHING
+    RETURNING product_key AS rejected_key
+    """, nativeQuery = true)
+    List<String> insertWithSth(
+            @Param("productIds") long[] productIds,
+            @Param("productKeys") String[] productKeys,
+            @Param("regions") String[] regions);
 
 
     @Modifying

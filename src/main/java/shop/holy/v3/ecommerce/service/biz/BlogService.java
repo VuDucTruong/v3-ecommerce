@@ -18,9 +18,11 @@ import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.BlogMapper;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +32,11 @@ public class BlogService {
     private final BlogMapper blogMapper;
     private final CloudinaryFacadeService cloudinaryService;
 
-
     public ResponseBlog createBlog(RequestBlogCreation request) {
+        long profileId = SecurityUtil.getAuthProfileId();
         Blog blogPost = blogMapper.fromRequestCreateToEntity(request);
-        return upsertAndReturnChanges(blogPost, request.image());
+        blogPost.setProfileId(profileId);
+        return upsertAndReturnChanges(blogPost, request.image(), false);
     }
 
     public ResponseBlog getBlog(long id, boolean includeDeleted) {
@@ -48,16 +51,19 @@ public class BlogService {
 
     @Transactional
     public int deleteBlog(long id) {
-        return blogRepository.updateBlogDeletedAt(id);
+
+        return blogRepository.updateBlogDeletedAtById(id);
     }
 
     @Transactional
     public ResponseBlog updateBlog(RequestBlogUpdate request) {
+        long profileId = SecurityUtil.getAuthProfileId();
         Blog blogPost = blogMapper.fromRequestUpdateToEntity(request);
-        return upsertAndReturnChanges(blogPost, request.image());
+
+        return upsertAndReturnChanges(blogPost, request.image(), true);
     }
 
-    private ResponseBlog upsertAndReturnChanges(Blog blogPost, MultipartFile image) throws BadRequestException {
+    private ResponseBlog upsertAndReturnChanges(Blog blogPost, MultipartFile image, boolean isUpdate) throws BadRequestException {
         try {
             if (image != null) {
                 String imageUrl = cloudinaryService.uploadBlogBlob(image);
@@ -66,8 +72,12 @@ public class BlogService {
         } catch (IOException e) {
             throw new BadRequestException("Failed to upload image");
         }
-        Blog result = blogRepository.save(blogPost);
-        return blogMapper.fromEntityToResponse(result);
+        if (isUpdate) {
+            blogRepository.updateBlogIfNotNull(blogPost, blogPost.getId(), blogPost.getProfileId());
+        } else
+            blogRepository.save(blogPost);
+
+        return blogMapper.fromEntityToResponse(blogPost);
     }
 
     public ResponsePagination<ResponseBlog> search(RequestBlogSearch searchReq) {

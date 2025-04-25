@@ -14,6 +14,7 @@ import shop.holy.v3.ecommerce.service.biz.ProductService;
 import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,11 +31,10 @@ public class ControllerProduct {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getProductById(@RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
+    public CompletableFuture<ResponseProduct> getProductById(@RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
                                             @RequestParam(required = false) String slug,
                                             @RequestParam(required = false) boolean deleted) {
-        ResponseProduct res = productService.getByIdentifier(id, slug, deleted);
-        return ResponseEntity.ok(res);
+        return productService.getByIdentifier(id, slug, deleted);
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -1,12 +1,9 @@
 package shop.holy.v3.ecommerce.api.dto.blog;
 
-import org.springframework.data.domain.Pageable;
+import io.swagger.v3.oas.annotations.media.Schema;
 import shop.holy.v3.ecommerce.api.dto.RequestPageable;
-
 import java.time.LocalDate;
 import java.util.List;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 
 public record RequestBlogSearch(
         @Schema(description = "Pagination and sorting information")
@@ -15,8 +12,8 @@ public record RequestBlogSearch(
         @Schema(description = "Search by blog title or author", example = "tech")
         String search,
         
-        @Schema(description = "Filter by blog tags", example = "[\"tech\", \"news\", \"reviews\"]")
-        List<String> tags,
+        @Schema(description = "Filter by blog genres", example = "[\"tech\", \"news\", \"reviews\"]")
+        List<String> genres,
         
         @Schema(description = "Filter by publication start date", format = "date", example = "2023-01-01")
         LocalDate publishedFrom,

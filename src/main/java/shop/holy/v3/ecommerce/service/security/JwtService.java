@@ -12,6 +12,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import static shop.holy.v3.ecommerce.shared.constant.DefaultValues.ClaimKeys;
 
 @Service
 @EnableConfigurationProperties(JwtProperties.class)
@@ -28,13 +29,18 @@ public class JwtService {
 
     public String generateAccessToken(AuthAccount account) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", account.getRole());
-        claims.put("userId", account.getId());
-        claims.put("profileId", account.getProfileId());
-        claims.put("enableDate", account.getEnableDate());
-        claims.put("disableDate", account.getDisableDate());
-        claims.put("deletedAt", account.getDeletedAt());
-        claims.put("isVerified", account.getIsVerified());
+        claims.put(ClaimKeys.ID, account.getId());
+        claims.put(ClaimKeys.ROLE, account.getRole());
+        claims.put(ClaimKeys.PROFILE_ID, account.getProfileId());
+        // Convert LocalDate to ISO-8601 string format
+        if (account.getEnableDate() != null)
+            claims.put(ClaimKeys.ENABLE_DATE, account.getEnableDate().toString());
+        if (account.getDisableDate() != null)
+            claims.put(ClaimKeys.DISABLE_DATE, account.getDisableDate().toString());
+        if (account.getDeletedAt() != null)
+            claims.put(ClaimKeys.DELETED_AT, account.getDeletedAt().toString());
+        claims.put(ClaimKeys.IS_VERIFIED, account.getIsVerified());
+
 
         return Jwts.builder()
                 .addClaims(claims)

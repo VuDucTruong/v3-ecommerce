@@ -45,7 +45,7 @@ public class AccountService {
 
     public void registerAccount(RequestAccountRegistration registration) {
         Account account = accountMapper.fromRegistrationRequestToEntity(registration);
-        account.setRole(RoleEnum.ROLE_CUSTOMER.name());
+        account.setRole(RoleEnum.CUSTOMER.name());
         accountRepository.save(account);
     }
 

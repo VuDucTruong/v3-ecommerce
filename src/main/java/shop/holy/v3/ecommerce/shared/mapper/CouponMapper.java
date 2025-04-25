@@ -30,10 +30,9 @@ public abstract class CouponMapper extends IBaseMapper {
             if (StringUtils.hasLength(searchReq.search())) {
                 predicate = criteriaBuilder.and(predicate,
                         SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("code"), searchReq.search()));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("type"), searchReq.type().name()));
             }
-            if (StringUtils.hasLength(searchReq.type().name())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("type"), searchReq.type().toString()));
-            }
+
             if (searchReq.availableFrom() != null) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.greaterThanOrEqualTo(root.get("availableFrom"), searchReq.availableFrom()));

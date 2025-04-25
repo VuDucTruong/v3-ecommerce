@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.Mapping;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
@@ -24,6 +25,7 @@ import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
 @MapperConfig(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
 public abstract class AccountMapper extends IBaseMapper {
 
+    @Mapping(source = "profile.id", target = "profileId")
     public abstract AuthAccount fromAccountToAuthAccount(Account account);
 
     public abstract Account fromRegistrationRequestToEntity(RequestAccountRegistration accountRegistration);

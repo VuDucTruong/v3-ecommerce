@@ -29,7 +29,7 @@ public class Profile extends EntityBase {
     @ManyToMany(mappedBy = "followers")
     private Set<Product> favoriteProducts;
 
-    @OneToMany(mappedBy = "profile")
+    @OneToMany(mappedBy = "author")
     private Set<Comment> comments;
 
 }

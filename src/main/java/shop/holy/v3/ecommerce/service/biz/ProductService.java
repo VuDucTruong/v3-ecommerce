@@ -17,10 +17,12 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
+import shop.holy.v3.ecommerce.persistence.entity.Comment;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProdId_ProdItem;
+import shop.holy.v3.ecommerce.persistence.repository.ICommentRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductDescriptionRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
@@ -32,10 +34,10 @@ import shop.holy.v3.ecommerce.shared.mapper.ProductMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,7 @@ public class ProductService {
     private final IProductRepository productRepository;
     private final IProductDescriptionRepository productDescriptionRepository;
     private final IProductItemRepository productItemRepository;
+    private final ICommentRepository commentRepository;
     private final CloudinaryFacadeService cloudinaryFacadeService;
 
     @SneakyThrows
@@ -77,27 +80,41 @@ public class ProductService {
         return ResponsePagination.fromPage(responses);
     }
 
-    public ResponseProduct getByIdentifier(long id, String slug, boolean deleted) {
+    public CompletableFuture<ResponseProduct> getByIdentifier(long id, String slug, boolean deleted) {
         if (id == DefaultValues.ID && slug == null)
-            return null;
-        Product rs;
-        if (id != DefaultValues.ID) {
-            if (deleted)
-                rs = productRepository.findByIdWithJoinFetch(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-            else
-                rs = productRepository.findFirstByIdEqualsAndDeletedAtIsNull(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-        } else {
-            if (deleted)
-                rs = productRepository.findFirstBySlug(slug).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-            else
-                rs = productRepository.findFirstBySlugEqualsAndDeletedAtIsNull(slug).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-        }
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
-        Page<ProductItem> productItems = productItemRepository.findAllByProductIdEquals(id, pageable);
-        rs.setProductItems(new HashSet<>(productItems.getContent()));
+            return CompletableFuture.completedFuture(null);
+        return CompletableFuture.supplyAsync(() -> {
+                    if (id != DefaultValues.ID) {
+                        return deleted
+                                ? productRepository.findByIdWithJoinFetch(id)
+                                : productRepository.findFirstByIdEqualsAndDeletedAtIsNull(id);
+                    } else {
+                        return deleted
+                                ? productRepository.findFirstBySlug(slug)
+                                : productRepository.findFirstBySlugEqualsAndDeletedAtIsNull(slug);
+                    }
+                }).thenApply(opt -> opt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception))
+                .thenCompose(product -> {
+                    Pageable pageableItems = PageRequest.of(0, 10, Sort.by("id").ascending());
+                    Pageable pageableComments = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 
-        return productMapper.fromEntityToResponseWithStatus(rs, productMapper.fromCntToStatus(productItems.getTotalElements()));
+                    CompletableFuture<Page<ProductItem>> itemsFuture =
+                            CompletableFuture.supplyAsync(() ->
+                                    productItemRepository.findAllByProductIdEquals(product.getId(), pageableItems));
+
+                    CompletableFuture<Page<Comment>> commentsFuture =
+                            CompletableFuture.supplyAsync(() ->
+                                    commentRepository.findAllByProductIdEqualsAndDeletedAtIsNull(product.getId(), pageableComments));
+
+                    return itemsFuture.thenCombine(commentsFuture, (itemsPage, commentsPage) -> {
+                        product.setProductItems(new HashSet<>(itemsPage.getContent()));
+                        product.setComments(new HashSet<>(commentsPage.getContent()));
+                        return productMapper.fromEntityToResponseWithStatus(
+                                product, productMapper.fromCntToStatus(itemsPage.getTotalElements()));
+                    });
+                });
     }
+
 
     @Transactional
     public ResponseProduct insert(RequestProductCreate request) throws IOException {

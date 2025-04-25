@@ -6,6 +6,7 @@ import java.util.Date;
 
 public record RequestBlogCreation(String title,
                                   String subtitle,
+
                                   Long genreId,
                                   Date publishedAt,
                                   MultipartFile image,

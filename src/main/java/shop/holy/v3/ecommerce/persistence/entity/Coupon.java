@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -30,6 +31,5 @@ public class Coupon extends EntityBase {
     private int usageLimit;
     private String description;
 
-    @OneToOne(mappedBy = "coupon")
-    private Order order;
+
 }

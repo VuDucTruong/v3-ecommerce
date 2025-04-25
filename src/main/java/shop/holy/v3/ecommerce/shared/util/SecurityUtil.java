@@ -15,8 +15,7 @@ public class SecurityUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         switch (authentication) {
             case null -> throw BizErrors.AUTHORISATION_NULL.exception();
-            case AnonymousAuthenticationToken ignored ->
-                    throw BizErrors.AUTHORISATION_ANNONYMOUS.exception();
+            case AnonymousAuthenticationToken ignored -> throw BizErrors.AUTHORISATION_ANNONYMOUS.exception();
             case UsernamePasswordAuthenticationToken ignored -> {
                 Object authAccount = authentication.getPrincipal();
                 if (authAccount == null) {
@@ -28,6 +27,13 @@ public class SecurityUtil {
             }
         }
         throw new UnAuthorisedException("Unauthorised Unknown Error ");
+    }
+
+    public static long getAuthProfileId() {
+        AuthAccount authAccount = getAuthNonNull();
+        if (authAccount.getProfileId() == null)
+            throw new UnAuthorisedException("Unauthorised Null Profile Id");
+        return authAccount.getProfileId();
     }
 
     public static AuthAccount getAuthMatchingRoleNullSafe(RoleEnum roleEnum) {

@@ -7,7 +7,7 @@ public record RequestPageable(
         int page,
         @Schema(description = "Number of items per page", example = "10")
         int size,
-        @Schema(description = "Sort by field's name", example = "name")
+        @Schema(description = "Sort by field's name", example = "id")
         String sortBy,
         @Schema(description = "Sort direction", example = "asc")
         String sortDirection

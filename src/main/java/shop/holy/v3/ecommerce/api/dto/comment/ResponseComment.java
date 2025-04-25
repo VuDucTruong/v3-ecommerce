@@ -1,20 +1,15 @@
 package shop.holy.v3.ecommerce.api.dto.comment;
 
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
+
 import java.util.Date;
-import java.util.List;
 
 public record ResponseComment(
         ResponseProfile author,
         Date createdAt,
         Date deletedAt,
         String content,
-        List<Reply> repiles
+        ResponseReply[] replies
 ) {
-    public record Reply(ResponseProfile author,
-                        Date createdAt,
-                        Date deletedAt,
-                        String content) {
 
-    }
 }

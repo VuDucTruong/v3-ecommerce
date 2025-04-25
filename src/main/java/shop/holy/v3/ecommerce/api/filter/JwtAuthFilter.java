@@ -26,6 +26,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
     private final JwtService jwtUtil;
     private final JwtProperties jwtProperties;
     private final AuthAccountService authAccountService;
+//    private final String[] whiteListedEndpoints = {"/accounts/tokens", "/accounts"};
 
     @Override
     protected void doFilterInternal(
@@ -71,13 +72,12 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
             return;
         }
 
-        grantAuthorisationBeforeNextChain(request, response, chain, authAccount);
+        grantAuthorisationBeforeNextChain(request, authAccount);
         chain.doFilter(request, response);
         grantNewTokensOnResponse(response, authAccount);
     }
 
-    private void grantAuthorisationBeforeNextChain(HttpServletRequest request, HttpServletResponse response,
-                                                   FilterChain chain, AuthAccount authAccount) throws IOException, ServletException {
+    private void grantAuthorisationBeforeNextChain(HttpServletRequest request,  AuthAccount authAccount) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 authAccount, null, authAccount.getAuthorities());
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

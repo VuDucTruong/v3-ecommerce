@@ -43,6 +43,11 @@ public class ControllerProductItem {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/test")
+    public void test() {
+        productItemService.testInsert();
+    }
+
     @PutMapping("")
     public ResponseProductItem updateProductItem(@RequestBody RequestProductItemUpdate productItemUpdate) {
         return productItemService.update(productItemUpdate);

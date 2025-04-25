@@ -20,9 +20,7 @@ import shop.holy.v3.ecommerce.persistence.repository.IOrderRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
-import shop.holy.v3.ecommerce.shared.constant.PaymentStatus;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 import shop.holy.v3.ecommerce.shared.mapper.OrderMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
@@ -68,7 +66,7 @@ public class OrderService {
     public ResponsePagination<ResponseOrder> search(RequestOrderSearch searchReq) {
         Specification<Order> specs = orderMapper.fromRequestSearchToSpec(searchReq);
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
-        if (Objects.equals(authAccount.getRole(), RoleEnum.ROLE_CUSTOMER)) {
+        if (Objects.equals(authAccount.getRole(), RoleEnum.CUSTOMER)) {
             specs = specs.and((root, query, criteriaBuilder)
                     -> criteriaBuilder.equal(root.get("accountId"), authAccount.getId()));
         } else throw new UnAuthorisedException("UNAUTHORIZED");

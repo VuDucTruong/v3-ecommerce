@@ -39,7 +39,7 @@ public class UserService {
     @Transactional
     public ResponseUser createUser(RequestUserCreate request) throws IOException {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
-        if (authAccount.getRole() != RoleEnum.ROLE_ADMIN) {
+        if (authAccount.getRole() != RoleEnum.ADMIN) {
             throw BizErrors.FORBIDDEN_ACTION.exception();
         }
         Account account = accountMapper.fromUserCreateRequestToAccountEntity(request);

@@ -3,6 +3,7 @@ package shop.holy.v3.ecommerce.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
@@ -12,10 +13,16 @@ import java.util.Set;
 public class Comment extends EntityBase {
 
     @Column(name = "parent_comment_id")
-    private long parentCommentId;
+    private Long parentCommentId;
+
+    @Column(name = "author_id")
+    private long authorId;
 
     @Column(name = "product_id")
-    private long authorId;
+    private Long productId;
+
+    @Column(name = "content")
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id",
@@ -23,13 +30,12 @@ public class Comment extends EntityBase {
             insertable = false, updatable = false)
     private Comment parent;
 
-
     @OneToMany(mappedBy = "parent", targetEntity = Comment.class)
     private Set<Comment> replies;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
-    private Profile profile;
+    private Profile author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)

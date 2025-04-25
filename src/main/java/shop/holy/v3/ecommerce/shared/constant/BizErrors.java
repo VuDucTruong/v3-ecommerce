@@ -9,6 +9,7 @@ public enum BizErrors {
     LOGIN_FAILED(new UnAuthorisedException("Login failed")),
     USER_NOT_FOUND(new ResourceNotFoundException("User not found")),
     INVALID_PASSWORD(new UnAuthorisedException("Invalid password")),
+    INVALID_TOKEN(new UnAuthorisedException("Invalid token")),
     USERNAME_ALREADY_EXISTS(new BadRequestException("Username already exists")),
 
     EMAIL_ALREADY_EXISTS(new ResourceNotFoundException("Email already exists")),

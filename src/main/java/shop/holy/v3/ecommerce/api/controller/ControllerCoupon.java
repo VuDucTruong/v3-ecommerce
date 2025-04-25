@@ -30,9 +30,9 @@ public class ControllerCoupon {
 
     @GetMapping()
     public ResponseEntity<?> getById(@RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
-                                     @RequestParam(required = false) String productKey,
+                                     @RequestParam(required = false) String code,
                                      @RequestParam(required = false) boolean deleted) {
-        return ResponseEntity.ok(couponService.findByIdentitfier(id, productKey, deleted));
+        return ResponseEntity.ok(couponService.findByIdentitfier(id, code, deleted));
     }
 
 

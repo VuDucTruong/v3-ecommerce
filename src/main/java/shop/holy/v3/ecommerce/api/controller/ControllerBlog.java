@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogCreation;
@@ -22,18 +23,21 @@ public class ControllerBlog {
     private final BlogService blogService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseBlog createBlog( @ModelAttribute RequestBlogCreation createRequest) {
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_1)")
+    public ResponseBlog createBlog(@ModelAttribute RequestBlogCreation createRequest) {
         ResponseBlog responseBlog = blogService.createBlog(createRequest);
         return responseBlog;
     }
 
     @PutMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseBlog updateBlog(@PathParam("id") String id, @ModelAttribute RequestBlogUpdate updateRequest) {
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_1)")
+    public ResponseBlog updateBlog(@ModelAttribute RequestBlogUpdate updateRequest) {
+
         ResponseBlog responseBlog = blogService.updateBlog(updateRequest);
         return responseBlog;
     }
 
-    @PostMapping
+    @PostMapping(value = "searches")
     public ResponsePagination<ResponseBlog> getBlogs(
             @RequestBody RequestBlogSearch searchRequest) {
         ResponsePagination<ResponseBlog> responsePagination = blogService.search(searchRequest);
@@ -47,6 +51,7 @@ public class ControllerBlog {
     }
 
     @DeleteMapping(value = "{id}")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public int deleteBlog(@PathParam("id") long id) {
         return blogService.deleteBlog(id);
     }

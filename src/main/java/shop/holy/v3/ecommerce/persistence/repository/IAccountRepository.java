@@ -1,10 +1,7 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
 import jakarta.validation.constraints.Size;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 
@@ -13,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
 
+    @EntityGraph(attributePaths = {"profile.id"})
     Account findByEmail(@Size(max = 100) String email);
 
     @Modifying
