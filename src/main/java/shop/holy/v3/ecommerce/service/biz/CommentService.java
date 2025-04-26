@@ -16,8 +16,6 @@ import shop.holy.v3.ecommerce.persistence.repository.ICommentRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,7 +45,7 @@ public class CommentService {
                 .orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
     }
 
-    @Transactional(timeout = 15)
+    @Transactional
     public ResponseComment insert(RequestComment request) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         Comment comment = commentMapper.fromCreateRequestToEntity(request);
@@ -57,7 +55,7 @@ public class CommentService {
 
     }
 
-    @Transactional(timeout = 15)
+    @Transactional
     public int deleteCategory(long id) {
         return commentRepository.updateDeletedAtById(id);
     }

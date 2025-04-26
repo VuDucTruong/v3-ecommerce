@@ -13,7 +13,7 @@ spring:
     sql-migration-suffixes: .sql
     out-of-order: false
     default-schema: public
-    enabled: false
+    enabled: true
 
   jpa:
     properties:
@@ -27,5 +27,7 @@ spring:
           schema_validation: false
         default_schema: public
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 
+#app:
+#  flyway-refresh: ${APP_FLYWAY_REFRESH:false}
