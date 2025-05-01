@@ -17,6 +17,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+    --- triggers:
+    ---
+-- On insert
+
+
+
+--
 -- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
@@ -35,11 +42,11 @@ INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (1, '2025-04
 -- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (1, '2025-04-17 14:03:37.543768', NULL, NULL, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (2, '2025-04-17 14:06:24.94946', NULL, NULL, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (3, '2025-04-17 14:07:38.571169', NULL, NULL, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (4, '2025-04-17 14:09:04.700595', NULL, 1, 'phong', NULL, '01235567891');
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id, phone) VALUES (5, '2025-04-17 14:11:35.385778', NULL, 2, 'phong', NULL, '01235567891');
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (1, '2025-04-17 14:03:37.543768', NULL, NULL, 'phong', NULL);
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (2, '2025-04-17 14:06:24.94946', NULL, NULL, 'phong', NULL);
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (3, '2025-04-17 14:07:38.571169', NULL, NULL, 'phong', NULL);
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (4, '2025-04-17 14:09:04.700595', NULL, 1, 'phong', NULL);
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (5, '2025-04-17 14:11:35.385778', NULL, 2, 'phong', NULL);
 
 
 --

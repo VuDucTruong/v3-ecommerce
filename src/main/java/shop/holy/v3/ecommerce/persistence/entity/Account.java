@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "accounts")
 public class Account extends EntityBase {

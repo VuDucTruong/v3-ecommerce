@@ -3,6 +3,8 @@ package shop.holy.v3.ecommerce.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
@@ -11,7 +13,7 @@ import org.hibernate.type.SqlTypes;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "product_description")
-@Data
+@Getter @Setter
 public class ProductDescription extends EntityBase {
 
     @Column(name = "description")

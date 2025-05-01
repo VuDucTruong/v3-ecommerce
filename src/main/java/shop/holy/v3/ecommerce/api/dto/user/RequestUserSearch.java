@@ -28,10 +28,7 @@ public record RequestUserSearch(
         
         @Schema(description = "Filter by creation date (to)", format = "date", example = "2023-12-31")
         LocalDate createdAtTo,
-        
-        @Schema(description = "Filter by phone number", example = "+1234567890")
-        String phone,
-        
+
         @Schema(description = "Filter by email address", example = "user@example.com")
         String email
 ) {

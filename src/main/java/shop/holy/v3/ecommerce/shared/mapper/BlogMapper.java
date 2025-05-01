@@ -14,32 +14,29 @@ import shop.holy.v3.ecommerce.persistence.entity.Genre1;
 import shop.holy.v3.ecommerce.persistence.entity.Genre2;
 import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = CommonMapper.class)
 @MapperConfig(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
-public abstract class BlogMapper extends IBaseMapper {
+public abstract class BlogMapper {
 
     public abstract Blog fromRequestCreateToEntity(RequestBlogCreation request);
 
     public abstract Blog fromRequestUpdateToEntity(RequestBlogUpdate request);
 
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(source = "genre1", target = "genres")
     public abstract ResponseBlog fromEntityToResponse(Blog blog);
 
-    public String[] fromGenreToStringArray(Set<Genre1> genre1s) {
-        return genre1s.stream()
-                .flatMap(genre1 -> {
-                    Stream<String> genreName = Stream.of(genre1.getName());
-                    Stream<String> genre2Names = genre1.getGenre2s() != null ?
-                            genre1.getGenre2s().stream().map(Genre2::getName) :
-                            Stream.empty();
-                    return Stream.concat(genreName, genre2Names);
-                })
+    public String[] fromGenreToStringArray(Genre1 genre1) {
+        Stream<String> genreName = Stream.of(genre1.getName());
+        Stream<String> genre2Names = genre1.getGenre2s() != null ?
+                genre1.getGenre2s().stream().map(Genre2::getName) :
+                Stream.empty();
+        return Stream.concat(genreName, genre2Names)
                 .toArray(String[]::new);
     }
-
 
 
     public Specification<Blog> fromSearchRequestToSpec(RequestBlogSearch searchReq) {

@@ -6,8 +6,7 @@ public record ResponseProfile (
         long id,
         String fullName,
         LocalDate createdAt,
-        String imageUrl,
-        String phone
+        String imageUrl
 ) {
 
 }

@@ -23,6 +23,7 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
+import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
@@ -77,7 +78,7 @@ public class UserService {
             throw new UnAuthorisedException("You are not authorized to code users");
 
         Specification<Account> spec = accountMapper.fromRequestToSpecification(requestSearch);
-        Pageable pageable = accountMapper.fromRequestPageableToPageable(requestSearch.pageRequest());
+        Pageable pageable = MappingUtils.fromRequestPageableToPageable(requestSearch.pageRequest());
         Page<Account> accounts = accountRepository.findAll(spec, pageable);
         return ResponsePagination.fromPage(accounts.map(accountMapper::fromEntityToResponseAccountDetail));
     }

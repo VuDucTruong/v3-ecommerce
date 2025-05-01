@@ -23,6 +23,7 @@ import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 import shop.holy.v3.ecommerce.shared.mapper.OrderMapper;
+import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.math.BigDecimal;
@@ -70,7 +71,7 @@ public class OrderService {
             specs = specs.and((root, query, criteriaBuilder)
                     -> criteriaBuilder.equal(root.get("accountId"), authAccount.getId()));
         } else throw new UnAuthorisedException("UNAUTHORIZED");
-        Pageable pageable = orderMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Order> orders = orderRepository.findAll(specs, pageable);
 
         return ResponsePagination.fromPage(orders.map(order -> {

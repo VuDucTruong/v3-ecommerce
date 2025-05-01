@@ -1,12 +1,13 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@Data
+@Getter @Setter
 @Entity
 @Table(name = "genre2", uniqueConstraints = @UniqueConstraint(columnNames = {"genre1_id", "name"}))
 public class Genre2 extends EntityBase {

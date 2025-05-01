@@ -10,7 +10,7 @@ public record RequestOrderCreate(
         @Schema(description = """
                 {
                 "email": "phong@mail.com"
-                "phone": "01234569"
+                "p": "01234569"
                 }
                 ==> required info to obtain productKey via email
                 """) Map<String, String> requestInfo,

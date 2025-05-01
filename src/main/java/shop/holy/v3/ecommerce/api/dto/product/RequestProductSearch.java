@@ -18,7 +18,7 @@ public record RequestProductSearch(
         @Schema(description = "Filter by category IDs", example = "[1, 2, 3]")
         List<Long> categoryIds,
 
-        @Schema(description = "Search by product name or description", example = "smartphone")
+        @Schema(description = "Search by product name or description", example = "spotify")
         String search,
 
         @Schema(description = "Filter by minimum price", example = "100.00")

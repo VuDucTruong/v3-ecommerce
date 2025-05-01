@@ -85,33 +85,67 @@ select *
 from coupons;
 
 select *
-from genre;
+from genre1;
 select *
-from genre2
+from genre2;
+
+select *
+from products p
+         left join product_items pi
+                   ON p.id = pi.product_id;
+
+UPDATE products p
+SET quantity =
+            (select count(1) from product_items pi where pi.product_id = p.id)
+where true;
 
 
-select c1_0.id,
-       c1_0.author_id,
-       c1_0.content,
-       c1_0.created_at,
-       c1_0.deleted_at,
-       c1_0.parent_comment_id,
+delete
+from product_items
+where product_id = 8;
+
+
+select p1_0.id,
        c1_0.product_id,
-       p3_0.id,
-       p3_0.account_id,
-       p3_0.created_at,
-       p3_0.deleted_at,
-       p3_0.full_name,
-       p3_0.image_url_id,
-       p3_0.phone,
-       r1_0.parent_comment_id,
-       r1_0.id,
-       r1_0.author_id,
-       r1_0.content,
-       r1_0.created_at,
-       r1_0.deleted_at,
-       r1_0.product_id
-from public.comments c1_0
-         left join public.profiles p3_0 on p3_0.id = c1_0.author_id
-         left join public.comments r1_0 on c1_0.id = r1_0.parent_comment_id
-where c1_0.id=3
+       c1_1.id,
+       c1_1.created_at,
+       c1_1.deleted_at,
+       c1_1.description,
+       c1_1.image_url_id,
+       c1_1.name,
+       p1_0.created_at,
+       p1_0.deleted_at,
+       g1_0.id,
+       g1_0.created_at,
+       g1_0.deleted_at,
+       g1_0.name,
+       p1_0.group_id,
+       p1_0.image_url_id,
+       p1_0.name,
+       p1_0.original_price,
+       p1_0.price,
+       pd1_0.id,
+       pd1_0.created_at,
+       pd1_0.deleted_at,
+       pd1_0.description,
+       pd1_0.info,
+       pd1_0.platform,
+       pd1_0.policy,
+       pd1_0.product_id,
+       pd1_0.tutorial,
+       p1_0.quantity,
+       p1_0.represent,
+       p1_0.slug,
+       p1_0.tags
+from public.products p1_0
+         left join public.products_categories c1_0 on p1_0.id = c1_0.product_id
+         left join public.categories c1_1 on c1_1.id = c1_0.category_id
+         left join public.product_groups g1_0 on g1_0.id = p1_0.group_id
+         left join public.products v1_0 on g1_0.id = v1_0.group_id
+         left join public.product_description pd1_0 on p1_0.id = pd1_0.product_id
+where p1_0.id=8
+  and p1_0.deleted_at is null;
+
+
+
+

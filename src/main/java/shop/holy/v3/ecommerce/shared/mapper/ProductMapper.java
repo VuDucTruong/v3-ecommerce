@@ -9,27 +9,37 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.product.*;
 import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescription;
-import shop.holy.v3.ecommerce.persistence.entity.Category;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
-import shop.holy.v3.ecommerce.persistence.entity.ProductDescription;
+import shop.holy.v3.ecommerce.persistence.entity.*;
+import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+import java.util.List;
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {ProductItemMapper.class, CommentMapper.class, CommonMapper.class})
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class ProductMapper extends IBaseMapper {
+public abstract class ProductMapper {
 
-    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
-    @Mapping(target = "status", constant = "OUT_OF_STOCK")
+    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(source = "group.variants", target = "variants")
+    @Mapping(source = "quantity", target = "status", qualifiedByName = "fromCntToStatus")
+    @Mapping(source = "productItems", target = "productItems", ignore = true)
+    @Mapping(source = "represent", target = "represent")
+    public abstract ResponseProduct fromEntityToResponse_Light(Product product);
+
+    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
     @Mapping(source = "product.group.variants", target = "variants")
-    public abstract ResponseProduct fromEntityToResponse(Product product);
+    @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus")
+    @Mapping(source = "productItems", target = "productItems")
+    public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, List<ProductItem> productItems);
 
-    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
-    @Mapping(source = "status", target = "status")
-    @Mapping(source = "product.group.variants", target = "variants")
-    @Mapping(source = "product.productDescription", target = "productDescription", ignore = true)
-    public abstract ResponseProduct fromEntityToResponseWithStatus(Product product, ProductStatus status);
 
+//    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+//    @Mapping(source = "product.group.variants", target = "variants")
+
+    /// /    @Mapping(source = "quantity", target = "quantity")
+//    public abstract ResponseProduct fromEntityToResponseWithStatus(Product product);
     @Mapping(source = "productDescription", target = "productDescription", ignore = true)
     public abstract Product fromRequestUpdateToEntity(RequestProductUpdate request);
 
@@ -38,6 +48,7 @@ public abstract class ProductMapper extends IBaseMapper {
 
     public abstract ProductDescription fromRequestToDescription(RequestProductDescription request);
 
+    @Named("fromCntToStatus")
     public ProductStatus fromCntToStatus(long cnt) {
         return cnt > 0 ? ProductStatus.IN_STOCK : ProductStatus.OUT_OF_STOCK;
     }

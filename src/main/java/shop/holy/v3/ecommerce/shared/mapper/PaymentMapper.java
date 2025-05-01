@@ -6,7 +6,7 @@ import org.mapstruct.MapperConfig;
 
 @Mapper(componentModel = "spring")
 @MapperConfig(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
-public abstract class PaymentMapper extends IBaseMapper
+public abstract class PaymentMapper
 {
 
 }

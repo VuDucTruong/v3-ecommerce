@@ -49,7 +49,7 @@ public class ControllerProductItem {
     }
 
     @PutMapping("")
-    public ResponseProductItem updateProductItem(@RequestBody RequestProductItemUpdate productItemUpdate) {
+    public int updateProductItem(@RequestBody RequestProductItemUpdate productItemUpdate) {
         return productItemService.update(productItemUpdate);
     }
 

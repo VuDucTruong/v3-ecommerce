@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class CommentMapper extends IBaseMapper {
+public abstract class CommentMapper  {
 
     @Mapping(source = "content", target = "content")
     public abstract Comment fromCreateRequestToEntity(RequestComment requestComment);

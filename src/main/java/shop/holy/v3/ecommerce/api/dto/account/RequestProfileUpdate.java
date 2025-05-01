@@ -7,9 +7,7 @@ import java.util.Date;
 public record RequestProfileUpdate(
         long id,
         String fullName,
-        MultipartFile image,
-        Date dateOfBirth,
-        String phone
+        MultipartFile image
 ) {
 
 }

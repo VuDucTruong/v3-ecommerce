@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.dto.order;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
@@ -12,11 +13,24 @@ public record ResponseOrder(
         Date deletedAt,
         OrderStatus status,
         ResponseCoupon coupon,
-        BigDecimal totalValue
+        BigDecimal totalValue,
+        ResponseOrderDetail[] details
 ) {
     public record ResponseOrderDetail(
-
+            BigDecimal price,
+            BigDecimal originalPrice,
+            @JsonUnwrapped ResponseOrderItem item,
+            int quantity
     ) {
 
+    }
+
+    public record ResponseOrderItem(
+            long id,
+            String name,
+            String imageUrl,
+            String slug,
+            String[] tags
+    ) {
     }
 }

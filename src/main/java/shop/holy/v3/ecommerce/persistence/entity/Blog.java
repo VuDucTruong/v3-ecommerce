@@ -3,11 +3,14 @@ package shop.holy.v3.ecommerce.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "blogs")
 public class Blog extends EntityBase {

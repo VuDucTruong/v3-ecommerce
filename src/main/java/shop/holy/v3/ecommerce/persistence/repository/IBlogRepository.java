@@ -30,6 +30,6 @@ public interface IBlogRepository extends JpaRepository<Blog, Long>, JpaSpecifica
     published_at = COALESCE(:#{#blog.publishedAt}, published_at)
     WHERE id = :id AND b.profile_id = :profileId
     """, nativeQuery = true)
-    int updateBlogIfNotNull(@Param("blog") Blog blog, @Param("id") long id, @Param("profileId") long profileId);
+    void updateBlogIfNotNull(@Param("blog") Blog blog, @Param("id") long id, @Param("profileId") long profileId);
 
 }

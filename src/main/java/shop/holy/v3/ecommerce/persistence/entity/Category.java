@@ -1,15 +1,15 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "categories")
 public class Category extends EntityBase {
 
@@ -22,5 +22,6 @@ public class Category extends EntityBase {
             uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "category_id"}),
             joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    @ToString.Exclude
     private Set<Product> products;
 }

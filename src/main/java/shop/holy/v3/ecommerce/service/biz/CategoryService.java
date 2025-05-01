@@ -15,6 +15,7 @@ import shop.holy.v3.ecommerce.persistence.repository.ICategoryRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.CategoryMapper;
+import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class CategoryService {
 
     public ResponsePagination<ResponseCategory> search(RequestCategorySearch searchReq) {
         var spec = categoryMapper.fromRequestSearchToSpec(searchReq);
-        Pageable pageable = categoryMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Category> categories = categoryRepository.findAll(spec, pageable);
         Page<ResponseCategory> responses = categories.map(categoryMapper::fromEntityToResponse);
         return ResponsePagination.fromPage(responses);

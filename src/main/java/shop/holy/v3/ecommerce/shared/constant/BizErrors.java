@@ -36,8 +36,6 @@ public enum BizErrors {
     COUPON_ALREADY_USED(new BadRequestException("Coupon already used")),
     INVALID_ADDRESS(new BadRequestException("Invalid address")),
     ADDRESS_NOT_FOUND(new ResourceNotFoundException("Address not found")),
-    INVALID_PHONE_NUMBER(new BadRequestException("Invalid phone number")),
-    PHONE_NUMBER_ALREADY_EXISTS(new BadRequestException("Phone number already exists")),
     FORBIDDEN_ACTION(new ForbiddenException("You don't have permission to do this action")),
     INVALID_DATE(new BadRequestException("Invalid date format"));
 

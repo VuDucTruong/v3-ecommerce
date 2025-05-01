@@ -13,7 +13,7 @@ import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class CouponMapper extends IBaseMapper {
+public abstract class CouponMapper {
 
     public abstract Coupon fromRequestCreateToEntity(RequestCouponCreate request);
 

@@ -18,6 +18,7 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.CouponType;
 import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.mapper.CouponMapper;
+import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ public class CouponService {
 
     public ResponsePagination<ResponseCoupon> search(RequestCouponSearch searchReq) {
         Specification<Coupon> spec = couponMapper.fromRequestToSpecification(searchReq);
-        Pageable pageable = couponMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Coupon> coupons = couponRepository.findAll(spec, pageable);
         Page<ResponseCoupon> responses = coupons.map(couponMapper::fromEntityToResponse);
         return ResponsePagination.fromPage(responses);

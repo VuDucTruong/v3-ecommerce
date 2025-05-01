@@ -15,15 +15,21 @@ import java.util.Date;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class ProductItemMapper extends IBaseMapper {
+public abstract class ProductItemMapper {
 
     @Mapping(source = "dateUsed", target = "active", qualifiedByName = "fromDateUsedToActive")
     public abstract ResponseProductItem fromEntityToResponse(ProductItem product);
 
+    @Mapping(source = "used", target = "dateUsed", qualifiedByName = "fromUsedToDateUsed")
     public abstract ProductItem fromRequestToEntity(RequestProductItemCreate productItem);
 
-
+    @Mapping(source = "used", target = "dateUsed", qualifiedByName = "fromUsedToDateUsed")
     public abstract ProductItem fromUpdateRequestToEntity(RequestProductItemUpdate productItem);
+
+    @Named("fromUsedToDateUsed")
+    public Date fromUsedToDateUsed(boolean used) {
+        return used ? null : new Date();
+    }
 
     ///  if used -> date_used !=null -> not active
     /// ->date_used == nul -> active
@@ -39,7 +45,7 @@ public abstract class ProductItemMapper extends IBaseMapper {
 
             Predicate predicate = criteriaBuilder.conjunction();
 
-            if(searchReq.productId()!=null){
+            if (searchReq.productId() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("productId"), searchReq.productId()));
             }
 

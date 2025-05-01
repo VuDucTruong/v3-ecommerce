@@ -3,13 +3,16 @@ package shop.holy.v3.ecommerce.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "comments")
-@Data
+@Getter
+@Setter
 public class Comment extends EntityBase {
 
     @Column(name = "parent_comment_id")

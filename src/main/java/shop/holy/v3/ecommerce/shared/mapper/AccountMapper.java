@@ -6,7 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.Mapping;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
@@ -21,9 +20,10 @@ import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+uses = CommonMapper.class)
 @MapperConfig(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
-public abstract class AccountMapper extends IBaseMapper {
+public abstract class AccountMapper  {
 
     @Mapping(source = "profile.id", target = "profileId")
     public abstract AuthAccount fromAccountToAuthAccount(Account account);
@@ -68,9 +68,6 @@ public abstract class AccountMapper extends IBaseMapper {
                         criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), searchReq.createdAtTo()));
             }
 
-            if (StringUtils.hasLength(searchReq.phone())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("phone"), searchReq.phone()));
-            }
             if (StringUtils.hasLength(searchReq.email())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("email"), searchReq.email()));
             }

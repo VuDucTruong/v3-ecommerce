@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
@@ -11,16 +13,18 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@Data
+@Getter @Setter
 @Entity
 @Table(name = "products")
 public class Product extends EntityBase {
 
-//    @Column(name = "prod_desc_id")
+    //    @Column(name = "prod_desc_id")
 //    private Long prodDescId;
     private String slug;
     private String name;
     private String imageUrlId;
+    @ColumnDefault("0")
+    private long quantity;
 
     private BigDecimal originalPrice;
     private BigDecimal price;
@@ -28,7 +32,8 @@ public class Product extends EntityBase {
     @Column(name = "group_id")
     private Long groupId;
 
-    private boolean isRepresent;
+    @ColumnDefault("false")
+    private boolean represent;
 
     // JSON
     @JdbcTypeCode(SqlTypes.JSON)

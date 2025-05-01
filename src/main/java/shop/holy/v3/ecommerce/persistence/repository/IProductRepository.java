@@ -1,7 +1,5 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
-import jakarta.annotation.Nonnull;
-import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,7 +11,6 @@ import shop.holy.v3.ecommerce.persistence.entity.Product;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
@@ -50,19 +47,19 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     List<Product> findProductsByIdIn(Collection<Long> id);
 
     @Query(value = """
-            SELECT p FROM Product p
+            SELECT DISTINCT p FROM Product p
             LEFT JOIN FETCH p.productDescription pd
-            LEFT JOIN FETCH p.group pv
-            LEFT JOIN FETCH p.group.variants
+            LEFT JOIN FETCH p.group pg
+            LEFT JOIN FETCH pg.variants
             LEFT JOIN FETCH p.categories pc
                 WHERE p.id = :id
             """)
-    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
+//    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
     Optional<Product> findByIdWithJoinFetch(long id);
 
 
-    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
-    @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND p.id = :id")
+    @EntityGraph(attributePaths = {"productDescription", "categories", "group.variants"})
+//    @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND p.id = :id")
     Optional<Product> findFirstByIdEqualsAndDeletedAtIsNull(long id);
 
     @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
@@ -85,5 +82,9 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             WHERE product_id = :productId AND category_id = :categoryId
             """, nativeQuery = true)
     void deleteProductCategories(long productId, long categoryId);
+
+    @Modifying
+    @Query("UPDATE Product p set p.quantity = p.quantity + :subTract where p.id = :productId")
+    void updateAddProductItemCountsByProductIdEquals(long productId, long subTract);
 
 }

@@ -8,7 +8,6 @@ import shop.holy.v3.ecommerce.persistence.entity.Genre2;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)

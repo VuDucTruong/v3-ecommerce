@@ -18,6 +18,7 @@ import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.BlogMapper;
+import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
@@ -59,6 +60,7 @@ public class BlogService {
     public ResponseBlog updateBlog(RequestBlogUpdate request) {
         long profileId = SecurityUtil.getAuthProfileId();
         Blog blogPost = blogMapper.fromRequestUpdateToEntity(request);
+        blogPost.setProfileId(profileId);
 
         return upsertAndReturnChanges(blogPost, request.image(), true);
     }
@@ -82,7 +84,7 @@ public class BlogService {
 
     public ResponsePagination<ResponseBlog> search(RequestBlogSearch searchReq) {
         Specification<Blog> spec = blogMapper.fromSearchRequestToSpec(searchReq);
-        Pageable pageable = blogMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Blog> blogs = blogRepository.findAll(spec, pageable);
         return ResponsePagination.fromPage(blogs.map(blogMapper::fromEntityToResponse));
     }

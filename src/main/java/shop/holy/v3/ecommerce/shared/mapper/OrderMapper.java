@@ -19,14 +19,14 @@ import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 @Mapper(componentModel = "spring")
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class OrderMapper extends IBaseMapper {
+public abstract class OrderMapper {
 
     public abstract Order fromCreateRequestToEntity(RequestOrderCreate categoryCreateRequest);
 
     public abstract ResponseOrder fromEntityToResponse(Order order);
 
     @Mapping(source = "status", target = "status")
-    public abstract ResponseOrder fromEntityToResponseWithStatus(Order order,@Nonnull OrderStatus status);
+    public abstract ResponseOrder fromEntityToResponseWithStatus(Order order, @Nonnull OrderStatus status);
 
     public OrderStatus fromPaymentStatusToOrderStatus(int paymentStatus) {
         if (PaymentStatus.FAILED.equals(paymentStatus))

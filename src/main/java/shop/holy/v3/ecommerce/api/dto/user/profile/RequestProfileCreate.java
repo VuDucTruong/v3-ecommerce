@@ -9,8 +9,6 @@ import java.util.Date;
 
 public record RequestProfileCreate(
         @Length(max = 50, min = 1) String fullName,
-        MultipartFile avatar, // File input for image
-        @NumberFormat String phone,
-        Date dateOfBirth
+        MultipartFile avatar// File input for image
 ) {
 }

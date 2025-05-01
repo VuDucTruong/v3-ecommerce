@@ -15,6 +15,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Comment;
 import shop.holy.v3.ecommerce.persistence.repository.ICommentRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
+import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class CommentService {
 
     public ResponsePagination<ResponseComment> search(RequestCommentSearch searchReq) {
         Specification<Comment> specs = commentMapper.fromSearchRequestToSpec(searchReq);
-        Pageable pageable = commentMapper.fromRequestPageableToPageable(searchReq.pageRequest());
+        Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Comment> comments = commentRepository.findAll(specs, pageable);
         var pageRes = comments
                 .map(commentMapper::fromEntityToResponse);

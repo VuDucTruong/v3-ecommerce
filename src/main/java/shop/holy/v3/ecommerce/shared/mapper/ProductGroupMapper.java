@@ -12,7 +12,7 @@ import shop.holy.v3.ecommerce.persistence.entity.ProductGroup;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class ProductGroupMapper extends IBaseMapper{
+public abstract class ProductGroupMapper {
     public abstract ProductGroup fromCreateRequestToEntity(RequestProductGroupCreate productGroup);
     public abstract ProductGroup fromUpdateRequestToEntity(RequestProductGroupUpdate productGroup);
     public abstract ResponseProductGroup fromEntityToResponse(ProductGroup productGroup);
