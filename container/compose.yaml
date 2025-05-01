@@ -23,7 +23,9 @@ services:
 #    volumes:
 #      - ./mirroring:/BOOT-INF/
   db:
-    image: postgres
+    ports:
+      - 5433:5432
+    image: postgres:17.2
     restart: on-failure
     user: postgres
     secrets:
