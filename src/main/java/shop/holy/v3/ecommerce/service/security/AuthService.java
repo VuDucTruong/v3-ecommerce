@@ -27,11 +27,11 @@ public class AuthService {
         Account account = accountRepository.findByEmail(request.email());
 
         if (account != null && account.getPassword().equals(request.password())) {
-            Profile profile = account.getProfile();
+//            Profile profile = account.getProfile();
             AuthAccount authAccount = accountMapper.fromAccountToAuthAccount(account);
             return new ResponseLogin(jwtService.generateAccessToken(authAccount),
                     jwtService.generateRefreshToken(String.valueOf(authAccount.getId())),
-                    accountMapper.fromEntityToResponseProfile(profile)
+                    accountMapper.fromEntityToResponseAccountDetail(account)
             );
         }
         throw BizErrors.LOGIN_FAILED.exception();
