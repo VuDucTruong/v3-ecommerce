@@ -24,28 +24,32 @@ public class ControllerProductItem {
     }
 
     @GetMapping("")
-    public ResponseProductItem getProductItemByUniqueIdentifier(
+    public ResponseEntity<ResponseProductItem[]> getProductItemByUniqueIdentifier(
             @RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
-            @RequestParam(required = false) String productKey,
-            @RequestParam(required = false) boolean deleted
-    ) {
+            @RequestParam(required = false, defaultValue = DefaultValues.ID + "") long productId,
+            @RequestParam(required = false, defaultValue = DefaultValues.ID + "") long orderDetailId,
+            @RequestParam(required = false) String productKey) {
+        int overlapCount = 0;
+        if (id != DefaultValues.ID) overlapCount++;
+        if (productId != DefaultValues.ID) overlapCount++;
+        if (orderDetailId != DefaultValues.ID) overlapCount++;
+        if (productKey != null) overlapCount++;
+        if (overlapCount > 1)
+            return ResponseEntity.badRequest().build();
 
-        return productItemService.getByIdentifier(id, productKey, deleted);
+        return ResponseEntity.ok(productItemService.getByIdentifier(id, productId, orderDetailId, productKey));
     }
 
 
     @PostMapping("")
-    public ResponseEntity<ResponseProductItemCreate> createProductItem(@RequestBody @Valid RequestProductItemCreate[] productItem) {
+    public ResponseEntity<ResponseProductItemCreate> createProductItem(
+            @RequestBody @Valid RequestProductItemCreate[] productItem,
+            @RequestParam(required = false) boolean used) {
         if (productItem == null || productItem.length == 0) {
             return ResponseEntity.ok().build();
         }
-        ResponseProductItemCreate res = productItemService.inserts(productItem);
+        ResponseProductItemCreate res = productItemService.inserts(productItem, used);
         return ResponseEntity.ok(res);
-    }
-
-    @GetMapping("/test")
-    public void test() {
-        productItemService.testInsert();
     }
 
     @PutMapping("")
@@ -54,8 +58,17 @@ public class ControllerProductItem {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Integer> deleteProductItems(long[] ids) {
+    public ResponseEntity<Integer> deleteProductItems(@RequestParam long[] ids) {
         int changes = productItemService.deleteProductItems(ids);
+        return ResponseEntity.ok(changes);
+    }
+
+    @PutMapping("/mark-used")
+    public ResponseEntity<Integer> markUsed(@RequestParam long[] ids) {
+        if (ids == null || ids.length == 0) {
+            return ResponseEntity.ok().build();
+        }
+        int changes = productItemService.makeProductUsed(ids);
         return ResponseEntity.ok(changes);
     }
 

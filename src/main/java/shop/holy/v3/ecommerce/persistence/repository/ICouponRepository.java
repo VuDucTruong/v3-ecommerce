@@ -8,14 +8,13 @@ import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Coupon;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface ICouponRepository extends JpaRepository<Coupon, Long>, JpaSpecificationExecutor<Coupon> {
 
     @Modifying
     @Query("DELETE FROM Coupon c WHERE c.id = :id")
-    int deleteCouponById(UUID id);
+    int deleteCouponById(long id);
 
     Optional<Coupon> findFirstByCode(String code);
     Optional<Coupon> findFirstByIdAndDeletedAtIsNull(long id);
@@ -32,5 +31,5 @@ public interface ICouponRepository extends JpaRepository<Coupon, Long>, JpaSpeci
 
     @Modifying
     @Query("UPDATE Coupon c SET c.deletedAt = current_timestamp WHERE c.id = :id")
-    int updateDeletedAtById(UUID id);
+    int updateDeletedAtById(long id);
 }

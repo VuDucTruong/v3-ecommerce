@@ -20,8 +20,6 @@ public record RequestUserCreate(
         Date enableDate,
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         Date disableDate,
-
-        @Nullable @Length(min = 6, max = 40) String loginId,
         Boolean isVerified,
         RoleEnum role,
         RequestProfileCreate profile

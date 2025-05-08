@@ -7,7 +7,6 @@ public record RequestProductItemSearch(
         String productName,
         Long productId,
         String productKey,
-        boolean used,
-        boolean deleted
+        boolean used
 ) {
 }

@@ -2,11 +2,11 @@ package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
+import java.util.Objects;
+
 @Entity
 @Table(name = "payments")
 @Getter
@@ -18,14 +18,21 @@ public class Payment extends EntityBase {
     @Column(name = "order_id")
     private Long orderId;
 
-    private int status = 2;
+    @Size(max = 10)
+    private String status;
     private String paymentMethod = "VNPAY";
-    private String bankCode;
+    private String bankCode; // NCB
+    private String detailCode;
+    private String detailMessage;
+
+    @Size(max = 2048)
+    private String paymentUrl;
+
 
     @Size(max = 255)
-    private String orderInfo;
+    private String note;
     @Size(max = 50)
-    private String cardMethod;
+    private String cardType;
     @Size(max = 65)
     private String transRef;
     @Size(max = 256)
@@ -39,4 +46,14 @@ public class Payment extends EntityBase {
     @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Profile profile;
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Payment that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(profileId);
+    }
 }

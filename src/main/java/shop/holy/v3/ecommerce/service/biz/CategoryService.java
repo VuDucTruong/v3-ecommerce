@@ -17,7 +17,6 @@ import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.CategoryMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -47,7 +46,7 @@ public class CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("CATEGORY NOT FOUND BY ID " + id));
     }
 
-    public ResponseCategory insert(RequestCategoryCreate request) throws IOException {
+    public ResponseCategory insert(RequestCategoryCreate request) {
         Category category = categoryMapper.fromCreateRequestToEntity(request);
 
         if (request.image() != null) {
@@ -57,7 +56,7 @@ public class CategoryService {
         return this.upsert(category);
     }
 
-    public ResponseCategory update(RequestCategoryUpdate request) throws IOException {
+    public ResponseCategory update(RequestCategoryUpdate request) {
         Category category = categoryMapper.fromUpdateRequestToEntity(request);
         if (request.image() != null) {
             cloudinaryFacadeService.uploadCategoryBlob(request.image());
@@ -72,8 +71,13 @@ public class CategoryService {
     }
 
     @Transactional(timeout = 15)
-    public int deleteCategory(long id) {
-        return categoryRepository.updateDeletedAtById(id);
+    public void deleteCategory(long id, boolean isHard) {
+        categoryRepository.deleteProductCategoryByCategoryIdEquals(id);
+        if (isHard)
+            categoryRepository.deleteById(id);
+        else
+            categoryRepository.updateDeletedAtById(id);
+
     }
 
 

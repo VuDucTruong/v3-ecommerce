@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.persistence.repository;
 
 import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 
@@ -10,8 +11,11 @@ import java.util.Optional;
 @Repository
 public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
 
-    @EntityGraph(attributePaths = {"profile.id"})
+    @EntityGraph(attributePaths = {"profile"})
     Account findByEmail(@Size(max = 100) String email);
+
+    @Query("SELECT 1 from Account a where a.email = :email")
+    Optional<Integer> isEmailExist(String email);
 
     @Modifying
     @Query(value = """
@@ -23,10 +27,17 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
 
     @Modifying
     @Query(value = """
-            update accounts set password = :password
-                            where otp = :otp and otp_expiry > now()
+            UPDATE accounts
+            SET password = :password, otp = NULL, otp_expiry = NULL
+            WHERE email = :email
+              AND otp IS NOT NULL
+              AND otp = :otp
+                AND otp_expiry is not null
+              AND otp_expiry > NOW()
             """, nativeQuery = true)
-    int changePassword(String otp, String password);
+    int changePassword(@Param("otp") String otp,
+                       @Param("email") String email,
+                       @Param("password") String password);
 
     Optional<Account> findByIdAndDeletedAtIsNull(long id);
 

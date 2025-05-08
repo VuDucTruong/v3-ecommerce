@@ -1,7 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -11,17 +10,17 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Table(name = "product_items")
+@Table(name = "product_items_used")
 @Entity
-public class ProductItem {
+public class ProductItemUsed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+    private long id;
 
     @ColumnDefault("now()")
     @Column(name = "created_at",insertable = false,updatable = false)
-    protected Date createdAt;
+    private Date createdAt;
 
     @Column(name = "product_id")
     private long productId;
@@ -31,18 +30,21 @@ public class ProductItem {
 
     private String region;
 
+    @Column(name = "order_detail_id", nullable = true)
+    private Long orderDetailId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
-    private Product product;
+    @JoinColumn(name = "order_detail_id", insertable = false, updatable = false)
+    private OrderDetail orderDetail;
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ProductItem that)) return false;
+        if (!(o instanceof ProductItemUsed that)) return false;
         return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(id);
     }
 }

@@ -38,7 +38,7 @@ public class UserService {
     private final CloudinaryFacadeService cloudinaryFacadeService;
 
     @Transactional
-    public ResponseUser createUser(RequestUserCreate request) throws IOException {
+    public ResponseUser createUser(RequestUserCreate request)  {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (authAccount.getRole() != RoleEnum.ADMIN) {
             throw BizErrors.FORBIDDEN_ACTION.exception();
@@ -59,10 +59,12 @@ public class UserService {
 
     public ResponseUser getById(Long id, boolean deleted) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
-        if (!authAccount.isAdmin() && authAccount.isNotSelf(id)) {
+        if (!authAccount.isAdmin() && id != null) {
             throw BizErrors.FORBIDDEN_ACTION.exception();
-        }
-        if (deleted) {
+        } else if (id == null)
+            id = authAccount.getId();
+
+        if (authAccount.isAdmin()&& deleted) {
             return accountRepository.findById(id)
                     .map(accountMapper::fromEntityToResponseAccountDetail)
                     .orElseThrow(BizErrors.ACCOUNT_NOT_FOUND::exception);
@@ -75,7 +77,7 @@ public class UserService {
     public ResponsePagination<ResponseUser> search(RequestUserSearch requestSearch) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (!authAccount.isAdmin())
-            throw new UnAuthorisedException("You are not authorized to code users");
+            throw BizErrors.AUTHORISATION_INVALID.exception();
 
         Specification<Account> spec = accountMapper.fromRequestToSpecification(requestSearch);
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(requestSearch.pageRequest());
@@ -85,13 +87,13 @@ public class UserService {
 
 
     @Transactional
-    public ResponseProfile updateProfile(RequestProfileUpdate request) throws IOException {
+    public ResponseProfile updateProfile(RequestProfileUpdate request) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         Profile profile = accountMapper.fromProfileUpdateRequestToEntity(request);
         if (authAccount.isAdmin()) {
             profile.setId(request.id());
         } else if (authAccount.isNotSelf(request.id())) {
-            throw new UnAuthorisedException("You are not authorized to update this profile");
+            throw BizErrors.RESOURCE_NOT_OWNED.exception();
         }
 
         accountMapper.fromProfileUpdateRequestToEntity(request);

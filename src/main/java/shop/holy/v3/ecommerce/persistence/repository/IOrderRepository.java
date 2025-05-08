@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Repository
@@ -18,5 +19,14 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
     int updateOrderDeletedAt(long id);
 
     Optional<Order> findFirstByIdEqualsAndDeletedAtIsNull(long id);
+
+    Optional<Order> findFirstByIdEqualsAndProfileIdEqualsAndDeletedAtIsNull(long id, long profileId);
+
+    Optional<Order> findFirstByIdEqualsAndProfileIdEquals(long id, long profileId);
+
+    Optional<Order> findFirstByIdEquals(long id);
+
+    @Query("SELECT o.amount from Order o where o.id = :orderId")
+    Optional<BigDecimal> findAmountByOrderId(long orderId);
 
 }

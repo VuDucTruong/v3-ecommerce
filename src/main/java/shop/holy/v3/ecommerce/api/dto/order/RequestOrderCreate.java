@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.api.dto.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,8 @@ public record RequestOrderCreate(
                 "p": "01234569"
                 }
                 ==> required info to obtain productKey via email
-                """) Map<String, String> requestInfo,
+                """)
+        HashMap<String, String> requestInfo,
         List<RequestOrderDetail> orderDetails
 ) {
 

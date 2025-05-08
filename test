@@ -1,0 +1,15 @@
+https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+?vnp_Amount=1000000
+&vnp_Command=pay
+&vnp_CreateDate=20250507213205
+&vnp_CurrCode=VND
+&vnp_ExpireDate=20250507214705
+&vnp_IpAddr=127.0.0.1
+&vnp_Locale=en
+&vnp_OrderInfo=Order+Info
+&vnp_OrderType=other
+&vnp_ReturnUrl=https%3A%2F%2Fsandbox.vnpayment.vn%2FReturnUrl
+&vnp_TmnCode=2QXUI4J4
+&vnp_TxnRef=476576642
+&vnp_Version=2.1.0
+&vnp_SecureHash=71E29F0CEB57444D283EDFAAC49A4AB1D9F9B52C4A5F3068DC9494493619F92D84CE5B7B70EAB7BCB8B19A2CB6A43A4169D104AC16F84A2F14CB502E0B05A143

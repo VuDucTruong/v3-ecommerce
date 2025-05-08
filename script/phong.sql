@@ -1,22 +1,3 @@
-SELECT *
-FROM flyway_schema_history;
-select *
-from accounts;
-
-select *
-from profiles;
-select *
-from products p
-         join product_description pd on p.prod_desc_id = p.id;
-
-select *
-from product_description;
-
-select *
-from flyway_schema_history;
-
-delete
-from flyway_schema_history;
 
 update products
 SET prod_desc_id = 6
@@ -69,14 +50,6 @@ select *
 from accounts a
          join profiles p
               on a.id = p.account_id;
-
-
-SELECT *
-FROM insert_product_items_with_conflict_detection(
-        ARRAY(1, 2, 3)::BIGINT[],
-        ARRAY ['key1', 'key2', 'key3']::TEXT[],
-        ARRAY ['US', 'EU', 'ASIA']::TEXT[]
-     );
 
 select *
 from product_items;
@@ -148,4 +121,10 @@ where p1_0.id=8
 
 
 
+select *
+from accounts a
+join profiles p
+on a.id = p.account_id
+where email='phong@gmail.com';
 
+select * from profiles;

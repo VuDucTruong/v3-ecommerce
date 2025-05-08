@@ -4,11 +4,13 @@ import shop.holy.v3.ecommerce.shared.constant.CouponType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 public record ResponseCoupon(
         long id,
         String code,
         CouponType type,
+        Date deletedAt,
         LocalDate availableFrom,
         LocalDate availableTo,
         BigDecimal value,

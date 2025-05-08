@@ -66,13 +66,9 @@ public class BlogService {
     }
 
     private ResponseBlog upsertAndReturnChanges(Blog blogPost, MultipartFile image, boolean isUpdate) throws BadRequestException {
-        try {
-            if (image != null) {
-                String imageUrl = cloudinaryService.uploadBlogBlob(image);
-                blogPost.setImageUrlId(imageUrl);
-            }
-        } catch (IOException e) {
-            throw new BadRequestException("Failed to upload image");
+        if (image != null) {
+            String imageUrl = cloudinaryService.uploadBlogBlob(image);
+            blogPost.setImageUrlId(imageUrl);
         }
         if (isUpdate) {
             blogRepository.updateBlogIfNotNull(blogPost, blogPost.getId(), blogPost.getProfileId());

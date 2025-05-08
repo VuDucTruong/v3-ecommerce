@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import shop.holy.v3.ecommerce.api.dto.FieldErrorResponse;
 import shop.holy.v3.ecommerce.api.dto.ResponseError;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
+import shop.holy.v3.ecommerce.shared.exception.ForbiddenException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 
@@ -68,6 +69,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseError<?> handleUnAuthorisedException(UnAuthorisedException ex, HttpServletRequest webRequest) {
 
+        return new ResponseError<>(webRequest.getContextPath(), 12, ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseError<?> handleForbiddenException(ForbiddenException ex, HttpServletRequest webRequest) {
         return new ResponseError<>(webRequest.getContextPath(), 12, ex.getMessage(), null);
     }
 }

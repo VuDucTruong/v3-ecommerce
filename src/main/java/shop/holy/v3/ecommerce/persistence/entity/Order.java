@@ -9,9 +9,9 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @Entity
@@ -23,13 +23,15 @@ public class Order extends EntityBase {
 
     @Column(name = "coupon_id")
     private Long couponId;
-    private BigDecimal total;
+    private BigDecimal originalAmount;
+    private BigDecimal amount;
+    private String status;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "request_info")
     private Map<String, String> requestInfo;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Coupon coupon;
 
@@ -43,4 +45,14 @@ public class Order extends EntityBase {
     @OneToMany(mappedBy = "order")
     private Set<OrderDetail> orderDetails;
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Order order)) return false;
+        return Objects.equals(id, order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id);
+    }
 }

@@ -8,8 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
-import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -77,6 +75,9 @@ public class AuthAccount implements UserDetails {
 
     public boolean isAdmin() {
         return role == RoleEnum.ADMIN;
+    }
+    public boolean isStaff(){
+        return role == RoleEnum.STAFF;
     }
 
     public boolean isNotSelf(long id) {

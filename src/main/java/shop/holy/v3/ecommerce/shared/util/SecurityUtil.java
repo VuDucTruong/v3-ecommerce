@@ -10,6 +10,9 @@ import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 
 public class SecurityUtil {
+    public static boolean isAuthenticated(Authentication authentication) {
+        return authentication != null && !authentication.isAuthenticated();
+    }
 
     public static AuthAccount getAuthNonNull() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -26,22 +29,22 @@ public class SecurityUtil {
             default -> {
             }
         }
-        throw new UnAuthorisedException("Unauthorised Unknown Error ");
+        throw BizErrors.AUTHORISATION_INVALID.exception();
     }
 
     public static long getAuthProfileId() {
         AuthAccount authAccount = getAuthNonNull();
         if (authAccount.getProfileId() == null)
-            throw new UnAuthorisedException("Unauthorised Null Profile Id");
+            throw BizErrors.AUTHORISATION_INVALID.exception();
         return authAccount.getProfileId();
     }
 
     public static AuthAccount getAuthMatchingRoleNullSafe(RoleEnum roleEnum) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (authAccount.getRole() == null) {
-            throw new UnAuthorisedException("Unauthorised Null Role");
+            throw BizErrors.AUTHORISATION_INVALID.exception();
         } else if (!authAccount.getRole().equals(roleEnum)) {
-            throw new UnAuthorisedException("Unauthorised Role");
+            throw BizErrors.AUTHORISATION_INVALID.exception();
         }
         return authAccount;
     }

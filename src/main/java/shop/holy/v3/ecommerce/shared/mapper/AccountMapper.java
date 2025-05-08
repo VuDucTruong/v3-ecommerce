@@ -28,6 +28,7 @@ public abstract class AccountMapper  {
     @Mapping(source = "profile.id", target = "profileId")
     public abstract AuthAccount fromAccountToAuthAccount(Account account);
 
+    @Mapping(source = "fullName", target = "profile.fullName")
     public abstract Account fromRegistrationRequestToEntity(RequestAccountRegistration accountRegistration);
 
     @Mapping(source = "profile", target = "profile", ignore = true)

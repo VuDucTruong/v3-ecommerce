@@ -15,7 +15,11 @@ public interface ICategoryRepository extends JpaRepository<Category, Long>, JpaS
     Optional<Category> findFirstByIdAndDeletedAtIsNull(Long id);
 
     @Modifying
+    @Query(value = "DELETE FROM products_categories where category_id=:categoryId", nativeQuery = true)
+    void deleteProductCategoryByCategoryIdEquals(long categoryId);
+
+    @Modifying
     @Query("UPDATE Category c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id = :id")
-    int updateDeletedAtById(Long id);
+    void updateDeletedAtById(Long id);
 
 }

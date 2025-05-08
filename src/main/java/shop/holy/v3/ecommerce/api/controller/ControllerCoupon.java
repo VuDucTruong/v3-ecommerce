@@ -43,8 +43,8 @@ public class ControllerCoupon {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCouponById(
-            @PathVariable UUID id, @RequestParam(required = false) boolean isSoft) {
-        return ResponseEntity.ok(couponService.deleteCoupon(id, isSoft));
+            @PathVariable long id, @RequestParam(required = false) boolean isSoft) {
+        return ResponseEntity.ok(couponService.deleteCoupon(id));
     }
 
     @PutMapping(value = "")

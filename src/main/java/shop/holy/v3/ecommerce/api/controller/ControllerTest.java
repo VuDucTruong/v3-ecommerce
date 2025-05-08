@@ -18,7 +18,7 @@ public class ControllerTest {
 
     @GetMapping("/biz-errors")
     public ResponseEntity<?> testBizErrors() {
-        throw BizErrors.COUPON_ALREADY_USED.exception();
+        throw BizErrors.EMAIL_ALREADY_EXISTS.exception();
     }
 
     @GetMapping("/me")

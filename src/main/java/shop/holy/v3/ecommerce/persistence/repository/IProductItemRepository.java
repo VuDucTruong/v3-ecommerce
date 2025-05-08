@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -8,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
-import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,17 +27,15 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
 
     Slice<ProductItem> findAllByProductIdEquals(long productId, org.springframework.data.domain.Pageable pageable);
 
-    Optional<ProductItem> findFirstByIdAndDeletedAtIsNull(long id);
-
-    Optional<ProductItem> findFirstByProductKeyAndDeletedAtIsNull(String productKey);
 
     Optional<ProductItem> findFirstByProductKey(String productKey);
+
+    List<ProductItem> findAllByProductId(long productId);
 
     @Modifying
     @Query("""
             UPDATE ProductItem pi set pi.productKey = :#{#productItem.productKey},
-            pi.productId = :#{#productItem.productKey},
-            pi.dateUsed = :#{#productItem.dateUsed}
+            pi.productId = :#{#productItem.productKey}
             WHERE pi.id = :#{#productItem.id}
             """)
     int updateProductItemById(@Param("productItem") ProductItem productItem);
@@ -65,6 +64,13 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
             GROUP BY product_id
             """, nativeQuery = true)
     List<ProQ_ProductId_Quantity> deleteProductItemsByIdIn(@Param("ids") long[] ids);
+
+    @Query(value = """
+                DELETE FROM product_items WHERE id = ANY(:ids)
+                RETURNING *
+            """, nativeQuery = true)
+    List<ProductItem> deleteProductItemsByIdInAndReturnAll(@Param("ids") long[] ids);
+
 
 
 }

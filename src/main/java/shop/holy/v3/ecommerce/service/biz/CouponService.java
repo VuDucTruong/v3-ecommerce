@@ -1,7 +1,6 @@
 package shop.holy.v3.ecommerce.service.biz;
 
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,14 +14,11 @@ import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
 import shop.holy.v3.ecommerce.persistence.entity.Coupon;
 import shop.holy.v3.ecommerce.persistence.repository.ICouponRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.constant.CouponType;
 import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.mapper.CouponMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -39,42 +35,28 @@ public class CouponService {
         return ResponsePagination.fromPage(responses);
     }
 
-    public Pair<Coupon, BigDecimal> evaluateDiscount(BigDecimal amount, String code) {
-        Coupon coupon = couponRepository.updateCouponUsage(code)
-                .orElseThrow(BizErrors.INVALID_COUPON::exception);
 
-        if (coupon.getType().equals(CouponType.PERCENTAGE.name())) {
-            BigDecimal discount = amount.multiply(coupon.getValue().divide(BigDecimal.valueOf(100)));
-            amount = amount.subtract(discount);
-            if (amount.compareTo(BigDecimal.ZERO) < 0) {
-                return new Pair<>(coupon, BigDecimal.ZERO);
-            }
-            return new Pair<>(coupon, amount);
-        }
-
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            return new Pair<>(coupon, BigDecimal.ZERO);
-        }
-        return new Pair<>(coupon, amount.subtract(coupon.getValue()));
-    }
 
     public ResponseCoupon findByIdentitfier(long id, String code, boolean deleted) {
         Coupon c;
-        if (id != DefaultValues.ID) {
+        if (id != DefaultValues.ID)
             if (deleted)
                 c = couponRepository.findById(id).orElseThrow(BizErrors.INVALID_COUPON::exception);
             else
                 c = couponRepository.findFirstByIdAndDeletedAtIsNull(id).orElseThrow(BizErrors.INVALID_COUPON::exception);
-        } else {
+        else {
             if (deleted)
                 c = couponRepository.findFirstByCode(code).orElseThrow(BizErrors.INVALID_COUPON::exception);
             else
                 c = couponRepository.findFirstByCodeAndDeletedAtIsNull(code).orElseThrow(BizErrors.INVALID_COUPON::exception);
         }
+//        LocalDate d = LocalDate.now();
+//        if (d.isBefore(c.getAvailableFrom()) || d.isAfter(c.getAvailableTo()))
+//            throw BizErrors.COUPON_EXPIRED.exception();
+
         return couponMapper.fromEntityToResponse(c);
 
     }
-
 
 
     @Transactional
@@ -89,10 +71,8 @@ public class CouponService {
         return couponMapper.fromEntityToResponse(couponRepository.save(coupon));
     }
 
-    public int deleteCoupon(UUID id, boolean isSoft) {
-        if (isSoft) {
-            return couponRepository.updateDeletedAtById(id);
-        }
+    @Transactional
+    public int deleteCoupon(long id) {
         return couponRepository.deleteCouponById(id);
     }
 

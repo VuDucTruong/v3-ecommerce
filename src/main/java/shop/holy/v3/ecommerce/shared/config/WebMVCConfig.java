@@ -5,6 +5,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,7 +28,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
             try {
                 return dateFormat.parse(source);
             } catch (ParseException e) {
-                throw new IllegalArgumentException("Invalid date format. Please use yyyy-MM-dd'T'HH:mm:ss.SSSX");
+                throw BizErrors.INVALID_DATE_FORMAT.exception();
             }
         }
     }

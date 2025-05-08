@@ -6,38 +6,28 @@ import shop.holy.v3.ecommerce.shared.exception.*;
 @RequiredArgsConstructor
 public enum BizErrors {
 
-    LOGIN_FAILED(new UnAuthorisedException("Login failed")),
-    USER_NOT_FOUND(new ResourceNotFoundException("User not found")),
-    INVALID_PASSWORD(new UnAuthorisedException("Invalid password")),
+    LOGIN_FAILED(new UnAuthorisedException("Invalid username or password")),
     INVALID_TOKEN(new UnAuthorisedException("Invalid token")),
-    USERNAME_ALREADY_EXISTS(new BadRequestException("Username already exists")),
+    PAYMENT_RESULT_FAILED(new BadRequestException("Payment update failed, please try again")),
 
-    EMAIL_ALREADY_EXISTS(new ResourceNotFoundException("Email already exists")),
+    EMAIL_ALREADY_EXISTS(new BadRequestException("Email already exists")),
     INVALID_EMAIL(new BadRequestException("Invalid email format")),
-    PASSWORD_TOO_WEAK(new BadRequestException("Password is too weak")),
 
     ACCOUNT_NOT_FOUND(new ResourceNotFoundException("Account not found")),
     PRODUCT_NOT_FOUND(new ResourceNotFoundException("Product not found")),
     ORDER_NOT_FOUND(new ResourceNotFoundException("Order not found")),
     OTP_NOT_FOUND(new ResourceNotFoundException("OTP not found")),
-
-
-    PRODUCT_OUT_OF_STOCK(new BadRequestException("Product out of stock")),
     RESOURCE_NOT_FOUND(new ResourceNotFoundException("Resource not found")),
 
-    AUTHORISATION_NULL(new UnAuthorisedException("Authorisation null")),
+    AUTHORISATION_NULL(new UnAuthorisedException("Authorisation is not found")),
     AUTHORISATION_ANNONYMOUS(new UnAuthorisedException("Authorisation user is anonymous")),
-    AUTHORISATION_INVALID(new UnAuthorisedException("Authorisation invalid")),
+    AUTHORISATION_INVALID(new UnAuthorisedException("Authorisation is invalid")),
 
-    CART_EMPTY(new BadRequestException("Cart is empty")),
-    PAYMENT_FAILED(new BadRequestException("Payment failed")),
-    INVALID_COUPON(new BadRequestException("Invalid coupon")),
-    COUPON_EXPIRED(new BadRequestException("Coupon expired")),
-    COUPON_ALREADY_USED(new BadRequestException("Coupon already used")),
-    INVALID_ADDRESS(new BadRequestException("Invalid address")),
-    ADDRESS_NOT_FOUND(new ResourceNotFoundException("Address not found")),
+    INVALID_COUPON(new BadRequestException("Coupon not available")),
     FORBIDDEN_ACTION(new ForbiddenException("You don't have permission to do this action")),
-    INVALID_DATE(new BadRequestException("Invalid date format"));
+    RESOURCE_NOT_OWNED(new ForbiddenException("You don't own this resource")),
+    INVALID_DATE_FORMAT(new BadRequestException("Invalid date format. Please use yyyy-MM-dd'T'HH:mm:ss.SSSX"));
+
 
     private final BaseBizException exception;
 

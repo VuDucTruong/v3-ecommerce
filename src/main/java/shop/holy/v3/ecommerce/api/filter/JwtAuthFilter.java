@@ -16,7 +16,6 @@ import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.service.security.AuthAccountService;
 import shop.holy.v3.ecommerce.service.security.JwtService;
 import shop.holy.v3.ecommerce.shared.property.JwtProperties;
-
 import java.io.IOException;
 
 @Component
@@ -57,7 +56,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
             authAccount = new AuthAccount(userId);
             authAccount.fromClaims(claims);
         }
-        // If access token is expired, try to trust refresh token
+        /// If access token is expired, try to trust refresh token
         else {
             if (refreshToken != null && !jwtUtil.isTokenExpired(refreshToken, false)) {
                 long userId = Long.parseLong(jwtUtil.extractId(accessToken, true));

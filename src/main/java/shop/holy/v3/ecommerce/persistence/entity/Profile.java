@@ -27,7 +27,7 @@ public class Profile extends EntityBase {
     @OneToMany(mappedBy = "profile")
     private Set<Order> orders;
 
-    @ManyToMany(mappedBy = "followers")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "followers")
     private Set<Product> favoriteProducts;
 
     @OneToMany(mappedBy = "author")

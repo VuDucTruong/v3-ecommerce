@@ -17,7 +17,6 @@ import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
-import shop.holy.v3.ecommerce.persistence.repository.ICommentRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductDescriptionRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
@@ -30,7 +29,6 @@ import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -42,7 +40,6 @@ public class ProductService {
     private final IProductRepository productRepository;
     private final IProductDescriptionRepository productDescriptionRepository;
     private final IProductItemRepository productItemRepository;
-    private final ICommentRepository commentRepository;
     private final CloudinaryFacadeService cloudinaryFacadeService;
 
     @SneakyThrows
@@ -101,7 +98,7 @@ public class ProductService {
 
 
     @Transactional
-    public ResponseProduct insert(RequestProductCreate request) throws IOException {
+    public ResponseProduct insert(RequestProductCreate request) {
         Product product = productMapper.fromCreateRequestToEntity(request);
 
         ///  UPLOAD images
@@ -154,7 +151,7 @@ public class ProductService {
     }
 
 
-    private void uploadSingleImageAndSetEntity(Product product, MultipartFile file) throws IOException {
+    private void uploadSingleImageAndSetEntity(Product product, MultipartFile file) {
         if (file == null)
             return;
         String imageUrl = cloudinaryFacadeService.uploadProductBlob(file);

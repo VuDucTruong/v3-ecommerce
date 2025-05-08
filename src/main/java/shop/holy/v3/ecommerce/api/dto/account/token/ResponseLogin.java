@@ -1,4 +1,11 @@
 package shop.holy.v3.ecommerce.api.dto.account.token;
 
-public record ResponseLogin (String accessToken, String refreshToken) {
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
+
+public record ResponseLogin (
+        String accessToken,
+        String refreshToken,
+        @JsonUnwrapped ResponseProfile profile
+) {
 }

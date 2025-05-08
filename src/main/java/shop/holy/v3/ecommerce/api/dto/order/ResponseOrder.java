@@ -13,24 +13,23 @@ public record ResponseOrder(
         Date deletedAt,
         OrderStatus status,
         ResponseCoupon coupon,
-        BigDecimal totalValue,
+        BigDecimal originalAmount,
+        BigDecimal amount,
         ResponseOrderDetail[] details
 ) {
     public record ResponseOrderDetail(
             BigDecimal price,
             BigDecimal originalPrice,
-            @JsonUnwrapped ResponseOrderItem item,
+            @JsonUnwrapped ResponseOrderItem product,
             int quantity
     ) {
-
     }
 
     public record ResponseOrderItem(
             long id,
             String name,
             String imageUrl,
-            String slug,
-            String[] tags
+            String slug
     ) {
     }
 }

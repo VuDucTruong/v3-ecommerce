@@ -39,7 +39,7 @@ public abstract class ProductMapper {
 //    @Mapping(source = "product.group.variants", target = "variants")
 
     /// /    @Mapping(source = "quantity", target = "quantity")
-//    public abstract ResponseProduct fromEntityToResponseWithStatus(Product product);
+//    public abstract ResponseProduct fromEntityToResponse_Light(Product product);
     @Mapping(source = "productDescription", target = "productDescription", ignore = true)
     public abstract Product fromRequestUpdateToEntity(RequestProductUpdate request);
 

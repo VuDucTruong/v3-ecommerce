@@ -48,7 +48,7 @@ public class Product extends EntityBase {
     @OneToOne(mappedBy = "product")
     private ProductDescription productDescription;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "product_favorites",
             joinColumns = @JoinColumn(name = "product_id"),

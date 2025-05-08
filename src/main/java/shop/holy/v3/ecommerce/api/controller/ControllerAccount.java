@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
@@ -24,36 +25,45 @@ public class ControllerAccount {
     private final AccountService accountService;
     private final AuthService authService;
 
-    @PostMapping(value = "/otp")
+    @PostMapping(value = "otp")
+    @Operation(description = "send OTP to user's email -> route to change password page with current Email context")
     public ResponseEntity<?> verifyOtp(@RequestBody RequestOTP request) throws MessagingException {
         accountService.saveOtp(request);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/password")
-    public ResponseEntity<?> changePassword(@RequestBody RequestPasswordUpdate request) {
-        accountService.changePassword(request);
+    @PutMapping(value = "password")
+    @Operation(description = "change password the Remove cookies -> must route user to login !!")
+    public ResponseEntity<?> changePassword(@RequestBody RequestPasswordUpdate request, HttpServletResponse response){
+        var cookies = accountService.changePassword(request);
+        for (Cookie cookie : cookies) {
+            response.addCookie(cookie);
+        }
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("")
+    @PostMapping("register")
+    @Operation(description = "register a new user -> must route user to login !!")
     public ResponseEntity<?> register(@RequestBody RequestAccountRegistration request) {
         accountService.registerAccount(request);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/tokens")
-    public ResponseEntity<?> getTokens(@RequestBody RequestLogin loginRequest, HttpServletResponse response) {
+    @PostMapping("login")
+    @Operation(description = "login a user -> route to home with profile as client's global context")
+    public ResponseEntity<?> login(@RequestBody RequestLogin loginRequest, HttpServletResponse response) {
         ResponseLogin loginResponse = authService.authenticateAccount(loginRequest);
         Cookie[] cookies = authService.makeCookies(loginResponse);
         for (Cookie cookie : cookies) {
             response.addCookie(cookie);
         }
+
         return ResponseEntity.ok(loginResponse);
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<?> deleteTokens(HttpServletResponse response) {
+    @DeleteMapping("logout")
+    @Operation(description = "logout a user -> remove cookies, must route to login page")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
         Cookie[] cookies = authService.removeAuthCookies();
         for (Cookie cookie : cookies) {
             response.addCookie(cookie);

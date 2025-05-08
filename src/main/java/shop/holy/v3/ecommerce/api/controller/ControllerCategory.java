@@ -26,7 +26,7 @@ public class ControllerCategory {
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable long id,
                                     @RequestParam(required = false) boolean deleted) {
-        return ResponseEntity.ok(categoryService.getCategoryByCode(id,deleted));
+        return ResponseEntity.ok(categoryService.getCategoryByCode(id, deleted));
     }
 
     @PostMapping("/searches")
@@ -49,8 +49,10 @@ public class ControllerCategory {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable long id) {
-        return ResponseEntity.ok(categoryService.deleteCategory(id));
+    public ResponseEntity<?> deleteCategory(@PathVariable long id,
+                                            @RequestParam(required = false) boolean isHard) {
+        categoryService.deleteCategory(id, isHard);
+        return ResponseEntity.ok().build();
     }
 
 }

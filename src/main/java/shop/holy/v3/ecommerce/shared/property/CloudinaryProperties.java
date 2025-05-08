@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
-@PropertySource("classpath:secret/cloudinary.yml")
+@PropertySource("classpath:secret/cloudinary.yaml")
 @Component
 public class CloudinaryProperties {
     @Value("${cloud-name}")
