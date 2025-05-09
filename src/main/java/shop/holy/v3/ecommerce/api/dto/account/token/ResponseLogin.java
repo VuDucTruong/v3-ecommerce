@@ -7,6 +7,6 @@ import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 public record ResponseLogin (
         String accessToken,
         String refreshToken,
-        @JsonUnwrapped ResponseUser profile
+        ResponseUser user
 ) {
 }
