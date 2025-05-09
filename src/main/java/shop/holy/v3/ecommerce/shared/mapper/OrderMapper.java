@@ -31,15 +31,17 @@ import java.util.stream.Collectors;
 public abstract class OrderMapper {
 
     @Mapping(source = "orderDetails", target = "orderDetails", ignore = true)
-    @Mapping(target = "status", constant = "PROCESSING")
+    @Mapping(target = "status", constant = "PENDING")
     public abstract Order fromCreateRequestToEntity(RequestOrderCreate categoryCreateRequest);
 
     @Mapping(source = "details", target = "details")
+    @Mapping(source = "order.status", target = "status")
     public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, Collection<OrderDetail> details);
 
-    @Mapping(source = "status", target = "status")
     @Mapping(source = "orderDetails", target = "details", ignore = true)
+    @Mapping(source = "status", target = "status")
     public abstract ResponseOrder fromEntityToResponse_Light(Order order);
+
 
     public Map<Long, OrderDetail> fromRequestToOrderDetails(List<RequestOrderCreate.RequestOrderDetail> details) {
         return details.stream().collect(Collectors.toMap(RequestOrderCreate.RequestOrderDetail::productId, this::fromRequestToOrderDetail));
@@ -78,7 +80,7 @@ public abstract class OrderMapper {
             }
             AuthAccount authAccount = SecurityUtil.getAuthNonNull();
             if (Objects.equals(authAccount.getRole(), RoleEnum.CUSTOMER)) {
-                predicate = criteriaBuilder.equal(root.get("accountId"), authAccount.getId());
+                predicate = criteriaBuilder.equal(root.get("profileId"), authAccount.getId());
             }
 
             return predicate;

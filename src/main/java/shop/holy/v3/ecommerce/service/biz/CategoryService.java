@@ -71,13 +71,20 @@ public class CategoryService {
     }
 
     @Transactional(timeout = 15)
-    public void deleteCategory(long id, boolean isHard) {
+    public int deleteCategory(long id, boolean isHard) {
         categoryRepository.deleteProductCategoryByCategoryIdEquals(id);
         if (isHard)
-            categoryRepository.deleteById(id);
+            return categoryRepository.deleteByIdEquals(id);
         else
-            categoryRepository.updateDeletedAtById(id);
+            return categoryRepository.updateDeletedAtById(id);
+    }
 
+    @Transactional
+    public int deleteCategories(long[] ids, boolean isHard) {
+        categoryRepository.deleteProductCategoryByCategoryIdIn(ids);
+        if (isHard)
+            return categoryRepository.deleteAllByIdIn(ids);
+        return categoryRepository.updateDeletedAtByIdIn(ids);
     }
 
 

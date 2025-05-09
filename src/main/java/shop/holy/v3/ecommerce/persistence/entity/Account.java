@@ -1,8 +1,10 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +28,8 @@ public class Account extends EntityBase {
     private LocalDate enableDate;
     private LocalDate disableDate;
     private boolean isVerified;
+
+    private String verificationCode;
 
     @OneToOne(mappedBy = "account")
     private Profile profile;

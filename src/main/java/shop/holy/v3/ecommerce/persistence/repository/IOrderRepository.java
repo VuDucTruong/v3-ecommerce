@@ -18,6 +18,16 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
             """)
     int updateOrderDeletedAt(long id);
 
+    @Modifying
+    @Query("""
+            update Order o set o.deletedAt = current_timestamp where o.id in (:ids)
+            """)
+    int updateOrderDeletedAtByIdIn(long[] ids);
+
+    @Modifying
+    @Query("UPDATE Order o set o.status = :status where o.id = :orderId")
+    int updateOrderStatusById(String status, long orderId);
+
     Optional<Order> findFirstByIdEqualsAndDeletedAtIsNull(long id);
 
     Optional<Order> findFirstByIdEqualsAndProfileIdEqualsAndDeletedAtIsNull(long id, long profileId);

@@ -149,6 +149,10 @@ public class ProductService {
     public int deleteProductById(Long id) {
         return productRepository.updateProductDeletedAt(id);
     }
+    @Transactional
+    public int deleteProductByIdIn(long[] ids){
+        return productRepository.updateProductDeletedAtByIdIn(ids);
+    }
 
 
     private void uploadSingleImageAndSetEntity(Product product, MultipartFile file) {

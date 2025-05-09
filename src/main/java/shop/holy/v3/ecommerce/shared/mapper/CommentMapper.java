@@ -22,18 +22,29 @@ public abstract class CommentMapper  {
     public abstract Comment fromCreateRequestToEntity(RequestComment requestComment);
 
     @Mapping(source = "content", target = "content")
-    @Mapping(source = "replies", target = "replies")
+    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies")
     @Mapping(source = "author", target = "author")
     public abstract ResponseComment fromEntityToResponse(Comment comment);
 
-    @IterableMapping(elementTargetType = ResponseReply.class)
+    @Mapping(source = "content", target = "content", ignore = true)
+    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
+    public abstract ResponseComment fromEntityToResponse_Censored(Comment comment);
+
+    @IterableMapping( elementTargetType = ResponseReply.class, qualifiedByName = "toReply")
+    @Named("mapReplies")
     public abstract ResponseReply[] mapReplies(Set<Comment> replies);
 
-    @Mapping(source = "author", target = "author")
-    @Mapping(source = "content", target = "content")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "deletedAt", target = "deletedAt")
+    @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply_Censored")
+    @Named("mapReplies_Censored")
+    public abstract ResponseReply[] mapReplies_Censored(Set<Comment> replies);
+
+    @Named("toReply")
     public abstract ResponseReply toResponseReply(Comment reply);
+
+    @Named("toReply_Censored")
+    @Mapping(source = "content", target = "content", ignore = true)
+    public abstract ResponseReply toResponseReply_censored(Comment reply);
+
 
     public abstract ResponseProfile fromProfileToResponseProfile(Profile profile);
 

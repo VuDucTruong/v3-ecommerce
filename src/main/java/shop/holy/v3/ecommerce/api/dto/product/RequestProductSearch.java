@@ -1,12 +1,10 @@
 package shop.holy.v3.ecommerce.api.dto.product;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import shop.holy.v3.ecommerce.api.dto.RequestPageable;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 
 public record RequestProductSearch(
         @Schema(description = "Pagination and sorting information")

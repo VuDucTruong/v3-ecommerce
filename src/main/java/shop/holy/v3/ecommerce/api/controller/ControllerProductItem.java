@@ -5,10 +5,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import shop.holy.v3.ecommerce.api.dto.ResponseError;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
 import shop.holy.v3.ecommerce.service.biz.ProductItemService;
 import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
+import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 
 @Tag(name = "Product Items")
 @RestController
@@ -35,7 +37,7 @@ public class ControllerProductItem {
         if (orderDetailId != DefaultValues.ID) overlapCount++;
         if (productKey != null) overlapCount++;
         if (overlapCount > 1)
-            return ResponseEntity.badRequest().build();
+            throw new BadRequestException("sth");
 
         return ResponseEntity.ok(productItemService.getByIdentifier(id, productId, orderDetailId, productKey));
     }

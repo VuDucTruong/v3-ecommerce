@@ -2,7 +2,6 @@ package shop.holy.v3.ecommerce.service.biz;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,23 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
-import shop.holy.v3.ecommerce.api.dto.order.RequestOrderCreate;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderSearch;
 import shop.holy.v3.ecommerce.api.dto.order.ResponseOrder;
-import shop.holy.v3.ecommerce.persistence.entity.Coupon;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
 import shop.holy.v3.ecommerce.persistence.entity.OrderDetail;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.repository.IOrderDetailRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IOrderRepository;
-import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 import shop.holy.v3.ecommerce.shared.mapper.OrderMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,7 +35,7 @@ public class OrderService {
     /**
      * shouldn't be able to find non-owned order
      */
-    public CompletableFuture<ResponseOrder> findByCode(long id, boolean deleted) {
+    public CompletableFuture<ResponseOrder> findById(long id, boolean deleted) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         CompletableFuture<Order> futureOrder = CompletableFuture.supplyAsync(() -> {
             if (authAccount.isAdmin() || authAccount.isStaff()) {
@@ -74,6 +67,13 @@ public class OrderService {
     @Transactional
     public int deleteOrderById(Long id) {
         return orderRepository.updateOrderDeletedAt(id);
+    }
+
+    @Transactional
+    public int deleteOrders(long[] ids) {
+        if (ids.length > 0)
+            return orderRepository.updateOrderDeletedAtByIdIn(ids);
+        return 0;
     }
 
 

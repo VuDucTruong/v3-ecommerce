@@ -52,8 +52,14 @@ public class BlogService {
 
     @Transactional
     public int deleteBlog(long id) {
-
         return blogRepository.updateBlogDeletedAtById(id);
+    }
+
+    @Transactional
+    public int deleteBlogs(long[] ids) {
+        if (ids.length > 0)
+            return blogRepository.updateBlogDeletedAtByIdIn(ids);
+        return 0;
     }
 
     @Transactional

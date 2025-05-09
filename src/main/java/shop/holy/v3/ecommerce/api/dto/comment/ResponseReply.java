@@ -4,7 +4,8 @@ import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 
 import java.util.Date;
 
-public record ResponseReply(ResponseProfile author,
+public record ResponseReply(long id,
+                            ResponseProfile author,
                             Date createdAt,
                             Date deletedAt,
                             String content) {

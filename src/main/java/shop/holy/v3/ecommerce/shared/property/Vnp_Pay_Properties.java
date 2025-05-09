@@ -18,19 +18,12 @@ import java.util.TimeZone;
 @Configuration
 @ConfigurationProperties(prefix = "payment.vnp")
 public class Vnp_Pay_Properties {
-    @JsonProperty("url")
     private String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    @JsonProperty("returnUrl")
     private String vnp_ReturnUrl;
-    @JsonProperty("tmnCode")
     private String vnp_TmnCode;
-    @JsonProperty("secretKey")
     private String secretKey;
-    @JsonProperty("version")
     private String vnp_Version;
-    @JsonProperty("command")
     private String vnp_Command;
-    @JsonProperty("orderType")
     private String orderType;
 
     public Map<String, String> buildParamsMap(String transRef,String orderInfo) {

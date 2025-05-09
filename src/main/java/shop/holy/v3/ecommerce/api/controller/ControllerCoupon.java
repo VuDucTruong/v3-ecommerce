@@ -3,6 +3,7 @@ package shop.holy.v3.ecommerce.api.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponCreate;
@@ -23,13 +24,15 @@ public class ControllerCoupon {
     private final CouponService couponService;
 
     @PostMapping("/searches")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<?> getAllCoupons(@RequestBody RequestCouponSearch searchReq) {
         ResponsePagination<ResponseCoupon> res = couponService.search(searchReq);
         return ResponseEntity.ok(res);
     }
 
     @GetMapping()
-    public ResponseEntity<?> getById(@RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
+    public ResponseEntity<?> getByIdentifier(@RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
                                      @RequestParam(required = false) String code,
                                      @RequestParam(required = false) boolean deleted) {
         return ResponseEntity.ok(couponService.findByIdentitfier(id, code, deleted));
@@ -37,17 +40,20 @@ public class ControllerCoupon {
 
 
     @PostMapping(value = "")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<?> createCoupon(@RequestBody RequestCouponCreate request) {
         return ResponseEntity.ok(couponService.insert(request));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<?> deleteCouponById(
             @PathVariable long id, @RequestParam(required = false) boolean isSoft) {
         return ResponseEntity.ok(couponService.deleteCoupon(id));
     }
 
     @PutMapping(value = "")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<?> updateCoupon(@RequestBody RequestCouponUpdate request) throws IOException {
         return ResponseEntity.ok(couponService.update(request));
     }

@@ -19,6 +19,10 @@ public interface IBlogRepository extends JpaRepository<Blog, Long>, JpaSpecifica
     @Query("UPDATE Blog b SET b.deletedAt = CURRENT_TIMESTAMP WHERE b.id = :id")
     int updateBlogDeletedAtById(long id);
 
+    @Modifying
+    @Query("UPDATE Blog b SET b.deletedAt = CURRENT_TIMESTAMP WHERE b.id in (:ids)")
+    int updateBlogDeletedAtByIdIn(long[] ids);
+
 
 
     @Modifying

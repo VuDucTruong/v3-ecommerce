@@ -25,6 +25,14 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             """)
     int updateProductDeletedAt(Long id);
 
+
+    @Modifying
+    @Query("""
+            update Product p set p.deletedAt = current_timestamp where p.id in (:ids)
+            """)
+    int updateProductDeletedAtByIdIn(long[] ids);
+
+
     @Modifying
     @Transactional
     @Query(value = "insert into product_favorites (profile_id, product_id) values (:accountId,:productId)", nativeQuery = true)

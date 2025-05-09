@@ -1,12 +1,12 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ public class Product extends EntityBase {
     @Column(name = "group_id")
     private Long groupId;
 
-    @ColumnDefault("false")
+    @ColumnDefault("true")
     private boolean represent;
 
     // JSON

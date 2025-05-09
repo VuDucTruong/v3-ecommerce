@@ -31,7 +31,7 @@ public class ControllerPayment {
     }
 
     @GetMapping(value = "history", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String his() {
+    public String gethistory(@RequestParam(required = false) Long id) {
         return """
                 Đéo có đâu, 1 order = 1 payment
                 => đi qua lấy order luôn bao gồm -> Optional: payment

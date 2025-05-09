@@ -16,6 +16,7 @@ public enum BizErrors {
     ACCOUNT_NOT_FOUND(new ResourceNotFoundException("Account not found")),
     PRODUCT_NOT_FOUND(new ResourceNotFoundException("Product not found")),
     ORDER_NOT_FOUND(new ResourceNotFoundException("Order not found")),
+    ORDER_AMOUNT_TOO_MINOR(new BadRequestException("Order amount is too small")),
     OTP_NOT_FOUND(new ResourceNotFoundException("OTP not found")),
     RESOURCE_NOT_FOUND(new ResourceNotFoundException("Resource not found")),
 

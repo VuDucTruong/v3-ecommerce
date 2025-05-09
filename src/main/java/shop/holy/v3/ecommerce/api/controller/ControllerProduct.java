@@ -30,15 +30,10 @@ public class ControllerProduct {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("test")
-    public void test() {
-        productService.teststh();;
-    }
-
     @GetMapping("")
     public CompletableFuture<ResponseProduct> getProductById(@RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
-                                            @RequestParam(required = false) String slug,
-                                            @RequestParam(required = false) boolean deleted) {
+                                                             @RequestParam(required = false) String slug,
+                                                             @RequestParam(required = false) boolean deleted) {
         return productService.getByIdentifier(id, slug, deleted);
     }
 
@@ -50,6 +45,12 @@ public class ControllerProduct {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProductById(@PathVariable long id) {
         return ResponseEntity.ok(productService.deleteProductById(id));
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<?> delete(@RequestParam long[] ids) {
+        var rs = productService.deleteProductByIdIn(ids);
+        return ResponseEntity.ok(rs);
     }
 
     @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -1,17 +1,18 @@
 package shop.holy.v3.ecommerce.api.dto.payment;
 
 public record RequestPaymentCallback(
-        String vnp_TmnCode,
         long vnp_Amount,
         String vnp_BankCode,
-        String vnp_BankTranNo,
         String vnp_CardType,
-        String vnp_PayDate,
         String vnp_OrderInfo,
-        String vnp_TransactionNo,
+        String vnp_PayDate,
         String vnp_ResponseCode,
+        String vnp_TmnCode,
+        String vnp_TransactionNo,
         String vnp_TransactionStatus,
         String vnp_TxnRef,
-        String vnp_SecureHash
+        String vnp_SecureHash,
+
+        String vnp_BankTranNo
 ) {
 }

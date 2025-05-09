@@ -128,3 +128,13 @@ on a.id = p.account_id
 where email='phong@gmail.com';
 
 select * from profiles;
+
+select *
+from payments;
+
+delete
+from payments
+where true;
+
+select *
+from orders;

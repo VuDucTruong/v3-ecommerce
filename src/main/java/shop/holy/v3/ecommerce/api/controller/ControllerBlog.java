@@ -56,4 +56,10 @@ public class ControllerBlog {
         return blogService.deleteBlog(id);
     }
 
+    @DeleteMapping(value = "")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
+    public int deleteBlogs(@RequestParam long ids[]) {
+        return blogService.deleteBlogs(ids);
+    }
+
 }

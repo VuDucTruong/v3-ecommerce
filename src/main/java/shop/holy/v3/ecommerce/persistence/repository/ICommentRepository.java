@@ -1,5 +1,7 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
@@ -14,12 +16,17 @@ public interface ICommentRepository extends JpaRepository<Comment, Long>, JpaSpe
     Optional<Comment> findById(Long aLong);
 
     @EntityGraph(attributePaths = {"author", "replies"})
-    Optional<Comment> findFirstByIdEqualsAndDeletedAtIsNull(long id);
+    Page<Comment> findAllByProductIdAndParentCommentIdIsNull(long productId, Pageable pageable);
 
 
     @Modifying
     @Query("UPDATE Comment c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id = ?1")
     int updateDeletedAtById(long id);
+
+
+    @Modifying
+    @Query("UPDATE Comment c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id = (?1)")
+    int updateDeletedAtByIdIn(long[] ids);
 
 
 }

@@ -4,14 +4,19 @@ package shop.holy.v3.ecommerce.service.biz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.payment.RequestPaymentCallback;
 import shop.holy.v3.ecommerce.api.dto.payment.RequestPaymentUrl;
 import shop.holy.v3.ecommerce.api.dto.payment.ResponsePayment;
 import shop.holy.v3.ecommerce.persistence.entity.Payment;
+import shop.holy.v3.ecommerce.persistence.entity.notification.NotificationProdKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_PayUrl_Status;
+import shop.holy.v3.ecommerce.persistence.repository.INotificationProdKeyRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IOrderRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IPaymentRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
+import shop.holy.v3.ecommerce.shared.constant.PaymentStatus;
 import shop.holy.v3.ecommerce.shared.mapper.PaymentMapper;
 import shop.holy.v3.ecommerce.shared.property.Vnp_Pay_Properties;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
@@ -30,13 +35,27 @@ public class PaymentService {
     private final IOrderRepository orderRepository;
     private final Vnp_Pay_Properties vnpPayProperties;
     private final PaymentMapper paymentMapper;
+    private final INotificationProdKeyRepository notificationRepository;
 
     @Transactional
     public ResponsePayment callBackPayment(RequestPaymentCallback request) {
+        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
+
         Payment payment = paymentMapper.from_CallbackRequest_to_Entity(request);
-        int changes = paymentRepository.updatePaymentByTransRefAndSecureHash(payment);
-        if (changes <= 0)
+        var orderIds = paymentRepository.updatePaymentByTransRefAndSecureHash(payment);
+        if (orderIds.size() <= 0)
             throw BizErrors.PAYMENT_RESULT_FAILED.exception();
+        if (payment.getStatus().equals(PaymentStatus.FAILED.name())) {
+            orderRepository.updateOrderStatusById(OrderStatus.FAILED.name(), payment.getOrderId());
+        }
+
+        else if (payment.getStatus().equals(PaymentStatus.SUCCESS.name())) {
+            String email = authAccount.getEmail();
+            NotificationProdKey noti = new NotificationProdKey();
+            noti.setEmail(email);
+            noti.setOrderIds(orderIds);
+            notificationRepository.save(noti);
+        }
         return paymentMapper.fromEntityToResponse(payment);
     }
 
@@ -59,6 +78,8 @@ public class PaymentService {
                 p1.setPaymentUrl(paymentUrl);
                 paymentRepository.save(p1);
             }
+            int changes = orderRepository.updateOrderStatusById(OrderStatus.PROCESSING.name(), orderId);
+            if (changes <= 0) throw BizErrors.ORDER_NOT_FOUND.exception();
             return paymentUrl;
         }
         return opt_payment.get().getPaymentUrl();

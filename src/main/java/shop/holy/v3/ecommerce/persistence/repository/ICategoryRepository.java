@@ -19,7 +19,19 @@ public interface ICategoryRepository extends JpaRepository<Category, Long>, JpaS
     void deleteProductCategoryByCategoryIdEquals(long categoryId);
 
     @Modifying
+    @Query(value = "DELETE FROM products_categories where category_id = ANY(:categoryIds)",nativeQuery = true)
+    void deleteProductCategoryByCategoryIdIn(long[] categoryIds);
+
+    @Modifying
     @Query("UPDATE Category c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id = :id")
-    void updateDeletedAtById(Long id);
+    int updateDeletedAtById(Long id);
+
+    @Modifying
+    @Query("UPDATE Category c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id in (:ids)")
+    int updateDeletedAtByIdIn(long[] ids);
+
+    int deleteAllByIdIn(long[] ids);
+
+    int deleteByIdEquals(long id);
 
 }

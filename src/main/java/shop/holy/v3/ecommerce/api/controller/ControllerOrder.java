@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,16 @@ public class ControllerOrder {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderById(@PathVariable long id,
-                                          @RequestParam boolean deleted) {
-        return ResponseEntity.ok(orderService.findByCode(id, deleted));
+                                          @RequestParam(required = false) boolean deleted) {
+        return ResponseEntity.ok(orderService.findById(id, deleted));
     }
 
 
     @PostMapping("/searches")
+    @Operation(description = """
+            1.automatically filter by Id when: user is not admin \n
+            2. concatenated queries with AND condition!!
+            """)
     public ResponseEntity<?> search(
             RequestOrderSearch searchReq
     ) {
@@ -45,6 +50,11 @@ public class ControllerOrder {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrderById(@PathVariable long id) {
         return ResponseEntity.ok(orderService.deleteOrderById(id));
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteMultiples(@RequestParam long[] ids) {
+        return ResponseEntity.ok(orderService.deleteOrders(ids));
     }
 
 

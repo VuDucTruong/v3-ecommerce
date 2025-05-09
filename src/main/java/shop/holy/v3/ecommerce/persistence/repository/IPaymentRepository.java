@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Payment;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_PayUrl_Status;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,16 +20,17 @@ public interface IPaymentRepository extends JpaRepository<Payment, Long> {
     Optional<ProQ_PayUrl_Status> findFirstPaymentUrlAndStatusByOrderId(long orderId);
 
     @Modifying
-    @Query("""
-                UPDATE Payment p set
-                p.status = :#{#p2.status}, p.paymentMethod = :#{#p2.paymentMethod},
-                p.bankCode = :#{#p2.bankCode},
-                p.detailCode = :#{#p2.detailCode}, p.detailMessage = :#{#p2.detailMessage},
-                p.note = :#{#p2.note}, p.cardType = :#{#p2.cardType}
+    @Query(value = """
+                UPDATE payments p set
+                status = :#{#p2.status}, payment_method = :#{#p2.paymentMethod},
+                bank_code = :#{#p2.bankCode},
+                detail_code = :#{#p2.detailCode}, detail_message = :#{#p2.detailMessage},
+                note = :#{#p2.note}, card_type = :#{#p2.cardType}
             WHERE
-            p.transRef = :#{#p2.transRef} AND p.secureHash = :#{#p2.secureHash}
-            """)
-    int updatePaymentByTransRefAndSecureHash(Payment p2);
+                trans_ref = :#{#p2.transRef} AND    secure_hash = :#{#p2.secureHash}
+                returning order_id
+            """, nativeQuery = true)
+    List<Long> updatePaymentByTransRefAndSecureHash(Payment p2);
 
 
 

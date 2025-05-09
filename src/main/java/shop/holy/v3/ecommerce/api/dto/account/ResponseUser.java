@@ -8,6 +8,7 @@ import java.util.Date;
 
 public record ResponseUser(
         long id,
+        String email,
         LocalDate enableDate,
         LocalDate disableDate,
         Date createdAt,

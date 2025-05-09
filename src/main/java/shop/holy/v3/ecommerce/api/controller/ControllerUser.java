@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("users")
-@Tag(name = "Users")
+@Tag(name = "Users", description = "=> to serve CRUD on users")
 @RequiredArgsConstructor
 public class ControllerUser {
 
@@ -28,7 +28,7 @@ public class ControllerUser {
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    @Operation(description = "Use for Admin only, to manually Create a User -> this is authenticated")
+    @Operation(description = "Use for Admin only, to manually Create a User \n -> this is authenticated")
     public ResponseEntity<?> createAccount(
             @ModelAttribute @Valid RequestUserCreate request) throws IOException {
         ResponseUser account = userService.createUser(request);
@@ -37,12 +37,12 @@ public class ControllerUser {
 
     @GetMapping("")
     @Operation(description = """
-            only admin provide id, for user leave all defaults (no set) 
-            This is also endpoint to automatic login
-            if this return AUTHORISATION_NULL || AUTHORISATION_ANNONYMOUS || AUTHORISATION_INVALID 
-                    => simply route to login page
+            only admin provide id, for user leave all defaults (no set) \n
+            This is also endpoint to automatic login \n
+            if this return AUTHORISATION_NULL || AUTHORISATION_ANNONYMOUS || AUTHORISATION_INVALID \n 
+                    => simply route to login page \n
             """)
-    public ResponseEntity<ResponseUser> getAccount(
+    public ResponseEntity<ResponseUser> getusers(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) boolean deleted) {
         ResponseUser account = userService.getById(id, deleted);
@@ -50,7 +50,7 @@ public class ControllerUser {
     }
 
     @PostMapping("searches")
-    @Operation(summary = "Search users", description = "Search users with pagination, all conditions are 'AND' concatenated ")
+    @Operation(summary = "Search users", description = "Search users with pagination, \n all conditions are 'AND' concatenated ")
     public ResponseEntity<?> search(
             @RequestBody RequestUserSearch searchSpecs
     ) {
@@ -65,6 +65,8 @@ public class ControllerUser {
         ResponseProfile profile = userService.updateProfile(request);
         return ResponseEntity.ok(profile);
     }
+
+
 
 
 }

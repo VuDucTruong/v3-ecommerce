@@ -16,7 +16,7 @@ import shop.holy.v3.ecommerce.api.dto.account.token.ResponseLogin;
 import shop.holy.v3.ecommerce.service.biz.AccountService;
 import shop.holy.v3.ecommerce.service.security.AuthService;
 
-@Tag(name = "Accounts")
+@Tag(name = "Accounts", description = "-> to serve functional ops, auths, cookies,...")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("accounts")

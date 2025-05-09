@@ -61,11 +61,12 @@ public abstract class ProductMapper {
             if (query.getResultType() == Product.class) {
                 root.fetch("categories", JoinType.LEFT);
                 root.fetch("productDescription", JoinType.LEFT);
+//                root.fetch("variants", JoinType.LEFT);
             }
 
             if (searchReq == null) return criteriaBuilder.conjunction();
 
-            Predicate predicate = criteriaBuilder.conjunction();
+            Predicate predicate = criteriaBuilder.equal(root.get("represent"), true);
 
             // Filter by IDs
             if (!CollectionUtils.isEmpty(searchReq.ids())) {

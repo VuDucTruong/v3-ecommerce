@@ -17,6 +17,7 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
+
 import java.util.Optional;
 
 @Service
@@ -35,16 +36,25 @@ public class CommentService {
         return ResponsePagination.fromPage(pageRes);
     }
 
-    public ResponseComment getById(long id, boolean deleted) {
-        Optional<Comment> optionalComment;
-        if (deleted)
-            optionalComment = commentRepository.findById(id);
-        else
-            optionalComment = commentRepository.findFirstByIdEqualsAndDeletedAtIsNull(id);
 
-        return optionalComment.map(commentMapper::fromEntityToResponse)
-                .orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+    public ResponseComment getById(long id, boolean deleted) {
+        Optional<Comment> queryRs = commentRepository.findById(id);
+        var cmt = deleted
+                ? queryRs.map(commentMapper::fromEntityToResponse)
+                : queryRs.map(commentMapper::fromEntityToResponse_Censored);
+        return cmt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
     }
+
+    public ResponsePagination<ResponseComment> getCommentsByProductId(long productId, boolean deleted, Pageable pageable) {
+        var comments = commentRepository.findAllByProductIdAndParentCommentIdIsNull(productId, pageable);
+        Page<ResponseComment> rs;
+        if (deleted)
+            rs = comments.map(commentMapper::fromEntityToResponse_Censored);
+        else
+            rs = comments.map(commentMapper::fromEntityToResponse);
+        return ResponsePagination.fromPage(rs);
+    }
+
 
     @Transactional
     public ResponseComment insert(RequestComment request) {
@@ -53,12 +63,16 @@ public class CommentService {
         comment.setAuthorId(authAccount.getProfileId());
 
         return commentMapper.fromEntityToResponse(commentRepository.save(comment));
-
     }
 
     @Transactional
-    public int deleteCategory(long id) {
+    public int deleteComment(long id) {
         return commentRepository.updateDeletedAtById(id);
+    }
+
+    @Transactional
+    public int deleteComments(long[] ids) {
+        return commentRepository.updateDeletedAtByIdIn(ids);
     }
 
 

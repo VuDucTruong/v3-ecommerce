@@ -1,13 +1,13 @@
 payment:
   vnp:
-    url: ${VNP_PAY_URL}
-    tmnCode: ${VNP_TMN_CODE} # identity code of merchant-client
     secretKey: ${VNP_SECRET_KEY}
     #    returnUrl: ${VNP_RETURN_URL:http://localhost:8081/payments/vnpay}
-    returnUrl: ${VNP_RETURN_URL}
-    version: ${VNP_VERSION}
-    command: ${VNP_COMMAND}
     orderType: ${VNP_ORDER_TYPE:other}
+    vnp-payurl: ${VNP_PAY_URL}
+    vnp-tmncode: ${VNP_TMN_CODE}
+    vnp-command: ${VNP_COMMAND}
+    vnp-version: ${VNP_VERSION}
+    vnp-returnurl: ${VNP_RETURN_URL}
 
   query:
     url: ${VNP_QUERY_URL}
