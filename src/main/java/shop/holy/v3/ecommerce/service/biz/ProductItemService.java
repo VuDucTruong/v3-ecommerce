@@ -1,30 +1,28 @@
 package shop.holy.v3.ecommerce.service.biz;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductItemUsedRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.mapper.ProductItemMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,41 +33,57 @@ public class ProductItemService {
     private final IProductRepository productRepository;
     private final ProductItemMapper mapper;
 
-    public ResponsePagination<ResponseProductItem> search(RequestProductItemSearch searchReq) {
+    public ResponsePagination<ResponseProductItems_Indetails> search(RequestProductItemSearch searchReq) {
         boolean used = searchReq.used();
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         if (used) {
             Specification<ProductItemUsed> specs = mapper.fromRequestSearchToSpec(searchReq);
-            Page<ProductItemUsed> usedProductItems = usedRepository.findAll(specs, pageable);
-            Page<ResponseProductItem> responses = usedProductItems.map(mapper::fromUsedEntityToResponse);
+            var usedProdItems = usedRepository.findBy(specs, q -> q.as(ProQ_ProductMetadata.class).page(pageable));
+            var responses = usedProdItems.map(item ->
+                    mapper.fromProjection_InDetail_ToResponse(item, used));
             return ResponsePagination.fromPage(responses);
         }
-
         Specification<ProductItem> specs = mapper.fromRequestSearchToSpec(searchReq);
-        Page<ProductItem> productItems = productItemRepository.findAll(specs, pageable);
-        Page<ResponseProductItem> responses = productItems.map(mapper::fromEntityToResponse);
+        var productItems = productItemRepository.findBy(specs, q -> q.as(ProQ_ProductMetadata.class).page(pageable));
+
+        var responses = productItems.map(item ->
+                mapper.fromProjection_InDetail_ToResponse(item, used));
         return ResponsePagination.fromPage(responses);
     }
 
-    public ResponseProductItems_Indetails[] getByIdentifier(Long id, Long productId, Long orderDetailId, String productKey) {
+    public ResponseProductItems_Indetails[] getByIdentifier(Long id, Long productId, Long orderDetailId, String productKey, boolean used) {
+//        List<ProQ_ProductMetadata> results;
         if (id != null) {
-            var rs = productItemRepository.findById(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-            return new ResponseProductItems_Indetails[]{mapper.from_EntityToResponse_Indetails(rs, null, false)};
-        } else if (orderDetailId != null){
-            Product prod = null;
-            return usedRepository.findAllByOrderDetailIdEquals(orderDetailId).stream()
-                    .map(item -> mapper.fromused_EntityToResponse_Indetails(item, prod, true))
-                    .toArray(ResponseProductItems_Indetails[]::new);
+            Optional<ProQ_ProductMetadata> optItem;
+            if (used)
+                optItem = usedRepository.findFirstById(id);
+            else
+                optItem = productItemRepository.findFirstById(id);
+            boolean finalUsed1 = used;
+            return new ResponseProductItems_Indetails[]{optItem
+                    .map(item -> mapper.fromProjection_InDetail_ToResponse(item, finalUsed1))
+                    .orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception)};
+
         }
-        else if (StringUtils.hasLength(productKey)) {
-            var rs = productItemRepository.findFirstByProductKey(productKey).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-            Product prod = null;
-            return new ResponseProductItems_Indetails[]{mapper.from_EntityToResponse_Indetails(rs, prod, false)};
+        if (StringUtils.hasLength(productKey)) {
+            Optional<ProQ_ProductMetadata> optItem;
+            if (used)
+                optItem = usedRepository.findFirstByProductKey(productKey);
+            else
+                optItem = productItemRepository.findFirstByProductKey(productKey);
+            boolean finalUsed2 = used;
+            return new ResponseProductItems_Indetails[]{optItem
+                    .map(item -> mapper.fromProjection_InDetail_ToResponse(item, finalUsed2))
+                    .orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception)};
         }
-        ///  ELSE PRODUCT_id
-        var rs = productItemRepository.findAllByProductIdEquals(productId, Pageable.unpaged(Sort.by(Sort.Direction.DESC, "createdAt"))).getContent();
-        var prod = productRepository.findById(productId).orElseThrow(BizErrors.PRODUCT_NOT_FOUND::exception);
-        return rs.stream().map(item -> mapper.from_EntityToResponse_Indetails(item, prod, false))
+        List<ProQ_ProductMetadata> results;
+        if (orderDetailId != null) {
+            results = usedRepository.findAllByOrderDetailIdEquals(orderDetailId);
+            used = true;
+        } else ///  ELSE PRODUCT_id
+            results = productItemRepository.findAllByProductIdEquals(productId);
+        boolean finalUsed = used;
+        return results.stream().map(item -> mapper.fromProjection_InDetail_ToResponse(item, finalUsed))
                 .toArray(ResponseProductItems_Indetails[]::new);
     }
 
@@ -116,10 +130,15 @@ public class ProductItemService {
         return id_qty_pair.size();
     }
 
+    ///  FIX THIS
     @Transactional
     public int makeProductUsed(long[] ids) {
         var productItems = productItemRepository.deleteProductItemsByIdInAndReturnAll(ids);
+//        productItemRepository.deleteByIdIn(ids);
+
         var useds = productItems.stream().map(mapper::from_NonUsedEntity_ToUsedEntity).toList();
+
+
         var groupByProdIdCount = useds.stream()
                 .collect(Collectors.groupingBy(ProductItemUsed::getProductId, Collectors.counting()));
         for (var e : groupByProdIdCount.entrySet()) {

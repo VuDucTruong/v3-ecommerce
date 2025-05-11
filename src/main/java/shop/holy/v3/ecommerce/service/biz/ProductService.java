@@ -103,21 +103,20 @@ public class ProductService {
 
         ///  UPLOAD images
         this.uploadSingleImageAndSetEntity(product, request.image());
+        ProductDescription prod_Desc = productMapper.fromRequestToDescription(request.productDescription());
+        var desc = productDescriptionRepository.save(prod_Desc);
 
         /// SAVE PRODUCT_DESC
+        product.setProDescId(desc.getId());
         Product rs = productRepository.save(product);
-        {
-            ProductDescription prod_Desc = productMapper.fromRequestToDescription(request.productDescription());
-            prod_Desc.setProductId(rs.getId());
-            productDescriptionRepository.save(prod_Desc);
-        }
+
         ///  SAVE CATEGORIES
         {
             request.categoryIds().forEach(catId -> {
                 productRepository.insertProductCategories(product.getId(), catId);
             });
         }
-        return productMapper.fromEntityToResponse_Light(product);
+        return productMapper.fromEntityToResponse_Light(rs);
     }
 
     @Transactional
@@ -138,7 +137,8 @@ public class ProductService {
             Product rs = productRepository.save(product);
             ProductDescription prod_Desc = productMapper.fromRequestToDescription(request.productDescription());
             if (prod_Desc != null) {
-                prod_Desc.setProductId(rs.getId());
+//                prod_Desc.setProductId(rs.getId());
+                prod_Desc.setId(rs.getProDescId());
                 productDescriptionRepository.updateProductDescriptionById(prod_Desc);
             }
         }
@@ -149,8 +149,9 @@ public class ProductService {
     public int deleteProductById(Long id) {
         return productRepository.updateProductDeletedAt(id);
     }
+
     @Transactional
-    public int deleteProductByIdIn(long[] ids){
+    public int deleteProductByIdIn(long[] ids) {
         return productRepository.updateProductDeletedAtByIdIn(ids);
     }
 

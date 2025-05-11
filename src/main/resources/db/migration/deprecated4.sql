@@ -20,11 +20,11 @@ SET row_security = off;
 -- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'ADMIN');
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (2, '2025-04-17 14:11:35.385778', NULL, '2026-04-17', 'customer@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'CUSTOMER');
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (6, '2025-05-08 10:59:23.342558', NULL, NULL, 'cus1@gmail.com', NULL, false, NULL, NULL, 'string', 'CUSTOMER');
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (8, '2025-05-08 11:08:58.873873', NULL, NULL, 'cus2@gmail.com', NULL, false, NULL, NULL, '123456', 'CUSTOMER');
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role) VALUES (9, '2025-05-08 11:16:25.04038', NULL, NULL, '21522458@gm.uit.edu.vn', NULL, false, NULL, NULL, '123456789', 'CUSTOMER');
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'ADMIN', NULL);
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (2, '2025-04-17 14:11:35.385778', NULL, '2026-04-17', 'customer@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'CUSTOMER', NULL);
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (6, '2025-05-08 10:59:23.342558', NULL, NULL, 'cus1@gmail.com', NULL, false, NULL, NULL, 'string', 'CUSTOMER', NULL);
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (8, '2025-05-08 11:08:58.873873', NULL, NULL, 'cus2@gmail.com', NULL, false, NULL, NULL, '123456', 'CUSTOMER', NULL);
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (9, '2025-05-08 11:16:25.04038', NULL, NULL, '21522458@gm.uit.edu.vn', NULL, false, NULL, NULL, '123456789', 'CUSTOMER', NULL);
 
 
 --
@@ -69,12 +69,25 @@ INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (1, 
 
 
 --
+-- Data for Name: product_description; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (1, '2025-04-17 16:13:40.831946', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (3, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', 'string');
+-- INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (7, '2025-04-23 21:09:11.903325', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
+-- INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (8, '2025-04-24 11:48:34.205537', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
+-- INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (9, '2025-04-24 11:51:10.273004', NULL, 'string', 'string', 'string', 'string', 9, 'string');
+
+
+
+--
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags) VALUES (10, '2025-04-24 11:48:34.205537', NULL, 1, NULL, 'phong youtube', 100.00, 50.00, 2, false, 'phong-youtube', '["str"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 4, false, '', '[]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 2, false, 'the-jakarta-product', '[]');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags, prod_desc_id) VALUES (10, '2025-04-24 11:48:34.205537', NULL, 1, NULL, 'phong youtube', 100.00, 50.00, 2, false, 'phong-youtube', '["str"]',1);
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags, prod_desc_id) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 4, false, '', '[]',2);
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags, prod_desc_id) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 2, false, 'the-jakarta-product', '[]',3);
 
 
 --
@@ -108,6 +121,12 @@ INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (
 
 
 --
+-- Data for Name: notification_prod_keys; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+
+
+--
 -- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
@@ -125,19 +144,8 @@ INSERT INTO public.order_details (id, order_id, original_price, price, product_i
 -- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (1, '2025-05-07 20:13:31.364656', NULL, 'NCB', NULL, NULL, NULL, 'them do an', 1, 'VNPAY', 'null?vnp_Amount=10000&vnp_BankCode=NCB&vnp_CreateDate=20250507201333&vnp_CurrCode=VND&vnp_ExpireDate=20250507202833&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderInfo=them+do+an&vnp_OrderType=other&vnp_TxnRef=1d06039f-f6f5-446f-b025-299bc96efab3&vnp_SecureHash=1678e5e5ba0fdf14f7cb15d25ccc1605e54be3c46ba6f1b3a4ad051ed20fa38088836275cc691a583d5f903afe3ff1174701a329a5ef5906955900966e87b4e6', 4, NULL, NULL, '1d06039f-f6f5-446f-b025-299bc96efab3');
+INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (2, '2025-05-09 09:13:38.952906', NULL, NULL, NULL, NULL, NULL, 'hello', 1, 'VNPAY', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=10000&vnp_Command=pay&vnp_CreateDate=20250509091348&vnp_CurrCode=VND&vnp_ExpireDate=20250509092848&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderInfo=hello&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3007%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=09c4a7a6-e3b1-465b-a057-f8d0c3be18da&vnp_Version=2.1.0&vnp_SecureHash=b1e3b4ac5db577bda68e5ed3fdede448a542f4b2fd0a275c0676a7390cb795bd8a798bafc607606ba0a76c0d370ac203aef38399863af20c0cd99c07d24b7e80', 3, NULL, NULL, '09c4a7a6-e3b1-465b-a057-f8d0c3be18da');
 
-
---
--- Data for Name: product_description; Type: TABLE DATA; Schema: public; Owner: phong
---
-
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (1, '2025-04-17 16:13:40.831946', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (6, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (7, '2025-04-23 21:09:11.903325', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (8, '2025-04-24 11:48:34.205537', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (9, '2025-04-24 11:51:10.273004', NULL, 'string', 'string', 'string', 'string', 9, 'string');
 
 
 --
@@ -234,6 +242,13 @@ SELECT pg_catalog.setval('public.keywords_id_seq', 1, false);
 
 
 --
+-- Name: notification_prod_keys_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
+--
+
+SELECT pg_catalog.setval('public.notification_prod_keys_id_seq', 1, false);
+
+
+--
 -- Name: order_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
@@ -251,7 +266,7 @@ SELECT pg_catalog.setval('public.orders_id_seq', 1, true);
 -- Name: payments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.payments_id_seq', 1, true);
+SELECT pg_catalog.setval('public.payments_id_seq', 2, true);
 
 
 --

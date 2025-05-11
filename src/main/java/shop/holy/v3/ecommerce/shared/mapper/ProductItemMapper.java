@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.shared.mapper;
 
 
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.apache.commons.lang3.tuple.Triple;
 import org.mapstruct.*;
@@ -10,10 +11,11 @@ import shop.holy.v3.ecommerce.api.dto.product.item.*;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-uses = {CommonMapper.class})
+        uses = {CommonMapper.class})
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ProductItemMapper {
     @Mapping(target = "used", constant = "false")
@@ -21,42 +23,25 @@ public abstract class ProductItemMapper {
 
     public abstract ProductItem fromRequestToEntity(RequestProductItemCreate productItem);
 
+    @Mapping(source = "id", target = "id")
     public abstract ProductItem fromUpdateRequestToEntity(RequestProductItemUpdate productItem);
 
     @Mapping(target = "used", constant = "true")
     public abstract ResponseProductItem fromUsedEntityToResponse(ProductItemUsed usedProductItem);
 
 
-    @Mapping(target = "slug", source = "product.slug")
-    @Mapping(target = "name", source = "product.name")
-    @Mapping(target = "imageUrl", source = "product.imageUrlId", qualifiedByName = MappingFunctions.GEN_URL)
-    @Mapping(target = "represent", source = "product.represent")
-    @Mapping(target = "price", source = "product.price")
-    @Mapping(target = "originalPrice", source = "product.originalPrice")
-    @Mapping(target = "productId", source = "item.productId")
-    @Mapping(target = "id", source = "item.id")
-    @Mapping(target = "productKey", source = "item.productKey")
-    @Mapping(target = "createdAt", source = "item.createdAt")
-    @Mapping(target = "region", source = "item.region")
-    @Mapping(target = "used", source = "used")
-    public abstract ResponseProductItems_Indetails from_EntityToResponse_Indetails(
-            ProductItem item, Product product, boolean used);
+    @Mapping(source = "used", target = "used")
+    @Mapping(target = "slug", source = "productMetadata.product.slug")
+    @Mapping(target = "name", source = "productMetadata.product.name")
+    @Mapping(target = "imageUrl", source = "productMetadata.product.imageUrlId", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(target = "represent", source = "productMetadata.product.represent")
+    @Mapping(target = "price", source = "productMetadata.product.price")
+    @Mapping(target = "originalPrice", source = "productMetadata.product.originalPrice")
+    @Mapping(target = "createdAt", source = "productMetadata.createdAt")
+    public abstract ResponseProductItems_Indetails fromProjection_InDetail_ToResponse(ProQ_ProductMetadata productMetadata, boolean used);
 
-    @Mapping(target = "slug", source = "product.slug")
-    @Mapping(target = "name", source = "product.name")
-    @Mapping(target = "imageUrl", source = "product.imageUrlId", qualifiedByName = MappingFunctions.GEN_URL)
-    @Mapping(target = "represent", source = "product.represent")
-    @Mapping(target = "price", source = "product.price")
-    @Mapping(target = "originalPrice", source = "product.originalPrice")
-    @Mapping(target = "id", source = "item.id")
-    @Mapping(target = "productId", source = "item.productId")
-    @Mapping(target = "productKey", source = "item.productKey")
-    @Mapping(target = "createdAt", source = "item.createdAt")
-    @Mapping(target = "region", source = "item.region")
-    @Mapping(target = "used", source = "used")
-    public abstract ResponseProductItems_Indetails fromused_EntityToResponse_Indetails(
-            ProductItemUsed item, Product product, boolean used);
 
+    @Mapping(source = "id", target = "id", ignore = true)
     public abstract ProductItemUsed from_NonUsedEntity_ToUsedEntity(ProductItem productItem);
 
     public abstract ProductItemUsed from_Request_ToUsedEntity(RequestProductItemCreate productItem);
@@ -92,12 +77,13 @@ public abstract class ProductItemMapper {
             assert query != null;
             if (searchReq == null) return criteriaBuilder.conjunction();
 
+            root.fetch("product", JoinType.LEFT);
+
             Predicate predicate = criteriaBuilder.conjunction();
 
             if (searchReq.productId() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("productId"), searchReq.productId()));
             }
-
 
             if (StringUtils.hasLength(searchReq.productKey())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("productKey"),
@@ -107,9 +93,6 @@ public abstract class ProductItemMapper {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("product").get("name"),
                         "%" + searchReq.productName() + "%"));
             }
-            if (!searchReq.used()) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("dateUsed")));
-            }
 
             // Filter deleted products
 
@@ -117,5 +100,6 @@ public abstract class ProductItemMapper {
             return predicate;
         };
     }
+
 
 }

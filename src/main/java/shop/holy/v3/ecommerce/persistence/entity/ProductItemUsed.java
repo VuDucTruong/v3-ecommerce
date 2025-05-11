@@ -37,6 +37,11 @@ public class ProductItemUsed {
     @JoinColumn(name = "order_detail_id", insertable = false, updatable = false)
     private OrderDetail orderDetail;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private Product product;
+
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ProductItemUsed that)) return false;

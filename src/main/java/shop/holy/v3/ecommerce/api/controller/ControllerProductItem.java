@@ -21,8 +21,15 @@ public class ControllerProductItem {
     private final ProductItemService productItemService;
 
     @PostMapping("/searches")
-    public ResponseEntity<ResponsePagination<ResponseProductItem>> search(@RequestBody RequestProductItemSearch searchReq) {
-        ResponsePagination<ResponseProductItem> productItems = productItemService.search(searchReq);
+    @Operation(description = """
+            1. productName -> like %x% \n
+            2. productId -> id = 'x' \n
+            3. productKey -> like %x% \n
+            4. used -> will search the used only \n
+            ====> IS Different from <b> deleted </b> ---> only find productKey on "used Table" \n
+            """)
+    public ResponseEntity<ResponsePagination<ResponseProductItems_Indetails>> search(@RequestBody RequestProductItemSearch searchReq) {
+        ResponsePagination<ResponseProductItems_Indetails> productItems = productItemService.search(searchReq);
         return ResponseEntity.ok(productItems);
     }
 
@@ -30,15 +37,17 @@ public class ControllerProductItem {
     @Operation(description = """
             there're 4 possible parameters, but must be 1 to present only: \n
             1. id -> get product Item by id \n
-            2. productId -> get All ProductItems by productId
-            3. orderDetailId -> get All ProductItems sent via Email by orderDetailId
-            4. productKey -> rarely but ok, to check if exists
+            2. productId -> get All ProductItems by productId \n
+            3. orderDetailId -> get All ProductItems sent via Email by orderDetailId \n
+            4. productKey -> find First by productKey = 'exact_value' \n
+            5. used -> default false -> if true -> includes even used ones.
             """)
     public ResponseEntity<ResponseProductItems_Indetails[]> getProductItemByUniqueIdentifier(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long productId,
             @RequestParam(required = false) Long orderDetailId,
-            @RequestParam(required = false) String productKey) {
+            @RequestParam(required = false) String productKey,
+            @RequestParam(required = false) boolean used) {
         int overlapCount = 0;
         if (id != null) overlapCount++;
         if (productId != null) overlapCount++;
@@ -47,7 +56,7 @@ public class ControllerProductItem {
         if (overlapCount > 1)
             throw new BadRequestException("sth");
 
-        return ResponseEntity.ok(productItemService.getByIdentifier(id, productId, orderDetailId, productKey));
+        return ResponseEntity.ok(productItemService.getByIdentifier(id, productId, orderDetailId, productKey, used));
     }
 
 
@@ -73,7 +82,7 @@ public class ControllerProductItem {
         return ResponseEntity.ok(changes);
     }
 
-    @PutMapping("/mark-used")
+    @PutMapping("/used")
     public ResponseEntity<Integer> markUsed(@RequestParam long[] ids) {
         if (ids == null || ids.length == 0) {
             return ResponseEntity.ok().build();

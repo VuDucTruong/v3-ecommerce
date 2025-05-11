@@ -13,7 +13,7 @@ public interface IProductDescriptionRepository extends JpaRepository<ProductDesc
             set pd.info = :#{#paramPd.info}, pd.description = :#{#paramPd.description}, 
                   pd.policy = :#{#paramPd.policy}, pd.tutorial = :#{#paramPd.tutorial},
                    pd.platform = :#{#paramPd.platform}
-                    WHERE pd.productId = :#{#paramPd.productId}
+                    WHERE pd.id = :#{#paramPd.id}
             """)
     int updateProductDescriptionById(@Param("paramPd") ProductDescription productDescription);
 }

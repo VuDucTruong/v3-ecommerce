@@ -7,8 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IProductItemUsedRepository extends JpaRepository<ProductItemUsed, Long>, JpaSpecificationExecutor<ProductItemUsed> {
@@ -25,7 +27,11 @@ public interface IProductItemUsedRepository extends JpaRepository<ProductItemUse
             @Param("productKeys") String[] productKeys,
             @Param("regions") String[] regions);
 
-    List<ProductItemUsed> findAllByOrderDetailIdEquals(long orderDetailId);
+    List<ProQ_ProductMetadata> findAllByOrderDetailIdEquals(long orderDetailId);
 
+
+    Optional<ProQ_ProductMetadata> findFirstById(long id);
+
+    Optional<ProQ_ProductMetadata> findFirstByProductKey(String productKey);
 }
 

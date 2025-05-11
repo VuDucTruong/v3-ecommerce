@@ -62,6 +62,16 @@ INSERT INTO public.categories (id, created_at, deleted_at, description, image_ur
 
 
 --
+-- Data for Name: product_description; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (1, '2025-04-17 16:13:40.831946', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (3, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', 'string');
+INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (13, '2025-05-11 17:06:00.69428', NULL, 'abc', 'string', 'platform', 'string', 'tutor');
+
+
+--
 -- Data for Name: product_groups; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
@@ -72,9 +82,10 @@ INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (1, 
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags) VALUES (10, '2025-04-24 11:48:34.205537', NULL, 1, NULL, 'phong youtube', 100.00, 50.00, 2, false, 'phong-youtube', '["str"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 4, false, '', '[]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, quantity, represent, slug, tags) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 2, false, 'the-jakarta-product', '[]');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (10, '2025-04-24 11:48:34.205537', NULL, 1, NULL, 'phong youtube', 100.00, 50.00, 1, 2, false, 'phong-youtube', '["str"]');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 2, 4, false, '', '[]');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 3, 2, false, 'the-jakarta-product', '[]');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (14, '2025-05-11 17:06:00.69428', NULL, 1, NULL, 'Youtube', 12.99, 9.99, 13, 0, true, 'youtube', '["digital", "music", "streaming"]');
 
 
 --
@@ -135,18 +146,6 @@ INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, d
 
 
 --
--- Data for Name: product_description; Type: TABLE DATA; Schema: public; Owner: phong
---
-
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (1, '2025-04-17 16:13:40.831946', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (6, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (7, '2025-04-23 21:09:11.903325', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (8, '2025-04-24 11:48:34.205537', NULL, 'string', 'string', 'string', 'string', NULL, 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, product_id, tutorial) VALUES (9, '2025-04-24 11:51:10.273004', NULL, 'string', 'string', 'string', 'string', 9, 'string');
-
-
---
 -- Data for Name: product_favorites; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
@@ -170,6 +169,11 @@ INSERT INTO public.product_items (id, created_at, product_id, product_key, regio
 -- Data for Name: product_items_used; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
+INSERT INTO public.product_items_used (id, created_at, order_detail_id, product_id, product_key, region) VALUES (1, '2025-05-11 22:09:29.323963', NULL, 14, 'Y1', 'US');
+INSERT INTO public.product_items_used (id, created_at, order_detail_id, product_id, product_key, region) VALUES (2, '2025-05-11 22:09:29.323963', NULL, 14, 'Y2', 'US');
+INSERT INTO public.product_items_used (id, created_at, order_detail_id, product_id, product_key, region) VALUES (3, '2025-05-11 22:47:56.497701', NULL, 14, 'Y4', 'US');
+INSERT INTO public.product_items_used (id, created_at, order_detail_id, product_id, product_key, region) VALUES (4, '2025-05-11 22:50:24.539057', NULL, 14, 'Y5', 'US');
+INSERT INTO public.product_items_used (id, created_at, order_detail_id, product_id, product_key, region) VALUES (5, '2025-05-11 22:51:46.131726', NULL, 14, 'Y6', 'US');
 
 
 --
@@ -181,6 +185,8 @@ INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 8);
 INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 10);
 INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 10);
 INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 9);
+INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 14);
+INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 14);
 
 
 --
@@ -271,7 +277,7 @@ SELECT pg_catalog.setval('public.payments_id_seq', 2, true);
 -- Name: product_description_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_description_id_seq', 9, true);
+SELECT pg_catalog.setval('public.product_description_id_seq', 13, true);
 
 
 --
@@ -285,21 +291,21 @@ SELECT pg_catalog.setval('public.product_groups_id_seq', 1, true);
 -- Name: product_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_items_id_seq', 60, true);
+SELECT pg_catalog.setval('public.product_items_id_seq', 63, true);
 
 
 --
 -- Name: product_items_used_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_items_used_id_seq', 1, false);
+SELECT pg_catalog.setval('public.product_items_used_id_seq', 5, true);
 
 
 --
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 10, true);
+SELECT pg_catalog.setval('public.products_id_seq', 14, true);
 
 
 --

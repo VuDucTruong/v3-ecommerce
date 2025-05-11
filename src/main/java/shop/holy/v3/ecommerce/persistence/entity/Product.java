@@ -1,7 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
@@ -10,10 +9,11 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 @Table(name = "products")
 public class Product extends EntityBase {
@@ -28,6 +28,9 @@ public class Product extends EntityBase {
 
     private BigDecimal originalPrice;
     private BigDecimal price;
+
+    @Column(name = "prod_desc_id")
+    private long proDescId;
 
     @Column(name = "group_id")
     private Long groupId;
@@ -45,7 +48,8 @@ public class Product extends EntityBase {
     @BatchSize(size = 20)
     private Set<Category> categories;
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prod_desc_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductDescription productDescription;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -62,9 +66,21 @@ public class Product extends EntityBase {
     @OneToMany(mappedBy = "product")
     private Set<ProductItem> productItems;
 
-    @ManyToOne
+    @OneToMany(mappedBy = "product")
+    private Set<ProductItemUsed> productItemUseds;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", insertable = false, updatable = false)
     private ProductGroup group;
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Product product)) return false;
+        return Objects.equals(id, product.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

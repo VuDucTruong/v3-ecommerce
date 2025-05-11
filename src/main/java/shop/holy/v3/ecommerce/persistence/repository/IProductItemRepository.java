@@ -1,6 +1,5 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,17 +18,16 @@ import java.util.Optional;
 @Repository
 public interface IProductItemRepository extends JpaRepository<ProductItem, Long>, JpaSpecificationExecutor<ProductItem> {
 
-//    @Query(value = """
-//            select product_id, count(1) as cnt
-//                        from product_items where product_id IN :productIds
-//                        GROUP BY product_id
-//            """, nativeQuery = true)
-//    List<ProQ_ProdId_Cnt> find_count_group_by_prodId(long[] productIds);
+
+    Optional<ProQ_ProductMetadata> findFirstById(long id);
+
 
     Slice<ProductItem> findAllByProductIdEquals(long productId, org.springframework.data.domain.Pageable pageable);
 
+    List<ProQ_ProductMetadata> findAllByProductIdEquals(long productId);
 
-    Optional<ProductItem> findFirstByProductKey(String productKey);
+//    @EntityGraph(attributePaths = {"product"})
+    Optional<ProQ_ProductMetadata> findFirstByProductKey(String productKey);
 
 
 
@@ -36,7 +35,8 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
     @Modifying
     @Query("""
             UPDATE ProductItem pi set pi.productKey = :#{#productItem.productKey},
-            pi.productId = :#{#productItem.productKey}
+            pi.productId = :#{#productItem.productId},
+            pi.region = :#{#productItem.region}
             WHERE pi.id = :#{#productItem.id}
             """)
     int updateProductItemById(@Param("productItem") ProductItem productItem);
@@ -71,6 +71,13 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
                 RETURNING *
             """, nativeQuery = true)
     List<ProductItem> deleteProductItemsByIdInAndReturnAll(@Param("ids") long[] ids);
+
+//    @Query("SELECT p FROM ProductItem p WHERE p.id IN :ids")
+//    List<ProductItem> findAllByIdIn(@Param("ids") long[] ids);
+//
+//    @Modifying(clearAutomatically = true)
+//    @Query("DELETE FROM ProductItem p WHERE p.id IN :ids")
+//    int deleteByIdIn(@Param("ids") long[] ids);
 
 
 

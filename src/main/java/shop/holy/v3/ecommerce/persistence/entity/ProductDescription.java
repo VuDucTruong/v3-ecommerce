@@ -10,7 +10,8 @@ import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.type.SqlTypes;
 
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+import java.util.Objects;
+
 @Entity
 @Table(name = "product_description")
 @Getter @Setter
@@ -22,9 +23,6 @@ public class ProductDescription extends EntityBase {
     @Column(name = "info")
     private String info;
 
-    @Column(name = "product_id")
-    private long productId;
-
     @Column(name = "platform")
     private String platform;
 
@@ -34,7 +32,18 @@ public class ProductDescription extends EntityBase {
     @Column(name = "tutorial")
     private String tutorial;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Product product;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+//    private Product product;
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ProductDescription that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
