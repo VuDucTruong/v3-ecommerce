@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +27,22 @@ public class ControllerProductItem {
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseProductItem[]> getProductItemByUniqueIdentifier(
-            @RequestParam(required = false, defaultValue = DefaultValues.ID + "") long id,
-            @RequestParam(required = false, defaultValue = DefaultValues.ID + "") long productId,
-            @RequestParam(required = false, defaultValue = DefaultValues.ID + "") long orderDetailId,
+    @Operation(description = """
+            there're 4 possible parameters, but must be 1 to present only: \n
+            1. id -> get product Item by id \n
+            2. productId -> get All ProductItems by productId
+            3. orderDetailId -> get All ProductItems sent via Email by orderDetailId
+            4. productKey -> rarely but ok, to check if exists
+            """)
+    public ResponseEntity<ResponseProductItems_Indetails[]> getProductItemByUniqueIdentifier(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) Long productId,
+            @RequestParam(required = false) Long orderDetailId,
             @RequestParam(required = false) String productKey) {
         int overlapCount = 0;
-        if (id != DefaultValues.ID) overlapCount++;
-        if (productId != DefaultValues.ID) overlapCount++;
-        if (orderDetailId != DefaultValues.ID) overlapCount++;
+        if (id != null) overlapCount++;
+        if (productId != null) overlapCount++;
+        if (orderDetailId != null) overlapCount++;
         if (productKey != null) overlapCount++;
         if (overlapCount > 1)
             throw new BadRequestException("sth");

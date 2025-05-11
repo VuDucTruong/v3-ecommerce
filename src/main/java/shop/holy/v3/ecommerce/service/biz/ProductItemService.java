@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
+import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
@@ -50,26 +51,26 @@ public class ProductItemService {
         return ResponsePagination.fromPage(responses);
     }
 
-    public ResponseProductItem[] getByIdentifier(long id, long productId, long orderDetailId, String productKey) {
-        if (id == DefaultValues.ID && productKey == null)
-            return null;
-        if (id != DefaultValues.ID) {
+    public ResponseProductItems_Indetails[] getByIdentifier(Long id, Long productId, Long orderDetailId, String productKey) {
+        if (id != null) {
             var rs = productItemRepository.findById(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-            return new ResponseProductItem[]{mapper.fromEntityToResponse(rs)};
-
-        } else if (productId != DefaultValues.ID)
+            return new ResponseProductItems_Indetails[]{mapper.from_EntityToResponse_Indetails(rs, null, false)};
+        } else if (orderDetailId != null){
+            Product prod = null;
             return usedRepository.findAllByOrderDetailIdEquals(orderDetailId).stream()
-                    .map(mapper::fromUsedEntityToResponse)
-                    .toArray(ResponseProductItem[]::new);
-
+                    .map(item -> mapper.fromused_EntityToResponse_Indetails(item, prod, true))
+                    .toArray(ResponseProductItems_Indetails[]::new);
+        }
         else if (StringUtils.hasLength(productKey)) {
             var rs = productItemRepository.findFirstByProductKey(productKey).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-            return new ResponseProductItem[]{mapper.fromEntityToResponse(rs)};
+            Product prod = null;
+            return new ResponseProductItems_Indetails[]{mapper.from_EntityToResponse_Indetails(rs, prod, false)};
         }
-
+        ///  ELSE PRODUCT_id
         var rs = productItemRepository.findAllByProductIdEquals(productId, Pageable.unpaged(Sort.by(Sort.Direction.DESC, "createdAt"))).getContent();
-        return rs.stream().map(mapper::fromEntityToResponse)
-                .toArray(ResponseProductItem[]::new);
+        var prod = productRepository.findById(productId).orElseThrow(BizErrors.PRODUCT_NOT_FOUND::exception);
+        return rs.stream().map(item -> mapper.from_EntityToResponse_Indetails(item, prod, false))
+                .toArray(ResponseProductItems_Indetails[]::new);
     }
 
     @Transactional

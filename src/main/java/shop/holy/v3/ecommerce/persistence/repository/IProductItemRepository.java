@@ -30,7 +30,8 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
 
     Optional<ProductItem> findFirstByProductKey(String productKey);
 
-    List<ProductItem> findAllByProductId(long productId);
+
+
 
     @Modifying
     @Query("""

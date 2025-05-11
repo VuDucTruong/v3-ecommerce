@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.comment.RequestComment;
+import shop.holy.v3.ecommerce.api.dto.comment.RequestCommentSearch;
 import shop.holy.v3.ecommerce.api.dto.comment.ResponseComment;
 import shop.holy.v3.ecommerce.service.biz.CommentService;
 
@@ -43,12 +44,12 @@ public class ControllerComment {
     }
 
 
-//    @PostMapping("/searches")
-//    public ResponseEntity<ResponsePagination<ResponseComment>> search(
-//            @RequestBody RequestCommentSearch searchReq
-//    ) {
-//        return ResponseEntity.ok(commentService.search(searchReq));
-//    }
+    @PostMapping("/searches")
+    public ResponseEntity<ResponsePagination<ResponseComment>> search(
+            @RequestBody RequestCommentSearch searchReq
+    ) {
+        return ResponseEntity.ok(commentService.search(searchReq));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCommentById(
