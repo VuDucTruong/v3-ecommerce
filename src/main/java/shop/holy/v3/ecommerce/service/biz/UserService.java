@@ -21,12 +21,9 @@ import shop.holy.v3.ecommerce.persistence.repository.IProfileRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
-import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
-
-import java.io.IOException;
 
 @RequiredArgsConstructor
 @Service
@@ -38,7 +35,7 @@ public class UserService {
     private final CloudinaryFacadeService cloudinaryFacadeService;
 
     @Transactional
-    public ResponseUser createUser(RequestUserCreate request)  {
+    public ResponseUser createUser(RequestUserCreate request) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (authAccount.getRole() != RoleEnum.ADMIN) {
             throw BizErrors.FORBIDDEN_ACTION.exception();
@@ -64,7 +61,7 @@ public class UserService {
         } else if (id == null)
             id = authAccount.getId();
 
-        if (authAccount.isAdmin()&& deleted) {
+        if (authAccount.isAdmin() && deleted) {
             return accountRepository.findById(id)
                     .map(accountMapper::fromEntityToResponseAccountDetail)
                     .orElseThrow(BizErrors.ACCOUNT_NOT_FOUND::exception);
@@ -92,16 +89,15 @@ public class UserService {
         Profile profile = accountMapper.fromProfileUpdateRequestToEntity(request);
         if (authAccount.isAdmin()) {
             profile.setId(request.id());
-        } else if (authAccount.isNotSelf(request.id())) {
-            throw BizErrors.RESOURCE_NOT_OWNED.exception();
+        } else {
+            profile.setAccountId(request.id());
         }
 
-        accountMapper.fromProfileUpdateRequestToEntity(request);
         if (request.image() != null) {
             String blobUrl = cloudinaryFacadeService.uploadAccountBlob(request.image());
             profile.setImageUrlId(blobUrl);
             /// UPDATING HERE
-            profileRepository.updateProfileById(profile);
+            profileRepository.updateProfileByAccountId(profile);
             return accountMapper.fromEntityToResponseProfile(profile);
         }
         /// UPDATING HERE
@@ -110,12 +106,39 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteAccount(long id) {
+    public int deleteAccount() {
+        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
+        long id = authAccount.getId();
+        return deleteAccountById(id);
+    }
+
+    @Transactional
+    public int deleteAccountById(long id) {
         int deletedPros = profileRepository.updateDeletedAtByAccountId(id);
         int deletedAccs = accountRepository.updateDeletedAtById(id);
         if (deletedAccs == 0 && deletedPros == 0) {
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
         }
+        return deletedAccs;
+    }
+
+
+    @Transactional
+    public int deleteAccounts(long[] ids) {
+        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
+        if (ids == null || ids.length == 0)
+            return 0;
+        for (long id : ids) {
+            if (id == authAccount.getId())
+                throw BizErrors.FORBIDDEN_ACTION.exception();
+        }
+
+        int deletedPros = profileRepository.updateDeletedAtByAccountIdIn(ids);
+        int deletedAccs = accountRepository.updateDeletedAtByIdIn(ids);
+        if (deletedAccs == 0 && deletedPros == 0) {
+            throw BizErrors.ACCOUNT_NOT_FOUND.exception();
+        }
+        return deletedAccs;
     }
 
 

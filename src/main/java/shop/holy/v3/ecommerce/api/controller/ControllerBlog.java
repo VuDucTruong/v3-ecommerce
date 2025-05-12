@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +24,16 @@ public class ControllerBlog {
     private final BlogService blogService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_1)")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
+    @Operation(summary = "create 1")
     public ResponseBlog createBlog(@ModelAttribute RequestBlogCreation createRequest) {
         ResponseBlog responseBlog = blogService.createBlog(createRequest);
         return responseBlog;
     }
 
     @PutMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_1)")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
+    @Operation(summary = "update 1")
     public ResponseBlog updateBlog(@ModelAttribute RequestBlogUpdate updateRequest) {
 
         ResponseBlog responseBlog = blogService.updateBlog(updateRequest);
@@ -44,20 +47,25 @@ public class ControllerBlog {
         return responsePagination;
     }
 
+
     @GetMapping(value = "{id}")
+    @Operation(summary = "get 1")
     public ResponseBlog getBlog(@PathParam("id") long id,
                                 @RequestParam(name = "deleted", required = false) boolean deleted) {
         return blogService.getBlog(id, deleted);
     }
 
     @DeleteMapping(value = "{id}")
+    @Operation(summary = "delete 1")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public int deleteBlog(@PathParam("id") long id) {
         return blogService.deleteBlog(id);
     }
 
+
     @DeleteMapping(value = "")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
+    @Operation(summary = "delete many")
     public int deleteBlogs(@RequestParam long ids[]) {
         return blogService.deleteBlogs(ids);
     }

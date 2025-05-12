@@ -57,7 +57,7 @@ public class BlogService {
 
     @Transactional
     public int deleteBlogs(long[] ids) {
-        if (ids.length > 0)
+        if (ids == null && ids.length > 0)
             return blogRepository.updateBlogDeletedAtByIdIn(ids);
         return 0;
     }

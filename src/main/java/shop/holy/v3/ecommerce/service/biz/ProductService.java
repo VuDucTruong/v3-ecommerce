@@ -60,12 +60,12 @@ public class ProductService {
     }
 
 
-    public CompletableFuture<ResponseProduct> getByIdentifier(long id, String slug, boolean deleted) {
-        if (id == DefaultValues.ID && slug == null)
+    public CompletableFuture<ResponseProduct> getByIdentifier(Long id, String slug, boolean deleted) {
+        if (id == null && slug == null)
             return CompletableFuture.completedFuture(null);
 
         CompletableFuture<Product> prod = CompletableFuture.supplyAsync(() -> {
-                    if (id != DefaultValues.ID) {
+                    if (id != null) {
                         if (deleted)
                             return productRepository.findByIdWithJoinFetch(id);
                         else
@@ -147,11 +147,15 @@ public class ProductService {
 
     @Transactional
     public int deleteProductById(Long id) {
+        if (id == null)
+            return 0;
         return productRepository.updateProductDeletedAt(id);
     }
 
     @Transactional
     public int deleteProductByIdIn(long[] ids) {
+        if (ids == null || ids.length == 0)
+            return 0;
         return productRepository.updateProductDeletedAtByIdIn(ids);
     }
 

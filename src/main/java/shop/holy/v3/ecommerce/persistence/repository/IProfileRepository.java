@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
 
+import java.util.Collection;
+import java.util.Date;
+
 @Repository
 public interface IProfileRepository extends JpaRepository<Profile, Long> {
 
@@ -16,7 +19,7 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
                 p.imageUrlId = :#{#profile.imageUrlId}
             WHERE p.accountId = :#{#profile.accountId}
             """)
-    void updateProfileById( Profile profile);
+    void updateProfileByAccountId(Profile profile);
 
     @Modifying
     @Query("""
@@ -30,4 +33,8 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
     @Modifying
     int updateDeletedAtByAccountId(long accountId);
 
+
+    @Query("update Profile p set p.deletedAt = current_timestamp where p.accountId in :accountIds")
+    @Modifying
+    int updateDeletedAtByAccountIdIn(long[] accountIds);
 }

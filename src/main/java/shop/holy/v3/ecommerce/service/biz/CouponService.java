@@ -36,10 +36,9 @@ public class CouponService {
     }
 
 
-
-    public ResponseCoupon findByIdentitfier(long id, String code, boolean deleted) {
+    public ResponseCoupon findByIdentitfier(Long id, String code, boolean deleted) {
         Coupon c;
-        if (id != DefaultValues.ID)
+        if (id != null)
             if (deleted)
                 c = couponRepository.findById(id).orElseThrow(BizErrors.INVALID_COUPON::exception);
             else
@@ -50,9 +49,6 @@ public class CouponService {
             else
                 c = couponRepository.findFirstByCodeAndDeletedAtIsNull(code).orElseThrow(BizErrors.INVALID_COUPON::exception);
         }
-//        LocalDate d = LocalDate.now();
-//        if (d.isBefore(c.getAvailableFrom()) || d.isAfter(c.getAvailableTo()))
-//            throw BizErrors.COUPON_EXPIRED.exception();
 
         return couponMapper.fromEntityToResponse(c);
 
@@ -73,7 +69,15 @@ public class CouponService {
 
     @Transactional
     public int deleteCoupon(long id) {
-        return couponRepository.deleteCouponById(id);
+        return couponRepository.updateDeletedAtById(id);
+    }
+
+    @Transactional
+    public int deleteCouponsIn(long[] ids) {
+        if (ids == null || ids.length == 0)
+            return 0;
+
+        return couponRepository.updateDeletedAtByIdIn(ids);
     }
 
 }

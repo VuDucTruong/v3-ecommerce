@@ -39,9 +39,9 @@ public class GenreService {
         return genreMapper.fromRequestToResponse(request);
     }
 
-    public ResponseGenre getByIdentifier(long id, String name, boolean deleted) {
+    public ResponseGenre getByIdentifier(Long id, String name, boolean deleted) {
         Genre1 rs;
-        if (id != DefaultValues.ID)
+        if (id != null)
             if (deleted)
                 rs = genreRepository.findById(id).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
             else

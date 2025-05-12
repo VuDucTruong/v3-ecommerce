@@ -81,6 +81,9 @@ public class CategoryService {
 
     @Transactional
     public int deleteCategories(long[] ids, boolean isHard) {
+        if (ids.length == 0)
+            return 0;
+
         categoryRepository.deleteProductCategoryByCategoryIdIn(ids);
         if (isHard)
             return categoryRepository.deleteAllByIdIn(ids);

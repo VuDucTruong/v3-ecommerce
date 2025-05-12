@@ -45,7 +45,6 @@ phong:
     scheduled:
       cron: "0 0/5 * * * *"
 
-
 server:
   port: ${SERVER_PORT:8080}
   error:

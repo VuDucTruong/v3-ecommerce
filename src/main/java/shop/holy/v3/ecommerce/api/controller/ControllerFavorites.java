@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -19,6 +20,8 @@ import shop.holy.v3.ecommerce.service.biz.ProductFavoriteService;
 public class ControllerFavorites {
     private final ProductFavoriteService favoriteService;
 
+
+    @Operation(summary = "press like")
     @PutMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
     public ResponseEntity<?> favoriteProduct(@RequestParam Long productId) {
@@ -26,6 +29,7 @@ public class ControllerFavorites {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "press unlike")
     @DeleteMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
     public ResponseEntity<?> unFavoriteProduct(@RequestParam Long productId) {
@@ -33,6 +37,7 @@ public class ControllerFavorites {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "get My favorite products")
     @GetMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
     public ResponseEntity<?> getFavoriteProducts(@ParameterObject Pageable pageable) {

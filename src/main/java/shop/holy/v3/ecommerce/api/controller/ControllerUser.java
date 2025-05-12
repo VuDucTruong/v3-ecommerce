@@ -16,8 +16,6 @@ import shop.holy.v3.ecommerce.api.dto.user.RequestUserSearch;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.service.biz.UserService;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("users")
 @Tag(name = "Users", description = "=> to serve CRUD on users")
@@ -28,21 +26,22 @@ public class ControllerUser {
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    @Operation(description = "Use for Admin only, to manually Create a User \n -> this is authenticated")
+    @Operation(summary = "create 1: admin only", description = "Use for Admin only, to manually Create a User \n -> this is authenticated")
     public ResponseEntity<?> createAccount(
-            @ModelAttribute @Valid RequestUserCreate request) throws IOException {
+            @ModelAttribute @Valid RequestUserCreate request) {
         ResponseUser account = userService.createUser(request);
         return ResponseEntity.ok(account);
     }
 
     @GetMapping("")
-    @Operation(description = """
+    @Operation(summary = "get 1 => if customer -> requires no id; \n if admin => must give id", description = """
             only admin provide id, for user leave all defaults (no set) \n
             This is also endpoint to automatic login \n
             if this return AUTHORISATION_NULL || AUTHORISATION_ANNONYMOUS || AUTHORISATION_INVALID \n 
                     => simply route to login page \n
             """)
-    public ResponseEntity<ResponseUser> getusers(
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
+    public ResponseEntity<ResponseUser> getuser(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) boolean deleted) {
         ResponseUser account = userService.getById(id, deleted);
@@ -50,7 +49,8 @@ public class ControllerUser {
     }
 
     @PostMapping("searches")
-    @Operation(summary = "Search users", description = "Search users with pagination, \n all conditions are 'AND' concatenated ")
+    @Operation(summary = "Search users: role >= staff", description = "Search users with pagination, \n all conditions are 'AND' concatenated ")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
     public ResponseEntity<?> search(
             @RequestBody RequestUserSearch searchSpecs
     ) {
@@ -60,13 +60,35 @@ public class ControllerUser {
 
     @PatchMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
-    @Operation(description = "Perhaps use for users only, since why tf admin need profile update?")
-    public ResponseEntity<?> updateProfile(@Valid @ModelAttribute RequestProfileUpdate request) throws IOException {
+    @Operation(summary = "Update oneSelf's profile", description = "Perhaps use for users only")
+    public ResponseEntity<?> updateProfile(@ModelAttribute RequestProfileUpdate request) {
         ResponseProfile profile = userService.updateProfile(request);
         return ResponseEntity.ok(profile);
     }
 
+    @DeleteMapping("me")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
+    @Operation(summary = "delete 1 ==> admin can't delete self")
+    public ResponseEntity<Integer> deleteMe() {
+        var x = userService.deleteAccount();
+        return ResponseEntity.ok(x);
+    }
 
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
+    @Operation(summary = "delete 1 : admin only ==> use this to delete 1 is ok")
+    public ResponseEntity<Integer> delete1(@PathVariable long id) {
+        var x = userService.deleteAccountById(id);
+        return ResponseEntity.ok(x);
+    }
+
+    @DeleteMapping("")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
+    @Operation(summary = "delete many: admin only ==> use this to delete 1 is ok")
+    public ResponseEntity<Integer> deletemany(@RequestParam long[] ids) {
+        var x = userService.deleteAccounts(ids);
+        return ResponseEntity.ok(x);
+    }
 
 
 }

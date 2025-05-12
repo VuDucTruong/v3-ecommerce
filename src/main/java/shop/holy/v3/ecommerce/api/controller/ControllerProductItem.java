@@ -34,7 +34,7 @@ public class ControllerProductItem {
     }
 
     @GetMapping("")
-    @Operation(description = """
+    @Operation(summary = "get by identifier as query parameters", description = """
             there're 4 possible parameters, but must be 1 to present only: \n
             1. id -> get product Item by id \n
             2. productId -> get All ProductItems by productId \n
@@ -60,6 +60,7 @@ public class ControllerProductItem {
     }
 
 
+    @Operation(summary = "create 1")
     @PostMapping("")
     public ResponseEntity<ResponseProductItemCreate> createProductItem(
             @RequestBody @Valid RequestProductItemCreate[] productItem,
@@ -71,11 +72,13 @@ public class ControllerProductItem {
         return ResponseEntity.ok(res);
     }
 
+    @Operation(summary = "update 1")
     @PutMapping("")
     public int updateProductItem(@RequestBody RequestProductItemUpdate productItemUpdate) {
         return productItemService.update(productItemUpdate);
     }
 
+    @Operation(summary = "delete 1")
     @DeleteMapping("")
     public ResponseEntity<Integer> deleteProductItems(@RequestParam long[] ids) {
         int changes = productItemService.deleteProductItems(ids);
@@ -83,6 +86,7 @@ public class ControllerProductItem {
     }
 
     @PutMapping("/used")
+    @Operation(summary = "mark used => delete at productItems => insert to used table")
     public ResponseEntity<Integer> markUsed(@RequestParam long[] ids) {
         if (ids == null || ids.length == 0) {
             return ResponseEntity.ok().build();

@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +21,20 @@ public class ControllerPayment {
     private final PaymentService paymentService;
 
     @PutMapping("urls")
+    @Operation(summary = "step 2: get vnpay url. Pre_Cond: must create Order first")
     public String getPaymentById(@RequestBody RequestPaymentUrl requestPaymentUrl, HttpServletRequest httpServletRequest) {
         var ip = VNPayUtil.getIpAddress(httpServletRequest);
         return paymentService.upsertVnpPayment(requestPaymentUrl, ip);
     }
 
+    @Operation(summary = "step 3: forward callbacks query parameters. Pre_Cond: got payment url, performed payment on vnp page")
     @PutMapping("vnpay")
     public ResponsePayment vnpayPayment(@RequestBody RequestPaymentCallback req) {
         return paymentService.callBackPayment(req);
     }
 
+    @Operation(summary = "cần Endpoint này k vậy? vì 1 order gắn với 1 payment",
+            description = "#muốn xem payments -> check thanh toán ở link sandbox")
     @GetMapping(value = "history", produces = MediaType.TEXT_PLAIN_VALUE)
     public String gethistory(@RequestParam(required = false) Long id) {
         return """

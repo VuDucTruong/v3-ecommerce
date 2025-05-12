@@ -23,7 +23,7 @@ public class ControllerComment {
     private final CommentService commentService;
 
     @GetMapping("{id}")
-    @Operation(summary = "Get single Comment-> not commonly used", description = """
+    @Operation(summary = "Get 1 Comment-> not commonly used", description = """
             -> still return Comment but the content will be filtered if deleted==false (default), vice versa \n
             --> so that replies wont be affected \n
             ----> replies those are deleted still be returned but content is null if deleted==false, vice versa
@@ -35,6 +35,7 @@ public class ControllerComment {
         return ResponseEntity.ok(rs);
     }
 
+    @Operation(summary = "delete many")
     @GetMapping("")
     public ResponseEntity<ResponsePagination<ResponseComment>> getCommentsByProductIds(@RequestParam long productId,
                                                                                        @RequestParam(required = false) boolean deleted,
@@ -51,6 +52,8 @@ public class ControllerComment {
         return ResponseEntity.ok(commentService.search(searchReq));
     }
 
+
+    @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCommentById(
             long id
@@ -58,11 +61,13 @@ public class ControllerComment {
         return ResponseEntity.ok(commentService.deleteComment(id));
     }
 
+    @Operation(summary = "delete many")
     @DeleteMapping("")
     public ResponseEntity<Integer> deleteComments(@RequestParam long[] ids) {
         return ResponseEntity.ok(commentService.deleteComments(ids));
     }
 
+    @Operation(summary = "create 1")
     @PostMapping("")
     public ResponseEntity<ResponseComment> createComment(
             @RequestBody RequestComment request

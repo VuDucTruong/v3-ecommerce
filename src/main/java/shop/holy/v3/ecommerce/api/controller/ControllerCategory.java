@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.api.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -23,6 +24,7 @@ public class ControllerCategory {
     private final CategoryService categoryService;
 
     @GetMapping("/{id}")
+    @Operation(summary = "get 1")
     public ResponseEntity<?> getOne(@PathVariable long id,
                                     @RequestParam(required = false) boolean deleted) {
         return ResponseEntity.ok(categoryService.getCategoryByCode(id, deleted));
@@ -36,6 +38,7 @@ public class ControllerCategory {
         return ResponseEntity.ok(categories);
     }
 
+    @Operation(summary = "create 1")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<ResponseCategory> createCategory(@ModelAttribute RequestCategoryCreate request) {
@@ -43,6 +46,7 @@ public class ControllerCategory {
         return ResponseEntity.ok(res);
     }
 
+    @Operation(summary = "update 1")
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<ResponseCategory> updateCategory(@ModelAttribute RequestCategoryUpdate request) {
@@ -50,6 +54,7 @@ public class ControllerCategory {
         return ResponseEntity.ok(res);
     }
 
+    @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<?> deleteCategory(@PathVariable long id,
@@ -58,7 +63,9 @@ public class ControllerCategory {
         return ResponseEntity.ok(changes);
     }
 
+
     @DeleteMapping("")
+    @Operation(summary = "delete many")
     public ResponseEntity<?> deleteCategories(@RequestParam long[] ids, @RequestParam(required = false) boolean isHard) {
         var changes = categoryService.deleteCategories(ids, isHard);
         return ResponseEntity.ok(changes);

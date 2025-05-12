@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 
 public record RequestProfileUpdate(
-        long id,
+        Long id,
         String fullName,
         MultipartFile image
 ) {

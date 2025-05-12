@@ -16,12 +16,13 @@ import shop.holy.v3.ecommerce.service.biz.OrderService;
 
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Orders")
+@Tag(name = "Orders", description = "doesn't support Update order")
 @RequestMapping("orders")
 public class ControllerOrder {
     private final OrderService orderService;
     private final OrderInsertService orderInsertService;
 
+    @Operation(summary = "get 1")
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderById(@PathVariable long id,
                                           @RequestParam(required = false) boolean deleted) {
@@ -41,17 +42,19 @@ public class ControllerOrder {
         return ResponseEntity.ok(categories);
     }
 
-
+    @Operation(summary = "create 1")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createOrder(@RequestBody @Valid RequestOrderCreate request) {
         return ResponseEntity.ok(orderInsertService.insert(request));
     }
 
+    @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrderById(@PathVariable long id) {
         return ResponseEntity.ok(orderService.deleteOrderById(id));
     }
 
+    @Operation(summary = "delete many")
     @DeleteMapping("")
     public ResponseEntity<?> deleteMultiples(@RequestParam long[] ids) {
         return ResponseEntity.ok(orderService.deleteOrders(ids));

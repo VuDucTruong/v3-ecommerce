@@ -6,6 +6,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 
 @Repository
@@ -48,4 +50,7 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
             """, nativeQuery = true)
     int updateDeletedAtById(long id);
 
+    @Query("update Account a set a.deletedAt = current_timestamp where a.id in :ids")
+    @Modifying
+    int updateDeletedAtByIdIn(long[]ids);
 }

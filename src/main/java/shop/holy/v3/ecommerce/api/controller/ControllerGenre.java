@@ -11,7 +11,7 @@ import shop.holy.v3.ecommerce.service.biz.GenreService;
 @RestController
 @RequestMapping("/genres")
 @RequiredArgsConstructor
-@Tag(name = "Genres")
+@Tag(name = "Genres", description = "May perform get only, as I may hard code this")
 public class ControllerGenre {
     private final GenreService genreService;
 
@@ -24,7 +24,7 @@ public class ControllerGenre {
 
     @GetMapping("identifier")
     public ResponseEntity<ResponseGenre> getByIdentifier(
-            @RequestParam(required = false) long id,
+            @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) boolean deleted) {
         var x = genreService.getByIdentifier(id, name, deleted);

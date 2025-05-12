@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import shop.holy.v3.ecommerce.api.dto.FieldErrorResponse;
 import shop.holy.v3.ecommerce.api.dto.ResponseError;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 import shop.holy.v3.ecommerce.shared.exception.ForbiddenException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
@@ -70,6 +74,13 @@ public class GlobalExceptionHandler {
     public ResponseError<?> handleUnAuthorisedException(UnAuthorisedException ex, HttpServletRequest webRequest) {
 
         return new ResponseError<>(webRequest.getContextPath(), 12, ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseError<?> handleAuthorizationDeniedException(AuthorizationDeniedException ex, HttpServletRequest webRequest) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return new ResponseError<>(webRequest.getContextPath(), 13, BizErrors.AUTHORISATION_INVALID.exception().getMessage(), null);
     }
 
     @ExceptionHandler(ForbiddenException.class)

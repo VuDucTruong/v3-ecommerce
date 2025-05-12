@@ -1,7 +1,7 @@
 package shop.holy.v3.ecommerce.shared.constant;
 
 public class DefaultValues {
-    public static final long ID = Long.MIN_VALUE;
+//    public static final long ID = Long.MIN_VALUE;
 
     public static class ClaimKeys {
 

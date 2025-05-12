@@ -12,10 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ICouponRepository extends JpaRepository<Coupon, Long>, JpaSpecificationExecutor<Coupon> {
 
-    @Modifying
-    @Query("DELETE FROM Coupon c WHERE c.id = :id")
-    int deleteCouponById(long id);
-
     Optional<Coupon> findFirstByCode(String code);
     Optional<Coupon> findFirstByIdAndDeletedAtIsNull(long id);
     Optional<Coupon> findFirstByCodeAndDeletedAtIsNull(String code);
@@ -32,4 +28,8 @@ public interface ICouponRepository extends JpaRepository<Coupon, Long>, JpaSpeci
     @Modifying
     @Query("UPDATE Coupon c SET c.deletedAt = current_timestamp WHERE c.id = :id")
     int updateDeletedAtById(long id);
+
+    @Query("update Coupon c set c.deletedAt = current_timestamp where c.id in ?1")
+    @Modifying
+    int updateDeletedAtByIdIn(long[] ids);
 }

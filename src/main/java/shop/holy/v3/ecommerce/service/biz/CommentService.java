@@ -72,6 +72,9 @@ public class CommentService {
 
     @Transactional
     public int deleteComments(long[] ids) {
+        if (ids == null || ids.length == 0)
+            return 0;
+
         return commentRepository.updateDeletedAtByIdIn(ids);
     }
 

@@ -9,11 +9,12 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 @Table(name = "coupons")
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Coupon extends EntityBase {
 
     private String code;
@@ -31,5 +32,14 @@ public class Coupon extends EntityBase {
     private int usageLimit;
     private String description;
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Coupon coupon)) return false;
+        return Objects.equals(id, coupon.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

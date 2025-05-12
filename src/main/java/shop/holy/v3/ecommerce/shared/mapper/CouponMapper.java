@@ -30,7 +30,8 @@ public abstract class CouponMapper {
             if (StringUtils.hasLength(searchReq.search())) {
                 predicate = criteriaBuilder.and(predicate,
                         SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("code"), searchReq.search()));
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("type"), searchReq.type().name()));
+                if (searchReq.type() != null)
+                    predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("type"), searchReq.type().name()));
             }
 
             if (searchReq.availableFrom() != null) {
