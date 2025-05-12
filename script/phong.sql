@@ -69,7 +69,8 @@ from payments
 where true;
 
 select *
-from products;
+from products p
+join product_description pd on p.prod_desc_id = pd.id;
 
 
 select * from categories;

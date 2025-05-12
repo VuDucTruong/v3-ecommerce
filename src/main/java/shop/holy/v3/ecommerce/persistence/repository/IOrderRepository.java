@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -38,5 +39,6 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
 
     @Query("SELECT o.amount from Order o where o.id = :orderId")
     Optional<BigDecimal> findAmountByOrderId(long orderId);
+
 
 }

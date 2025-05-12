@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.service.smtp;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -55,7 +56,7 @@ public class SmtpService {
         sendEmail(to, "Holy Shop: Your OTP Code is ...", body);
     }
 
-    public void sendMailProductKeys(String to, String subject, MailProductKeys prod_keys) throws MessagingException {
+    public void sendMailProductKeys(String to, @NonNull String subject, MailProductKeys prod_keys) throws MessagingException {
         Context context = new Context();
         context.setVariable("bannerUrl", bannerUrl);
         prod_keys.bindContext(context);

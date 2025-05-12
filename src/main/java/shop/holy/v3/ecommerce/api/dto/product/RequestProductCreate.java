@@ -18,7 +18,7 @@ public record RequestProductCreate(
         @Schema(description = "Whether this product is representative of its group") boolean represent,
         @Schema(example = "9.99") BigDecimal price,
         @Schema(example = "12.99") BigDecimal originalPrice,
-        @Schema(example = "[\"digital\", \"music\", \"streaming\"]") String[] tags,
+        @Schema(example = "[\"digital\", \"music\", \"streaming\"]") List<String> tags,
         @Schema(description = "IDs of categories this product belongs to", example = "[1, 2, 3]") List<Long> categoryIds
 ) {
 
@@ -26,7 +26,7 @@ public record RequestProductCreate(
                                 String name, Long groupId, MultipartFile image,
                                 boolean represent,
                                 BigDecimal price, BigDecimal originalPrice,
-                                String[] tags,
+                                List<String> tags,
                                 List<Long> categoryIds) {
         this.productDescription = productDescription;
         this.groupId = groupId;

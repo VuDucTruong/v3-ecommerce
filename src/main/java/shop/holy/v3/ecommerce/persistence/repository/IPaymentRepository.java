@@ -27,10 +27,10 @@ public interface IPaymentRepository extends JpaRepository<Payment, Long> {
                 detail_code = :#{#p2.detailCode}, detail_message = :#{#p2.detailMessage},
                 note = :#{#p2.note}, card_type = :#{#p2.cardType}
             WHERE
-                trans_ref = :#{#p2.transRef} AND    secure_hash = :#{#p2.secureHash}
+                trans_ref = :#{#p2.transRef} AND secure_hash = :#{#p2.secureHash}
                 returning order_id
             """, nativeQuery = true)
-    List<Long> updatePaymentByTransRefAndSecureHash(Payment p2);
+    Optional<Long> updatePaymentByTransRefAndSecureHash(Payment p2);
 
 
 

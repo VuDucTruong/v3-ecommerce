@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_Email_Fullname;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -53,4 +55,7 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
     @Query("update Account a set a.deletedAt = current_timestamp where a.id in :ids")
     @Modifying
     int updateDeletedAtByIdIn(long[]ids);
+
+    @Query("select a.email as email, p.fullName as fullName from Account a join Profile p on a.id = p.accountId where email in (:emails)")
+    List<ProQ_Email_Fullname> findAllProQEmailFullname(Collection<String> emails );
 }

@@ -7,8 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -28,11 +31,18 @@ import java.util.stream.Collectors;
 @Slf4j
 @Hidden
 public class GlobalExceptionHandler {
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setAutoGrowNestedPaths(true);  // This enables auto-growing nested paths like tags.0
+    }
+
     private static final String COMMON_ERROR_MESSAGE_TEMPLATE = "Got error: [%s], with Message: [%s]";
 
     private String buildErrorMessage(Exception ex) {
         return String.format(COMMON_ERROR_MESSAGE_TEMPLATE, ex.getClass().getName(), ex.getMessage());
     }
+
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -62,6 +72,12 @@ public class GlobalExceptionHandler {
     public ResponseError<?> handleSchedulerException(BadRequestException ex, HttpServletRequest webRequest) {
         return new ResponseError<>(webRequest.getContextPath(), 2, ex.getMessage(), null);
     }
+
+//    @ExceptionHandler(BadRequestException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ResponseError<?> handleTranslationException(ExceptionTranslationFilter ex, HttpServletRequest webRequest) {
+//        return new ResponseError<>(webRequest.getContextPath(), 2, ex.getMessage(), null);
+//    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

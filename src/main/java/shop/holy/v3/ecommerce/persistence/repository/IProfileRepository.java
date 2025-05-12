@@ -37,4 +37,5 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
     @Query("update Profile p set p.deletedAt = current_timestamp where p.accountId in :accountIds")
     @Modifying
     int updateDeletedAtByAccountIdIn(long[] accountIds);
+
 }

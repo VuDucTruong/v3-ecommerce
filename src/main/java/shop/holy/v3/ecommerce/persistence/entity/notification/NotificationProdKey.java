@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
 import java.util.Date;
 import java.util.List;
 
@@ -27,11 +26,7 @@ public class NotificationProdKey {
 //    private String bannerUrl;
     @ColumnDefault("0")
     private int quantity;
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<Long> orderIds;
-
-
-
+    private Long orderId;
 
 
 }

@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -18,6 +19,8 @@ import java.util.Optional;
 @Repository
 public interface IProductItemRepository extends JpaRepository<ProductItem, Long>, JpaSpecificationExecutor<ProductItem> {
 
+
+    List<ProductItem> findAllByProductId(long productId, Pageable pageable);
 
     Optional<ProQ_ProductMetadata> findFirstById(long id);
 

@@ -42,18 +42,16 @@ public class PaymentService {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
 
         Payment payment = paymentMapper.from_CallbackRequest_to_Entity(request);
-        var orderIds = paymentRepository.updatePaymentByTransRefAndSecureHash(payment);
-        if (orderIds.size() <= 0)
+        var optOrderId = paymentRepository.updatePaymentByTransRefAndSecureHash(payment);
+        if (optOrderId.isEmpty())
             throw BizErrors.PAYMENT_RESULT_FAILED.exception();
         if (payment.getStatus().equals(PaymentStatus.FAILED.name())) {
             orderRepository.updateOrderStatusById(OrderStatus.FAILED.name(), payment.getOrderId());
-        }
-
-        else if (payment.getStatus().equals(PaymentStatus.SUCCESS.name())) {
+        } else if (payment.getStatus().equals(PaymentStatus.SUCCESS.name())) {
             String email = authAccount.getEmail();
             NotificationProdKey noti = new NotificationProdKey();
             noti.setEmail(email);
-            noti.setOrderIds(orderIds);
+            noti.setOrderId(optOrderId.get());
             notificationRepository.save(noti);
         }
         return paymentMapper.fromEntityToResponse(payment);
