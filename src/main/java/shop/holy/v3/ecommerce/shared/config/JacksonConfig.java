@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.TimeZone;
 
 @Configuration
 public class JacksonConfig {
@@ -30,7 +31,9 @@ public class JacksonConfig {
     public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
         return jacksonObjectMapperBuilder -> {
             // Set global date format to ISO 8601
-            jacksonObjectMapperBuilder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX"));
+            SimpleDateFormat dateFormat  = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            jacksonObjectMapperBuilder.dateFormat(dateFormat);
 
             jacksonObjectMapperBuilder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 //            jacksonObjectMapperBuilder.featuresToEnable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);

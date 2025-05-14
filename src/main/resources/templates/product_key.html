@@ -12,30 +12,29 @@
         </td>
     </tr>
     <tr>
-        <td style="padding:30px 40px;">
+        <td style="padding:30px 40px;" >
             <h2 style="color:#1db954; font-size:24px; margin-bottom:10px;">Hi <span th:text="${fullName}">User</span>,</h2>
             <p style="font-size:16px; line-height:1.6;">
                 Below are your product keys and license details.
             </p>
 
-            <div th:each="key : ${keys}" style="margin:30px 0; background-color:#2a2a2d; padding:20px; border-radius:6px;">
-                <p style="margin:0; font-size:14px; color:#888;">Product Key:</p>
-                <h3 style="margin:10px 0; font-size:20px; color:#ffffff; letter-spacing:2px;" th:text="${key.productKey}">XXXX-XXXX-XXXX-XXXX</h3>
+            <div th:each="meta : ${metas}">
+                <h3 style="color:#1db954; font-size:20px; margin-top:40px;"
+                    th:text="${T(java.lang.String).format('%s (Quantity: %d)', meta.productName, meta.quantity)}">
+                    Product Name: 0 items
+                </h3>
+                <table th:each="key : ${meta.keys}" width="100%" style="margin-top:10px;">
+                    <tr th:if="${key.productKey != null}">
+                        <td style="padding:6px; color:#888;">Product Key: </td>
+                        <td style="padding:6px;" th:text="${key.productKey}">XXXX-XXXX-XXXX</td>
+                    </tr>
 
-                <table width="100%" style="margin-top:10px;">
-                    <tr th:if="${key.startDate != null}">
-                        <td style="padding:6px; color:#888;">Start Date:</td>
-                        <td style="padding:6px;" th:text="${key.startDate}">DD/MM/YYYY</td>
-                    </tr>
-                    <tr th:if="${key.expiryDate != null}">
-                        <td style="padding:6px; color:#888;">Expiry Date:</td>
-                        <td style="padding:6px;" th:text="${key.expiryDate}">DD/MM/YYYY</td>
-                    </tr>
                     <tr th:if="${key.duration != null}">
                         <td style="padding:6px; color:#888;">Duration:</td>
                         <td style="padding:6px;" th:text="${key.duration}">1 year</td>
                     </tr>
                 </table>
+
             </div>
 
             <p style="margin-top:20px; font-size:14px; color:#666;">

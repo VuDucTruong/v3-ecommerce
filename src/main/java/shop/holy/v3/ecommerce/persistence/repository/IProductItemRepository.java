@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@SuppressWarnings({"Update"})
 public interface IProductItemRepository extends JpaRepository<ProductItem, Long>, JpaSpecificationExecutor<ProductItem> {
 
 
@@ -29,10 +30,8 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
 
     List<ProQ_ProductMetadata> findAllByProductIdEquals(long productId);
 
-//    @EntityGraph(attributePaths = {"product"})
+    //    @EntityGraph(attributePaths = {"product"})
     Optional<ProQ_ProductMetadata> findFirstByProductKey(String productKey);
-
-
 
 
     @Modifying
@@ -81,7 +80,6 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
 //    @Modifying(clearAutomatically = true)
 //    @Query("DELETE FROM ProductItem p WHERE p.id IN :ids")
 //    int deleteByIdIn(@Param("ids") long[] ids);
-
 
 
 }

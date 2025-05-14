@@ -35,7 +35,7 @@ public class ControllerComment {
         return ResponseEntity.ok(rs);
     }
 
-    @Operation(summary = "delete many")
+    @Operation(summary = "get many")
     @GetMapping("")
     public ResponseEntity<ResponsePagination<ResponseComment>> getCommentsByProductIds(@RequestParam long productId,
                                                                                        @RequestParam(required = false) boolean deleted,

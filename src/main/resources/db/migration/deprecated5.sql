@@ -22,19 +22,16 @@ SET row_security = off;
 
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'ADMIN', NULL);
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (2, '2025-04-17 14:11:35.385778', NULL, '2026-04-17', 'customer@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'CUSTOMER', NULL);
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (6, '2025-05-08 10:59:23.342558', NULL, NULL, 'cus1@gmail.com', NULL, false, NULL, NULL, 'string', 'CUSTOMER', NULL);
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (8, '2025-05-08 11:08:58.873873', NULL, NULL, 'cus2@gmail.com', NULL, false, NULL, NULL, '123456', 'CUSTOMER', NULL);
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (9, '2025-05-08 11:16:25.04038', NULL, NULL, '21522458@gm.uit.edu.vn', NULL, false, NULL, NULL, '123456789', 'CUSTOMER', NULL);
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (6, '2025-05-08 10:59:23.342558', NULL, '2025-05-14', 'cus1@gmail.com', '2025-05-13', false, NULL, NULL, 'string', 'CUSTOMER', NULL);
 
 
 --
 -- Data for Name: genre1; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (1, '2025-04-25 15:19:19.259669', NULL, 'Game');
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (2, '2025-05-14 02:11:06.184225', NULL, 'Mẹo hay');
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (3, '2025-05-14 02:11:07.893819', NULL, 'AI');
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (4, '2025-05-14 02:11:09.183369', NULL, 'Movies');
+INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (1, '2025-04-25 15:19:19.259669', NULL, 'social');
 
 
 --
@@ -72,22 +69,13 @@ INSERT INTO public.product_description (id, created_at, deleted_at, description,
 INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (2, '2025-04-17 16:44:12.911651', NULL, 'string', 'string', 'string', 'string', 'string');
 INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (3, '2025-04-17 16:49:31.057025', NULL, 'string', 'string', 'string', 'string', 'string');
 INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (13, '2025-05-11 17:06:00.69428', NULL, 'abc', 'string', 'platform', 'string', 'tutor');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (15, '2025-05-12 21:32:20.404573', NULL, 'string', 'string', 'string', 'string', 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (16, '2025-05-12 21:36:49.037095', NULL, '<p>This is the platform</p>', '<p>This is the tutorial</p>', '<p>This is the description</p>', '<p>This is the description</p>', '<p>This is the information</p>');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (17, '2025-05-12 21:51:07.058552', NULL, '<p>This is the platform</p>', '<p>This is the tutorial</p>', '<p>This is the description</p>', '<p>This is the description</p>', '<p>This is the information</p>');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (18, '2025-05-12 23:37:51.33737', NULL, 'string', 'string', 'string', 'string', 'string');
-INSERT INTO public.product_description (id, created_at, deleted_at, description, info, platform, policy, tutorial) VALUES (19, '2025-05-13 00:13:31.037736', NULL, '<p>adsfasd</p>', '<p>asdfasd</p>', '<p>asdasd</p>', '<p>asdasd</p>', '<p>asdasd</p>');
 
 
 --
 -- Data for Name: product_groups; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (1, '2025-04-23 21:05:23.825715', NULL, 'other');
-INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (2, '2025-05-14 02:10:49.978783', NULL, 'AI');
-INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (3, '2025-05-14 02:10:52.333377', NULL, 'Windows');
-INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (4, '2025-05-14 02:10:54.684567', NULL, 'office');
-INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (5, '2025-05-14 02:10:56.173013', NULL, 'gift card');
+INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (1, '2025-04-23 21:05:23.825715', NULL, 'youtube-spotify');
 
 
 --
@@ -98,11 +86,6 @@ INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id,
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 2, 4, false, '', '[]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 3, 2, false, 'the-jakarta-product', '[]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (14, '2025-05-11 17:06:00.69428', NULL, 1, NULL, 'Youtube', 12.99, 9.99, 13, 0, true, 'youtube', '["digital", "music", "streaming"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (16, '2025-05-12 21:32:20.404573', NULL, 1, NULL, 'product phong', 12.99, 9.99, 15, 0, true, 'product-phong', '["digital", "music", "streaming"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (19, '2025-05-12 23:37:51.33737', NULL, 1, NULL, 'Spotify Premium', 12.99, 9.99, 18, 0, true, 'spotify-premium', '["digital"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (20, '2025-05-13 00:13:31.037736', NULL, 1, 'https://res.cloudinary.com/dm45tt6nt/image/upload/v1747070010/ecommerce/product/8ea092fb-c495-4f43-b7cb-26c5ef20b8a9.png', 'aaaa', 10000.00, 9800.00, 19, 0, true, 'a', '["abc"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (17, '2025-05-12 21:36:49.037095', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 16, 0, true, 'as', '["sds"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (18, '2025-05-12 21:51:07.058552', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 17, 0, true, '21520507', '["sds"]');
 
 
 --
@@ -125,19 +108,8 @@ INSERT INTO public.coupons (id, created_at, deleted_at, available_from, availabl
 -- Data for Name: genre2; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (1, '2025-04-25 15:23:37.771039', NULL, 1, 'Esport');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (2, '2025-04-25 15:23:37.771039', NULL, 1, 'game miễn phí');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (3, '2025-05-14 02:12:10.241431', NULL, 1, 'Mẹo chơi game');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (4, '2025-05-14 02:12:10.256542', NULL, 1, 'Tin tức game');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (5, '2025-05-14 02:12:13.593002', NULL, 2, 'Điện thoại');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (6, '2025-05-14 02:12:13.606242', NULL, 2, 'Ứng dụng');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (7, '2025-05-14 02:12:13.617468', NULL, 2, 'Máy tính');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (8, '2025-05-14 02:12:13.630135', NULL, 2, 'Phần cứng');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (9, '2025-05-14 02:12:13.641187', NULL, 2, 'Thủ thuật');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (10, '2025-05-14 02:12:16.524289', NULL, 4, 'Đánh giá');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (11, '2025-05-14 02:12:16.54024', NULL, 4, 'Giới thiệu phim');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (12, '2025-05-14 02:12:16.553861', NULL, 4, 'Netflix');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (13, '2025-05-14 02:12:16.567998', NULL, 4, 'Phim chiếu rạp');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (3, '2025-04-25 15:23:37.771039', NULL, 1, 'life');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (4, '2025-04-25 15:23:37.771039', NULL, 1, 'news');
 
 
 --
@@ -215,12 +187,6 @@ INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 10);
 INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 9);
 INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 14);
 INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 14);
-INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 16);
-INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 17);
-INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 18);
-INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 19);
-INSERT INTO public.products_categories (category_id, product_id) VALUES (2, 19);
-INSERT INTO public.products_categories (category_id, product_id) VALUES (1, 20);
 
 
 --
@@ -262,14 +228,14 @@ SELECT pg_catalog.setval('public.coupons_id_seq', 1, true);
 -- Name: genre1_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.genre1_id_seq', 4, true);
+SELECT pg_catalog.setval('public.genre1_id_seq', 1, true);
 
 
 --
 -- Name: genre2_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.genre2_id_seq', 13, true);
+SELECT pg_catalog.setval('public.genre2_id_seq', 4, true);
 
 
 --
@@ -311,14 +277,14 @@ SELECT pg_catalog.setval('public.payments_id_seq', 2, true);
 -- Name: product_description_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_description_id_seq', 19, true);
+SELECT pg_catalog.setval('public.product_description_id_seq', 13, true);
 
 
 --
 -- Name: product_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_groups_id_seq', 5, true);
+SELECT pg_catalog.setval('public.product_groups_id_seq', 1, true);
 
 
 --
@@ -339,7 +305,7 @@ SELECT pg_catalog.setval('public.product_items_used_id_seq', 5, true);
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 20, true);
+SELECT pg_catalog.setval('public.products_id_seq', 14, true);
 
 
 --

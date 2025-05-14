@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     // Add this method to override the default findAll
     @Override
-    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
+    @EntityGraph(attributePaths = {"productDescription", "categories"})
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
     @Modifying

@@ -2,7 +2,6 @@ package shop.holy.v3.ecommerce.service.smtp;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,6 +22,8 @@ public class SmtpService {
     private boolean enableFallback;
     @Value("${phong.mail.banner-url}")
     private String bannerUrl;
+
+    private static final String format = "Order #%d, Your product keys are ...";
 
     private final TemplateEngine templateEngine;
     private final JavaMailSender mailSender;
@@ -56,12 +57,20 @@ public class SmtpService {
         sendEmail(to, "Holy Shop: Your OTP Code is ...", body);
     }
 
-    public void sendMailProductKeys(String to, @NonNull String subject, MailProductKeys prod_keys) throws MessagingException {
+    public void sendMailProductKeys(MailProductKeys mpk) throws MessagingException {
+
+        String body = makeBodyFromMPK(mpk);
+        sendEmail(mpk.getEmail(), String.format(format, mpk.getOrderId()), body);
+    }
+
+    public String makeBodyFromMPK(MailProductKeys mpk) {
         Context context = new Context();
         context.setVariable("bannerUrl", bannerUrl);
-        prod_keys.bindContext(context);
-        String body = templateEngine.process("product_key", context);
-        sendEmail(to, subject, body);
+        context.setVariable("fullName", mpk.getFullName());
+        context.setVariable("metas", mpk.getMetas().values());
+//        mpk.bindContext(context);
+
+        return templateEngine.process("product_key", context);
     }
 
     public void sendMailWelcome(String to, String subject, MailWelcome welcome) throws MessagingException {

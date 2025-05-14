@@ -23,9 +23,6 @@ public class NotificationProdKey {
     protected Date createdAt;
 
     private String email;
-//    private String bannerUrl;
-    @ColumnDefault("0")
-    private int quantity;
     private Long orderId;
 
 

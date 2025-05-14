@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class ProductMapper {
 
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
-    @Mapping(source = "group.variants", target = "variants")
+//    @Mapping(source = "group", target = "group")
     @Mapping(source = "quantity", target = "status", qualifiedByName = "fromCntToStatus")
     @Mapping(source = "productItems", target = "productItems", ignore = true)
     @Mapping(source = "represent", target = "represent")

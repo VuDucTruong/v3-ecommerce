@@ -20,7 +20,11 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
 //            """)
 //    List<ProQ_Email_Fullname> findWithProjectionAndIdIn(Collection<Long> orderIds);
 
-//    @Query("select od.productId, od.orderId from OrderDetail od where od.orderId in (:orderId)")
+    @Query("""
+            select odd.id, odd.productId, odd.orderId, odd.quantity,
+                        p.name as productName, p.imageUrlId as imageUrlId
+                        from OrderDetail odd left join Product p on odd.productId = p.id
+                        where odd.orderId in (:orderId)""")
     List<ProQ_OrderDetails> findByOrderIdIn(Collection<Long> orderId);
 
     @EntityGraph(attributePaths = {"product"})

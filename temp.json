@@ -1,0 +1,443 @@
+{
+  "totalInstances": 4,
+  "totalPages": 1,
+  "currentPage": 0,
+  "data": [
+    {
+      "id": 14,
+      "productDescription": {
+        "description": "abc",
+        "info": "string",
+        "platform": "platform",
+        "policy": "string",
+        "tutorial": "tutor"
+      },
+      "slug": "youtube",
+      "name": "Youtube",
+      "imageUrl": null,
+      "tags": [
+        "digital",
+        "music",
+        "streaming"
+      ],
+      "represent": true,
+      "groupId": 1,
+      "price": 9.99,
+      "originalPrice": 12.99,
+      "quantity": 0,
+      "categories": [
+        {
+          "id": 1,
+          "name": "edu",
+          "description": "math",
+          "imageUrl": null
+        },
+        {
+          "id": 2,
+          "name": "deleted ones",
+          "description": "",
+          "imageUrl": null
+        }
+      ],
+      "status": "OUT_OF_STOCK",
+      "variants": [
+        {
+          "id": 17,
+          "slug": "as",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 18,
+          "slug": "21520507",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 19,
+          "slug": "spotify-premium",
+          "name": "Spotify Premium",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 20,
+          "slug": "a",
+          "name": "aaaa",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9800,
+          "originalPrice": 10000
+        },
+        {
+          "id": 9,
+          "slug": "",
+          "name": "thanh phong",
+          "imageUrl": null,
+          "represent": false,
+          "price": 99,
+          "originalPrice": 1991
+        },
+        {
+          "id": 10,
+          "slug": "phong-youtube",
+          "name": "phong youtube",
+          "imageUrl": null,
+          "represent": false,
+          "price": 50,
+          "originalPrice": 100
+        },
+        {
+          "id": 14,
+          "slug": "youtube",
+          "name": "Youtube",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 16,
+          "slug": "product-phong",
+          "name": "product phong",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        }
+      ],
+      "productItems": null
+    },
+    {
+      "id": 16,
+      "productDescription": {
+        "description": "string",
+        "info": "string",
+        "platform": "string",
+        "policy": "string",
+        "tutorial": "string"
+      },
+      "slug": "product-phong",
+      "name": "product phong",
+      "imageUrl": null,
+      "tags": [
+        "digital",
+        "music",
+        "streaming"
+      ],
+      "represent": true,
+      "groupId": 1,
+      "price": 9.99,
+      "originalPrice": 12.99,
+      "quantity": 0,
+      "categories": [
+        {
+          "id": 1,
+          "name": "edu",
+          "description": "math",
+          "imageUrl": null
+        }
+      ],
+      "status": "OUT_OF_STOCK",
+      "variants": [
+        {
+          "id": 17,
+          "slug": "as",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 18,
+          "slug": "21520507",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 19,
+          "slug": "spotify-premium",
+          "name": "Spotify Premium",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 20,
+          "slug": "a",
+          "name": "aaaa",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9800,
+          "originalPrice": 10000
+        },
+        {
+          "id": 9,
+          "slug": "",
+          "name": "thanh phong",
+          "imageUrl": null,
+          "represent": false,
+          "price": 99,
+          "originalPrice": 1991
+        },
+        {
+          "id": 10,
+          "slug": "phong-youtube",
+          "name": "phong youtube",
+          "imageUrl": null,
+          "represent": false,
+          "price": 50,
+          "originalPrice": 100
+        },
+        {
+          "id": 14,
+          "slug": "youtube",
+          "name": "Youtube",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 16,
+          "slug": "product-phong",
+          "name": "product phong",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        }
+      ],
+      "productItems": null
+    },
+    {
+      "id": 19,
+      "productDescription": {
+        "description": "string",
+        "info": "string",
+        "platform": "string",
+        "policy": "string",
+        "tutorial": "string"
+      },
+      "slug": "spotify-premium",
+      "name": "Spotify Premium",
+      "imageUrl": null,
+      "tags": [
+        "digital"
+      ],
+      "represent": true,
+      "groupId": 1,
+      "price": 9.99,
+      "originalPrice": 12.99,
+      "quantity": 0,
+      "categories": [
+        {
+          "id": 1,
+          "name": "edu",
+          "description": "math",
+          "imageUrl": null
+        },
+        {
+          "id": 2,
+          "name": "deleted ones",
+          "description": "",
+          "imageUrl": null
+        }
+      ],
+      "status": "OUT_OF_STOCK",
+      "variants": [
+        {
+          "id": 17,
+          "slug": "as",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 18,
+          "slug": "21520507",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 19,
+          "slug": "spotify-premium",
+          "name": "Spotify Premium",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 20,
+          "slug": "a",
+          "name": "aaaa",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9800,
+          "originalPrice": 10000
+        },
+        {
+          "id": 9,
+          "slug": "",
+          "name": "thanh phong",
+          "imageUrl": null,
+          "represent": false,
+          "price": 99,
+          "originalPrice": 1991
+        },
+        {
+          "id": 10,
+          "slug": "phong-youtube",
+          "name": "phong youtube",
+          "imageUrl": null,
+          "represent": false,
+          "price": 50,
+          "originalPrice": 100
+        },
+        {
+          "id": 14,
+          "slug": "youtube",
+          "name": "Youtube",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 16,
+          "slug": "product-phong",
+          "name": "product phong",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        }
+      ],
+      "productItems": null
+    },
+    {
+      "id": 20,
+      "productDescription": {
+        "description": "<p>adsfasd</p>",
+        "info": "<p>asdfasd</p>",
+        "platform": "<p>asdasd</p>",
+        "policy": "<p>asdasd</p>",
+        "tutorial": "<p>asdasd</p>"
+      },
+      "slug": "a",
+      "name": "aaaa",
+      "imageUrl": "https://res.cloudinary.com/dm45tt6nt/image/upload/v1747070010/ecommerce/product/8ea092fb-c495-4f43-b7cb-26c5ef20b8a9.png",
+      "tags": [
+        "abc"
+      ],
+      "represent": true,
+      "groupId": 1,
+      "price": 9800,
+      "originalPrice": 10000,
+      "quantity": 0,
+      "categories": [
+        {
+          "id": 1,
+          "name": "edu",
+          "description": "math",
+          "imageUrl": null
+        }
+      ],
+      "status": "OUT_OF_STOCK",
+      "variants": [
+        {
+          "id": 17,
+          "slug": "as",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 18,
+          "slug": "21520507",
+          "name": "21520507",
+          "imageUrl": null,
+          "represent": true,
+          "price": 0,
+          "originalPrice": 0
+        },
+        {
+          "id": 19,
+          "slug": "spotify-premium",
+          "name": "Spotify Premium",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 20,
+          "slug": "a",
+          "name": "aaaa",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9800,
+          "originalPrice": 10000
+        },
+        {
+          "id": 9,
+          "slug": "",
+          "name": "thanh phong",
+          "imageUrl": null,
+          "represent": false,
+          "price": 99,
+          "originalPrice": 1991
+        },
+        {
+          "id": 10,
+          "slug": "phong-youtube",
+          "name": "phong youtube",
+          "imageUrl": null,
+          "represent": false,
+          "price": 50,
+          "originalPrice": 100
+        },
+        {
+          "id": 14,
+          "slug": "youtube",
+          "name": "Youtube",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        },
+        {
+          "id": 16,
+          "slug": "product-phong",
+          "name": "product phong",
+          "imageUrl": null,
+          "represent": true,
+          "price": 9.99,
+          "originalPrice": 12.99
+        }
+      ],
+      "productItems": null
+    }
+  ]
+}

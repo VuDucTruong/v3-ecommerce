@@ -7,5 +7,10 @@ public interface ProQ_OrderDetails {
 
     long getProductId();
 
+    String getProductName();
+
+    String getImageUrlId();
+
+
     int getQuantity();
 }

@@ -32,10 +32,7 @@ import java.util.stream.Collectors;
 @Hidden
 public class GlobalExceptionHandler {
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.setAutoGrowNestedPaths(true);  // This enables auto-growing nested paths like tags.0
-    }
+
 
     private static final String COMMON_ERROR_MESSAGE_TEMPLATE = "Got error: [%s], with Message: [%s]";
 
