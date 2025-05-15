@@ -11,6 +11,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Product;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
@@ -18,6 +19,9 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @Override
     @EntityGraph(attributePaths = {"productDescription", "categories"})
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
+
+    @Query(value = "select id from products where id IN (:ids) and created_at is not null", nativeQuery = true)
+    Set<Long> findExistingProductIds(Set<Long> ids);
 
     @Modifying
     @Query("""
@@ -90,6 +94,10 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             WHERE product_id = :productId AND category_id = :categoryId
             """, nativeQuery = true)
     void deleteProductCategories(long productId, long categoryId);
+
+    @Query(value = "select category_id from products_categories where product_id = ?1", nativeQuery = true)
+    Set<Long> findCategoryIdsByProductId(long productId);
+
 
     @Modifying
     @Query("UPDATE Product p set p.quantity = p.quantity + :subTract where p.id = :productId")

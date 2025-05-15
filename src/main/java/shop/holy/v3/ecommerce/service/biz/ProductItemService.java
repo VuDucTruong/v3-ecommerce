@@ -20,10 +20,11 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.ProductItemMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -88,30 +89,35 @@ public class ProductItemService {
     }
 
     @Transactional
-    public ResponseProductItemCreate inserts(RequestProductItemCreate[] requests, boolean used) {
+    public ResponseProductItemCreate inserts(List<RequestProductItemCreate> requests, boolean used) {
+        Set<Long> groupedProductIds = requests.stream().map(RequestProductItemCreate::productId).collect(Collectors.toSet());
+        Set<Long> existingProdIds = productRepository.findExistingProductIds(groupedProductIds);
+        Stream<RequestProductItemCreate> insertable = requests.stream()
+                .filter(s -> existingProdIds.contains(s.productId()));
+
+        List<ProQ_ProductId_AcceptedKey> accepted;
         if (used) {
-            ProductItemUsed[] usedItems = Arrays.stream(requests).map(mapper::from_Request_ToUsedEntity)
-                    .filter(item -> item.getProductKey() != null)
+            ProductItemUsed[] usedItems = insertable.map(mapper::from_Request_ToUsedEntity)
                     .toArray(ProductItemUsed[]::new);
             var tri = mapper.from_UsedEntity_To_Tri_Arrays(usedItems);
-            var accepted = usedRepository.insertProductItems(tri.getLeft(), tri.getMiddle(), tri.getRight());
-            return new ResponseProductItemCreate(accepted.stream().map(ProQ_ProductId_AcceptedKey::getAcceptedKey).toArray(String[]::new));
+            accepted = usedRepository.insertProductItems(tri.getLeft(), tri.getMiddle(), tri.getRight());
+        } else {
+
+            ProductItem[] productItems = insertable.map(mapper::fromRequestToEntity)
+                    .toArray(ProductItem[]::new);
+            var tri = mapper.from_Entity_To_Tri_Arrays(productItems);
+
+            ///  MAY BE THE ACCEPTED?
+            accepted = productItemRepository.insertProductItems(tri.getLeft(), tri.getMiddle(), tri.getRight());
+            ///  TO UPDATE PRODUCT'S QUANTITY
+            accepted.stream().collect(
+                    Collectors.groupingBy(ProQ_ProductId_AcceptedKey::getProductId,
+                            Collectors.reducing(0, _ -> 1, Integer::sum))
+            ).forEach(productRepository::updateAddProductItemCountsByProductIdEquals);
         }
-
-        ProductItem[] productItems = Arrays.stream(requests).map(mapper::fromRequestToEntity)
-                .filter(item -> item.getProductKey() != null)
-                .toArray(ProductItem[]::new);
-        var tri = mapper.from_Entity_To_Tri_Arrays(productItems);
-
-        ///  MAY BE THE ACCEPTED?
-        List<ProQ_ProductId_AcceptedKey> accepted = productItemRepository.insertProductItems(tri.getLeft(), tri.getMiddle(), tri.getRight());
-        ///  TO UPDATE PRODUCT'S QUANTITY
-        accepted.stream().collect(
-                Collectors.groupingBy(ProQ_ProductId_AcceptedKey::getProductId,
-                        Collectors.reducing(0, _ -> 1, Integer::sum))
-        ).forEach(productRepository::updateAddProductItemCountsByProductIdEquals);
-
-        return new ResponseProductItemCreate(accepted.stream().map(ProQ_ProductId_AcceptedKey::getAcceptedKey).toArray(String[]::new));
+        var results = accepted.stream().map(a -> new ResponseProductItemCreate.ResponseAccepted(a.getProductId(), a.getAcceptedKey()))
+                .toList();
+        return new ResponseProductItemCreate(results);
     }
 
 

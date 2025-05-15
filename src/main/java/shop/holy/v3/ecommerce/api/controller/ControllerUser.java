@@ -50,7 +50,7 @@ public class ControllerUser {
 
     @PostMapping("searches")
     @Operation(summary = "Search users: role >= staff", description = "Search users with pagination, \n all conditions are 'AND' concatenated ")
-    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<?> search(
             @RequestBody RequestUserSearch searchSpecs
     ) {
@@ -60,7 +60,11 @@ public class ControllerUser {
 
     @PatchMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
-    @Operation(summary = "Update oneSelf's profile", description = "Perhaps use for users only")
+    @Operation(summary = "Update oneSelf's profile", description = """
+            ID là id của profile
+            => if Admin && id != null
+            ====> update profile by Id (chính là profileId)
+            """)
     public ResponseEntity<?> updateProfile(@ModelAttribute RequestProfileUpdate request) {
         ResponseProfile profile = userService.updateProfile(request);
         return ResponseEntity.ok(profile);
@@ -76,7 +80,7 @@ public class ControllerUser {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    @Operation(summary = "delete 1 : admin only ==> use this to delete 1 is ok")
+    @Operation(summary = "delete 1 : admin only ==> use this to delete 1 by Id")
     public ResponseEntity<Integer> delete1(@PathVariable long id) {
         var x = userService.deleteAccountById(id);
         return ResponseEntity.ok(x);

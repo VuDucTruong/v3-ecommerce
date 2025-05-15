@@ -11,6 +11,7 @@ import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface IProductItemUsedRepository extends JpaRepository<ProductItemUsed, Long>, JpaSpecificationExecutor<ProductItemUsed> {
@@ -20,7 +21,7 @@ public interface IProductItemUsedRepository extends JpaRepository<ProductItemUse
             (SELECT id, key, region
             FROM unnest(:productIds, :productKeys, :regions) as t(id, key, region))
             ON CONFLICT (product_key) DO NOTHING
-            RETURNING product_key AS accepted_key, product_id
+            RETURNING product_id ,product_key AS accepted_key
             """, nativeQuery = true)
     List<ProQ_ProductId_AcceptedKey> insertProductItems(
             @Param("productIds") long[] productIds,

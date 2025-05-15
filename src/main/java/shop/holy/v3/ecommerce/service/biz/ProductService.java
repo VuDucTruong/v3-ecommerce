@@ -7,6 +7,8 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
@@ -28,7 +30,9 @@ import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -126,12 +130,23 @@ public class ProductService {
 
         this.uploadSingleImageAndSetEntity(product, request.image());
         ///  append-delete Categories
-        request.catIdsToDelete().forEach(catId -> {
-            productRepository.deleteProductCategories(productId, catId);
-        });
-        request.catIdsToAdd().forEach(catId -> {
-            productRepository.insertProductCategories(productId, catId);
-        });
+        if (!CollectionUtils.isEmpty(request.categoryIds())) {
+            List<Long> commingIds = request.categoryIds();
+            Set<Long> currentCatIds = productRepository.findCategoryIdsByProductId(productId);
+            List<Long> toDeletes = currentCatIds.stream()
+                    .filter(id -> !commingIds.contains(id))
+                    .toList();
+            List<Long> toInserts = commingIds.stream()
+                    .filter(id -> !currentCatIds.contains(id))
+                    .toList();
+            toDeletes.forEach(catId -> {
+                productRepository.deleteProductCategories(productId, catId);
+            });
+            toInserts.forEach(catId -> {
+                productRepository.insertProductCategories(productId, catId);
+            });
+        }
+
         ///  update product && update description as well
         {
             Product rs = productRepository.save(product);

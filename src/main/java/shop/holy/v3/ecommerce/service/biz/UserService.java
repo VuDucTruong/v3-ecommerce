@@ -48,6 +48,7 @@ public class UserService {
             profile.setImageUrlId(blobUrl);
             profile.setId(account.getId());
         }
+
         Account savedAccount = accountRepository.save(account);
         profile.setAccountId(savedAccount.getId());
         profileRepository.save(profile);
@@ -87,21 +88,25 @@ public class UserService {
     public ResponseProfile updateProfile(RequestProfileUpdate request) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         Profile profile = accountMapper.fromProfileUpdateRequestToEntity(request);
-        if (authAccount.isAdmin()) {
-            profile.setId(request.id());
-        } else {
-            profile.setAccountId(request.id());
-        }
+        profile.setAccountId(authAccount.getId());
+        int changes;
 
         if (request.image() != null) {
             String blobUrl = cloudinaryFacadeService.uploadAccountBlob(request.image());
             profile.setImageUrlId(blobUrl);
-            /// UPDATING HERE
-            profileRepository.updateProfileByAccountId(profile);
-            return accountMapper.fromEntityToResponseProfile(profile);
+            if ((request.id() == null))
+                changes = profileRepository.updateProfileByAccountId(profile);
+            else
+                changes = profileRepository.updateProfileById(profile);
+        } else {
+            if (request.id() == null)
+                changes = profileRepository.updateProfileExcludeImageByAccountId(profile);
+            else
+                changes = profileRepository.updateProfileById(profile);
         }
-        /// UPDATING HERE
-        profileRepository.updateProfileExcludeImage(profile);
+        if (changes <= 0)
+            throw BizErrors.ACCOUNT_NOT_FOUND.exception();
+
         return accountMapper.fromEntityToResponseProfile(profile);
     }
 

@@ -6,9 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
 
-import java.util.Collection;
-import java.util.Date;
-
 @Repository
 public interface IProfileRepository extends JpaRepository<Profile, Long> {
 
@@ -19,7 +16,15 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
                 p.imageUrlId = :#{#profile.imageUrlId}
             WHERE p.accountId = :#{#profile.accountId}
             """)
-    void updateProfileByAccountId(Profile profile);
+    int updateProfileByAccountId(Profile profile);
+    @Modifying
+    @Query("""
+            UPDATE Profile p
+            SET p.fullName = :#{#profile.fullName},
+                p.imageUrlId = :#{#profile.imageUrlId}
+            WHERE p.id = :#{#profile.id}
+            """)
+    int updateProfileById(Profile profile);
 
     @Modifying
     @Query("""
@@ -27,7 +32,17 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
             SET p.fullName = :#{#profile.fullName}
             WHERE p.accountId = :#{#profile.accountId}
             """)
-    void updateProfileExcludeImage(Profile profile);
+    int updateProfileExcludeImageByAccountId(Profile profile);
+
+    @Modifying
+    @Query("""
+            UPDATE Profile p
+            SET p.fullName = :#{#profile.fullName}
+            WHERE p.id = :#{#profile.id}
+            """)
+    int updateProfileExcludeImageById(Profile profile);
+
+
 
     @Query("update Profile p set p.deletedAt = CURRENT_TIMESTAMP where p.accountId = :accountId")
     @Modifying

@@ -2,16 +2,18 @@ package shop.holy.v3.ecommerce.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.holy.v3.ecommerce.api.dto.ResponseError;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
 import shop.holy.v3.ecommerce.service.biz.ProductItemService;
-import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
+
+import java.util.List;
 
 @Tag(name = "Product Items")
 @RestController
@@ -60,14 +62,12 @@ public class ControllerProductItem {
     }
 
 
-    @Operation(summary = "create 1")
+    @Operation(summary = "create 1", description = "")
     @PostMapping("")
     public ResponseEntity<ResponseProductItemCreate> createProductItem(
-            @RequestBody @Valid RequestProductItemCreate[] productItem,
+            @RequestBody @Valid @Nonnull @NotEmpty(message = "Request for creation must not be empty") List< @Valid RequestProductItemCreate> productItem,
             @RequestParam(required = false) boolean used) {
-        if (productItem == null || productItem.length == 0) {
-            return ResponseEntity.ok().build();
-        }
+
         ResponseProductItemCreate res = productItemService.inserts(productItem, used);
         return ResponseEntity.ok(res);
     }

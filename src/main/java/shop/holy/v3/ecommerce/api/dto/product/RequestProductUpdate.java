@@ -17,7 +17,7 @@ public record RequestProductUpdate(
         @Schema(example = "9.99") BigDecimal price,
         @Schema(example = "12.99") BigDecimal originalPrice,
         @Schema(description = "Whether this product is representative of its group") boolean represent,
-        @Schema(description = "Category IDs to remove from product", example = "[1, 2]") List<Long> catIdsToDelete,
-        @Schema(description = "Category IDs to add to product", example = "[3, 4]") List<Long> catIdsToAdd
+        List<Long> categoryIds
+
 ) {
 }
