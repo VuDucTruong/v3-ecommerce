@@ -37,9 +37,9 @@ public class ControllerComment {
 
     @Operation(summary = "get many")
     @GetMapping("")
-    public ResponseEntity<ResponsePagination<ResponseComment>> getCommentsByProductIds(@RequestParam long productId,
-                                                                                       @RequestParam(required = false) boolean deleted,
-                                                                                       @ParameterObject Pageable pageable) {
+    public ResponseEntity<ResponsePagination<ResponseComment.Light>> getCommentsByProductIds(@RequestParam long productId,
+                                                                                             @RequestParam(required = false) boolean deleted,
+                                                                                             @ParameterObject Pageable pageable) {
         var cmt = commentService.getCommentsByProductId(productId, deleted, pageable);
         return ResponseEntity.ok(cmt);
     }

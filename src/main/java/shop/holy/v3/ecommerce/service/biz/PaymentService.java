@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.service.biz;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
@@ -68,22 +69,23 @@ public class PaymentService {
             Payment p1 = paymentMapper.from_UrlRequest_to_Entity(req);
             BigDecimal amount = orderRepository.findAmountByOrderId(orderId).orElseThrow(BizErrors.ORDER_NOT_FOUND::exception);
             String tRef = UUID.randomUUID().toString();
-            String paymentUrl = build_Pay_Url(p1.getBankCode(), amount, tRef, p1.getNote(), ip);
+            Pair<String, String> pUrlPair = build_Pay_Url(p1.getBankCode(), amount, tRef, p1.getNote(), ip);
             ///  SAVE .....
             {
                 p1.setProfileId(profileId);
                 p1.setTransRef(tRef);
-                p1.setPaymentUrl(paymentUrl);
+                p1.setPaymentUrl(pUrlPair.getFirst());
+                p1.setSecureHash(pUrlPair.getSecond());
                 paymentRepository.save(p1);
             }
             int changes = orderRepository.updateOrderStatusById(OrderStatus.PROCESSING.name(), orderId);
             if (changes <= 0) throw BizErrors.ORDER_NOT_FOUND.exception();
-            return paymentUrl;
+            return pUrlPair.getFirst();
         }
         return opt_payment.get().getPaymentUrl();
     }
 
-    private String build_Pay_Url(String bankCode, BigDecimal amount, String transRef, String orderInfo, String ip) {
+    private Pair<String, String> build_Pay_Url(String bankCode, BigDecimal amount, String transRef, String orderInfo, String ip) {
         Map<String, String> vnpParamsMap = vnpPayProperties.buildParamsMap(transRef, orderInfo);
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount.longValue() * 100));
         if (bankCode != null && !bankCode.isEmpty()) {
@@ -95,7 +97,7 @@ public class PaymentService {
         String hashData = VNPayUtil.getPaymentURL(vnpParamsMap, false);
         String vnpSecureHash = VNPayUtil.hmacSHA512(vnpPayProperties.getSecretKey(), hashData);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
-        return vnpPayProperties.getVnp_PayUrl() + "?" + queryUrl;
+        return Pair.of(queryUrl, hashData);
     }
 
 }

@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.shared.mapper;
 
 
+import jakarta.persistence.criteria.JoinType;
 import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +32,16 @@ public abstract class CommentMapper  {
     @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
     public abstract ResponseComment fromEntityToResponse_Censored(Comment comment);
 
+
+    @Mapping(source = "content", target = "content")
+    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies")
+    @Mapping(source = "author", target = "author")
+    public abstract ResponseComment.Light fromEntityToResponseLight(Comment comment);
+
+    @Mapping(source = "content", target = "content", ignore = true)
+    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
+    public abstract ResponseComment.Light fromEntityToResponse_CensoredLight(Comment comment);
+
     @IterableMapping( elementTargetType = ResponseReply.class, qualifiedByName = "toReply")
     @Named("mapReplies")
     public abstract ResponseReply[] mapReplies(Set<Comment> replies);
@@ -46,11 +57,12 @@ public abstract class CommentMapper  {
     @Mapping(source = "content", target = "content", ignore = true)
     public abstract ResponseReply toResponseReply_censored(Comment reply);
 
-
     public abstract ResponseProfile fromProfileToResponseProfile(Profile profile);
 
     public Specification<Comment> fromSearchRequestToSpec(RequestCommentSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
+            root.fetch("product", JoinType.INNER);
+
             if (searchReq == null) return criteriaBuilder.conjunction();
 
             if (searchReq.productId() != null) {
@@ -62,9 +74,6 @@ public abstract class CommentMapper  {
             if(StringUtils.hasLength(searchReq.content())){
                 criteriaBuilder.and(criteriaBuilder.equal(root.get("content"), searchReq.content()));
             }
-//            if (StringUtils.hasLength(searchReq.productName())){
-//
-//            }
 
             if (!searchReq.deleted()) {
                 criteriaBuilder.and(criteriaBuilder.isNull(root.get("deletedAt")));

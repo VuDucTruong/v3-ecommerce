@@ -12,10 +12,8 @@ import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponSearch;
 import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponUpdate;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
 import shop.holy.v3.ecommerce.service.biz.CouponService;
-import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor

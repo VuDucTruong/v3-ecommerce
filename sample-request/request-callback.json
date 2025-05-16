@@ -1,0 +1,9 @@
+{
+  "vnp_BankCode": "NCB",
+  "vnp_CardType": "ATM",
+  "vnp_OrderInfo": "hello",
+  "vnp_ResponseCode": "15",
+  "vnp_TransactionStatus": "02",
+  "vnp_TxnRef": "09c4a7a6-e3b1-465b-a057-f8d0c3be18da",
+  "vnp_SecureHash": "35ef70814cf2a6afe40dc31ff6120b6c7ecd07567f09774cfdb6de50c00e2d9be1af9c8a87e9b37c837a9b01837781f975289ba6844d0cfcd3c7911a3eeb0f24"
+}

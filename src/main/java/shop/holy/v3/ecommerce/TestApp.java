@@ -7,6 +7,7 @@ import shop.holy.v3.ecommerce.shared.property.Vnp_Pay_Properties;
 import shop.holy.v3.ecommerce.shared.util.VNPayUtil;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,6 +15,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TestApp {
     public static final Vnp_Pay_Properties vnpPayProperties = new Vnp_Pay_Properties();
+    public static void main(String[] args) throws Exception {
+        String dateString = "20250509091544";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = sdf.parse(dateString);
+        System.out.println(date);
+    }
 //
 //    public static void main(String[] args) {
 //        vnpPayProperties.setVnp_PayUrl("https://sandbox.vnpayment.vn/paymentv2/vpcpay.html");

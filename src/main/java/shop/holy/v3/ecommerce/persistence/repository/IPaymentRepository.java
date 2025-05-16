@@ -19,7 +19,6 @@ public interface IPaymentRepository extends JpaRepository<Payment, Long> {
 
     Optional<ProQ_PayUrl_Status> findFirstPaymentUrlAndStatusByOrderId(long orderId);
 
-    @Modifying
     @Query(value = """
                 UPDATE payments p set
                 status = :#{#p2.status}, payment_method = :#{#p2.paymentMethod},

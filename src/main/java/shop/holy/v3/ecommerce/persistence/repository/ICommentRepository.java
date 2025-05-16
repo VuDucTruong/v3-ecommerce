@@ -1,7 +1,9 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
@@ -12,7 +14,11 @@ import java.util.Optional;
 public interface ICommentRepository extends JpaRepository<Comment, Long>, JpaSpecificationExecutor<Comment> {
 
     @Override
-    @EntityGraph(attributePaths = {"author", "replies"})
+    @EntityGraph(attributePaths = {"author", "replies", "product"})
+    Page<Comment> findAll(Specification<Comment> spec, @Nonnull Pageable pageable);
+
+    @Override
+    @EntityGraph(attributePaths = {"author", "replies", "product"})
     Optional<Comment> findById(Long aLong);
 
     @EntityGraph(attributePaths = {"author", "replies"})

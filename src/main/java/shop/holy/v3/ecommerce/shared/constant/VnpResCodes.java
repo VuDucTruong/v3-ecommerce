@@ -10,6 +10,7 @@ public enum VnpResCodes {
     FAIL_IBANKING_NOT_REGISTERED("09","Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng."),
     FAIL_CARD_VERIFICATION_FAILED("10","Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần"),
     FAIL_TRANS_TIMEOUT("11","Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch."),
+    FAIL_TRANS_TIMEOUT2("15", "giao dịch hết hiệu lực thời gian thanh toán"),
     FAIL_CARD_LOCKED("12","Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa."),
     FAIL_OTP_INVALID("13","Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch."),
     FAIL_TRANS_CANCELLED("24","Giao dịch không thành công do: Khách hàng hủy giao dịch"),
@@ -24,6 +25,14 @@ public enum VnpResCodes {
     public String code(){return code;}
     public String message(){return message;}
     public boolean equals(String code){return this.code.equals(code);}
-
+    public static VnpResCodes fromCode(String code) {
+        var enums = VnpResCodes.values();
+        for (VnpResCodes v : enums) {
+            if (v.code().equals(code)) {
+                return v;
+            }
+        }
+        return null;
+    }
 
 }

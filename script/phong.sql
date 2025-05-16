@@ -73,13 +73,13 @@ from products p
 join product_description pd on p.prod_desc_id = pd.id;
 
 
-select * from categories;
-
 select * from product_items ;
 
 
 select * from product_items_used;
-
+select *
+from payments
+where trans_ref = '09c4a7a6-e3b1-465b-a057-f8d0c3be18da'
 select * from accounts;
 select *
 from product_favorites;

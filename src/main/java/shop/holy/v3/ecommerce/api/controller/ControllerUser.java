@@ -50,7 +50,7 @@ public class ControllerUser {
 
     @PostMapping("searches")
     @Operation(summary = "Search users: role >= staff", description = "Search users with pagination, \n all conditions are 'AND' concatenated ")
-    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
     public ResponseEntity<?> search(
             @RequestBody RequestUserSearch searchSpecs
     ) {

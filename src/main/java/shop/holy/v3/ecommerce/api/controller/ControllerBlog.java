@@ -57,7 +57,7 @@ public class ControllerBlog {
 
     @DeleteMapping(value = "{id}")
     @Operation(summary = "delete 1")
-    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
+    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
     public int deleteBlog(@PathParam("id") long id) {
         return blogService.deleteBlog(id);
     }

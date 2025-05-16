@@ -45,13 +45,13 @@ public class CommentService {
         return cmt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
     }
 
-    public ResponsePagination<ResponseComment> getCommentsByProductId(long productId, boolean deleted, Pageable pageable) {
+    public ResponsePagination<ResponseComment.Light> getCommentsByProductId(long productId, boolean deleted, Pageable pageable) {
         var comments = commentRepository.findAllByProductIdAndParentCommentIdIsNull(productId, pageable);
-        Page<ResponseComment> rs;
+        Page<ResponseComment.Light> rs;
         if (deleted)
-            rs = comments.map(commentMapper::fromEntityToResponse_Censored);
+            rs = comments.map(commentMapper::fromEntityToResponse_CensoredLight);
         else
-            rs = comments.map(commentMapper::fromEntityToResponse);
+            rs = comments.map(commentMapper::fromEntityToResponseLight);
         return ResponsePagination.fromPage(rs);
     }
 
