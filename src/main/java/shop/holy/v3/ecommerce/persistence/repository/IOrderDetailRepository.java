@@ -8,17 +8,11 @@ import shop.holy.v3.ecommerce.persistence.entity.OrderDetail;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_OrderDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long> {
-
-//    @Query("""
-//                SELECT o.id, p.fullName as fullName, od.id, od.productId, od.quantity from Order o
-//                left join Profile p
-//                left join fetch OrderDetail od
-//            """)
-//    List<ProQ_Email_Fullname> findWithProjectionAndIdIn(Collection<Long> orderIds);
 
     @Query("""
             select odd.id, odd.productId, odd.orderId, odd.quantity,
@@ -33,4 +27,12 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
 
     List<OrderDetail> findAllByOrderIdIn(Collection<Long> orderIds);
 
+    @Query("""
+            SELECT SUM(od.quantity) from
+                        OrderDetail od join Order  o
+                    where o.status =  :status
+                                and o.createdAt >= :lowerBound AND
+                            o.createdAt <= :upperBound
+            """)
+    long findSumQuantityByRecentTime(Date lowerBound, Date upperBound);
 }

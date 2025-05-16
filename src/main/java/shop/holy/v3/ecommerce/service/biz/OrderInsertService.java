@@ -81,7 +81,7 @@ public class OrderInsertService {
             detail.setOrderId(order.getId());
             detail.setProduct(product);
         }
-        var orderDetails = prodId_by_OrderDetail.values();
+        Collection<OrderDetail> orderDetails = prodId_by_OrderDetail.values();
         detailRepository.saveAll(orderDetails);
         return orderDetails;
     }

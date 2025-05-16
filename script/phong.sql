@@ -81,3 +81,5 @@ select * from product_items ;
 select * from product_items_used;
 
 select * from accounts;
+select *
+from product_favorites;

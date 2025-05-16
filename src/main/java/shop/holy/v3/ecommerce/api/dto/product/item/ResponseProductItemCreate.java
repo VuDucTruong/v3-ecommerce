@@ -6,8 +6,13 @@ import java.util.List;
 
 public record ResponseProductItemCreate(
         @Schema(description = "List of product keys that successfully added",
-                example = "[\"SPOTIFYKEY123\", \"SPOTIFYKEY124\"]")
-        List<ResponseAccepted> accepted
+                example = """
+                        [{
+                           \"productId\" : \"8\",
+                           \"productKey\" : \"SPOTIFYKEY123\"
+                        }]
+                        """)
+        List<ResponseAccepted> productItemDetails
 ) {
     public record ResponseAccepted(
             Long productId,

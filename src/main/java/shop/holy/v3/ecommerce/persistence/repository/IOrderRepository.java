@@ -4,10 +4,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_Date_Revenue;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,12 +36,28 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
 
     Optional<Order> findFirstByIdEqualsAndProfileIdEqualsAndDeletedAtIsNull(long id, long profileId);
 
-    Optional<Order> findFirstByIdEqualsAndProfileIdEquals(long id, long profileId);
-
-    Optional<Order> findFirstByIdEquals(long id);
-
     @Query("SELECT o.amount from Order o where o.id = :orderId")
     Optional<BigDecimal> findAmountByOrderId(long orderId);
 
+    @Query("""
+            select SUM(o.amount) from Order o
+                        where o.status =  :status
+                        and o.createdAt >= :lowerBound AND
+                            o.createdAt <= :upperBound
+            """)
+    BigDecimal findSumTotalByRecentTime(String status, Date lowerBound, Date upperBound);
+
+    long countByStatusAndCreatedAtLessThanAndCreatedAtGreaterThan(String status, Date lowerBound, Date upperBound);
+
+    @Query("""
+                select cast(o.createdAt as date) as date, sum(o.amount) as revenue
+                from Order o
+                where o.status = :status
+                  and o.createdAt >= :lowerBound
+                  and o.createdAt <= :upperBound
+                group by cast(o.createdAt as date)
+                order by cast(o.createdAt as date)
+            """)
+    List<ProQ_Date_Revenue> findRevenues(String status, Date lowerBound, Date upperBound);
 
 }

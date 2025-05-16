@@ -58,4 +58,6 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
 
     @Query("select a.email as email, p.fullName as fullName from Account a join Profile p on a.id = p.accountId where email in (:emails)")
     List<ProQ_Email_Fullname> findAllProQEmailFullname(Collection<String> emails );
+
+    int countAccountByRole(String role);
 }
