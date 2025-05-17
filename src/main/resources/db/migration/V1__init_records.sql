@@ -43,17 +43,19 @@ INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (4, '2025-05
 
 INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (1, '2025-04-17 14:03:37.543768', NULL, NULL, 'phong', NULL);
 INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (2, '2025-04-17 14:06:24.94946', NULL, NULL, 'phong', NULL);
-INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (4, '2025-04-17 14:09:04.700595', NULL, 1, 'phong', NULL);
 INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (5, '2025-04-17 14:11:35.385778', NULL, 2, 'phong', NULL);
 INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (3, '2025-04-17 14:07:38.571169', NULL, 6, 'abc', NULL);
 INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (6, '2025-05-08 11:08:58.873873', NULL, 8, 'p', NULL);
 INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (7, '2025-05-08 11:16:25.04038', NULL, 9, 'thanh phong', NULL);
+INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, image_url_id) VALUES (4, '2025-04-17 14:09:04.700595', NULL, 1, 'abc', NULL);
 
 
 --
 -- Data for Name: blogs; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
+INSERT INTO public.blogs (id, created_at, deleted_at, content, genre_id, image_url_id, profile_id, published_at, subtitle, title) VALUES (1, '2025-05-18 00:38:35.529595', NULL, '<p>string</p>', 1, NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, genre_id, image_url_id, profile_id, published_at, subtitle, title) VALUES (2, '2025-05-18 00:40:01.774669', NULL, '<p>string</p>', 1, NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
 
 
 --
@@ -96,13 +98,13 @@ INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (5, 
 
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (10, '2025-04-24 11:48:34.205537', NULL, 1, NULL, 'phong youtube', 100.00, 50.00, 1, 2, false, 'phong-youtube', '["str"]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 2, 4, false, '', '[]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 3, 2, false, 'the-jakarta-product', '[]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (14, '2025-05-11 17:06:00.69428', NULL, 1, NULL, 'Youtube', 12.99, 9.99, 13, 0, true, 'youtube', '["digital", "music", "streaming"]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (16, '2025-05-12 21:32:20.404573', NULL, 1, NULL, 'product phong', 12.99, 9.99, 15, 0, true, 'product-phong', '["digital", "music", "streaming"]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (19, '2025-05-12 23:37:51.33737', NULL, 1, NULL, 'Spotify Premium', 12.99, 9.99, 18, 0, true, 'spotify-premium', '["digital"]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (20, '2025-05-13 00:13:31.037736', NULL, 1, 'https://res.cloudinary.com/dm45tt6nt/image/upload/v1747070010/ecommerce/product/8ea092fb-c495-4f43-b7cb-26c5ef20b8a9.png', 'aaaa', 10000.00, 9800.00, 19, 0, true, 'a', '["abc"]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (17, '2025-05-12 21:36:49.037095', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 16, 0, true, 'as', '["sds"]');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (18, '2025-05-12 21:51:07.058552', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 17, 0, true, '21520507', '["sds"]');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 3, 3, false, 'the-jakarta-product', '[]');
 
 
 --
@@ -112,6 +114,7 @@ INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id,
 INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (2, '2025-04-25 16:21:07.625201', NULL, 1, 'string', NULL, 9);
 INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (3, '2025-04-25 16:23:52.76518', NULL, 4, '123', NULL, 9);
 INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (4, '2025-04-25 16:40:36.213105', NULL, 4, '123', 2, 9);
+INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (5, '2025-05-16 22:13:31.586052', NULL, 4, 'asdfasdfasdfadsf', NULL, 9);
 
 
 --
@@ -177,6 +180,7 @@ INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, d
 -- Data for Name: product_favorites; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
+INSERT INTO public.product_favorites (product_id, profile_id) VALUES (8, 4);
 
 
 --
@@ -191,6 +195,7 @@ INSERT INTO public.product_items (id, created_at, product_id, product_key, regio
 INSERT INTO public.product_items (id, created_at, product_id, product_key, region) VALUES (39, '2025-04-25 08:48:52.727791', 10, '3', '3');
 INSERT INTO public.product_items (id, created_at, product_id, product_key, region) VALUES (58, '2025-05-02 00:22:59.395296', 8, 'SPOTIFYKEY123', 'US');
 INSERT INTO public.product_items (id, created_at, product_id, product_key, region) VALUES (60, '2025-05-02 00:44:07.859538', 8, 'SPOTIFY_50', 'US');
+INSERT INTO public.product_items (id, created_at, product_id, product_key, region) VALUES (67, '2025-05-15 21:42:43.779527', 8, 'S1', 'US');
 
 
 --
@@ -234,7 +239,7 @@ SELECT pg_catalog.setval('public.accounts_id_seq', 9, true);
 -- Name: blogs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.blogs_id_seq', 1, false);
+SELECT pg_catalog.setval('public.blogs_id_seq', 2, true);
 
 
 --
@@ -248,7 +253,7 @@ SELECT pg_catalog.setval('public.categories_id_seq', 2, true);
 -- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.comments_id_seq', 4, true);
+SELECT pg_catalog.setval('public.comments_id_seq', 5, true);
 
 
 --
@@ -325,7 +330,7 @@ SELECT pg_catalog.setval('public.product_groups_id_seq', 5, true);
 -- Name: product_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_items_id_seq', 63, true);
+SELECT pg_catalog.setval('public.product_items_id_seq', 67, true);
 
 
 --
