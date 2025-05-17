@@ -8,9 +8,9 @@ import static shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles.*;
 @RequiredArgsConstructor
 @Getter
 public enum RoleEnum {
-    ADMIN(new String[]{ROLE_LEVEL_0, ROLE_ADMIN}),
+    ADMIN(new String[]{ROLE_LEVEL_0,ROLE_STAFF, ROLE_ADMIN}),
     STAFF(new String[]{ROLE_LEVEL_0, ROLE_STAFF}),
-    CUSTOMER(new String[]{ROLE_LEVEL_0, ROLE_STAFF, ROLE_CUSTOMER});
+    CUSTOMER(new String[]{ROLE_LEVEL_0, ROLE_CUSTOMER});
 
     public static class Roles {
         public static final String ROLE_LEVEL_0 = "ROLE_LEVEL_0";

@@ -13,6 +13,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Blog;
 import shop.holy.v3.ecommerce.persistence.entity.Genre1;
 import shop.holy.v3.ecommerce.persistence.entity.Genre2;
 import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
+import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 
 import java.util.stream.Stream;
 
@@ -27,9 +28,13 @@ public abstract class BlogMapper {
 
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
     @Mapping(source = "genre1", target = "genres")
+    @Mapping(source = "profile", target = "author")
     public abstract ResponseBlog fromEntityToResponse(Blog blog);
 
     public String[] fromGenreToStringArray(Genre1 genre1) {
+        if (genre1 == null)
+            return new String[0];
+
         Stream<String> genreName = Stream.of(genre1.getName());
         Stream<String> genre2Names = genre1.getGenre2s() != null ?
                 genre1.getGenre2s().stream().map(Genre2::getName) :
@@ -42,20 +47,21 @@ public abstract class BlogMapper {
     public Specification<Blog> fromSearchRequestToSpec(RequestBlogSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
             var predicate = criteriaBuilder.conjunction();
-            root.fetch("genres");
+            root.fetch("genre1");
+            root.fetch("profile");
 
             if (searchReq.search() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("title"), "%" + searchReq.search() + "%"));
             }
-            if (CollectionUtils.isEmpty(searchReq.genres())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("author"), "%" + searchReq.search() + "%"));
+            if (!CollectionUtils.isEmpty(searchReq.genres())) {
+                predicate = criteriaBuilder.and(predicate, root.get("genre1").get("name").in(searchReq.genres()));
             }
 
             if (searchReq.publishedFrom() != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("publishedAt"), searchReq.publishedFrom()));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("publishedAt"), AppDateUtils.toStartOfDay(searchReq.publishedFrom())));
             }
             if (searchReq.publishedTo() != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("publishedAt"), searchReq.publishedTo()));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("publishedAt"), AppDateUtils.toEndOfDay(searchReq.publishedTo())));
             }
 
             if (!searchReq.deleted()) {

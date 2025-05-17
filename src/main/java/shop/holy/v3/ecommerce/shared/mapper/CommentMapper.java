@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.shared.mapper;
 
 
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
@@ -13,6 +14,7 @@ import shop.holy.v3.ecommerce.api.dto.comment.ResponseReply;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
+import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 import java.util.Set;
 
@@ -62,25 +64,26 @@ public abstract class CommentMapper  {
     public Specification<Comment> fromSearchRequestToSpec(RequestCommentSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
             root.fetch("product", JoinType.INNER);
+            root.fetch("author", JoinType.INNER);
 
             if (searchReq == null) return criteriaBuilder.conjunction();
 
-            if (searchReq.productId() != null) {
-                criteriaBuilder.and(criteriaBuilder.equal(root.get("productId"), searchReq.productId()));
+            Predicate predicate = criteriaBuilder.conjunction();
+            if(!CollectionUtils.isEmpty(searchReq.ids())){
+                predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
             }
-            if (!CollectionUtils.isEmpty(searchReq.ids())) {
-                criteriaBuilder.and(root.get("id").in(searchReq.ids()));
-            }
-            if(StringUtils.hasLength(searchReq.content())){
-                criteriaBuilder.and(criteriaBuilder.equal(root.get("content"), searchReq.content()));
+            if (StringUtils.hasLength(searchReq.content())) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("content"), "%" + searchReq.content().toLowerCase() + "%"));
             }
 
+            if (StringUtils.hasLength(searchReq.productName())) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%"));
+            }
             if (!searchReq.deleted()) {
-                criteriaBuilder.and(criteriaBuilder.isNull(root.get("deletedAt")));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
 
-
-            return criteriaBuilder.conjunction();
+            return predicate;
         };
     }
 

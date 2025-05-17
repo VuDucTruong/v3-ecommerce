@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ICommentRepository extends JpaRepository<Comment, Long>, JpaSpecificationExecutor<Comment> {
 
+    @Nonnull
     @Override
     @EntityGraph(attributePaths = {"author", "replies", "product"})
     Page<Comment> findAll(Specification<Comment> spec, @Nonnull Pageable pageable);

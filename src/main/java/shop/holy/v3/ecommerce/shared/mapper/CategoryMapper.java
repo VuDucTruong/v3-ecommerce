@@ -3,6 +3,7 @@ package shop.holy.v3.ecommerce.shared.mapper;
 import jakarta.persistence.criteria.Predicate;
 import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.category.RequestCategoryCreate;
 import shop.holy.v3.ecommerce.api.dto.category.RequestCategorySearch;
@@ -32,6 +33,10 @@ public abstract class CategoryMapper {
             if (StringUtils.hasLength(searchReq.search())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("name"), "%" + searchReq.search().toLowerCase() + "%"));
             }
+            if(!CollectionUtils.isEmpty(searchReq.ids())){
+                predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
+            }
+
             if (!searchReq.deleted()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }

@@ -41,6 +41,10 @@ public class ControllerBlog {
     }
 
     @PostMapping(value = "searches")
+    @Operation(description = """
+             1. hiện là cái genres chỉ search trong genre1 \n
+            ===> where .... AND genre1.name IN (list<genres) 
+            """)
     public ResponsePagination<ResponseBlog> getBlogs(
             @RequestBody RequestBlogSearch searchRequest) {
         ResponsePagination<ResponseBlog> responsePagination = blogService.search(searchRequest);

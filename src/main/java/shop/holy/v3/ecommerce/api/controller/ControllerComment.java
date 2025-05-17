@@ -24,9 +24,9 @@ public class ControllerComment {
 
     @GetMapping("{id}")
     @Operation(summary = "Get 1 Comment-> not commonly used", description = """
-            -> still return Comment but the content will be filtered if deleted==false (default), vice versa \n
-            --> so that replies wont be affected \n
-            ----> replies those are deleted still be returned but content is null if deleted==false, vice versa
+            ==> Vẫn trả về comment kể cả đã delete \n
+            ==> phần comment nào bị delete sẽ bị content = null \n
+            ====> if deleted = true, trả về comment và không bị content = null
             """)
     public ResponseEntity<ResponseComment> getResponseCommentById(@PathVariable Long id,
                                                                   @Parameter(description = "if true => will return content even deletedAt!=null (mark deleted)")
@@ -55,7 +55,7 @@ public class ControllerComment {
 
     @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCommentById(
+    public ResponseEntity<Integer> deleteCommentById(
             long id
     ) {
         return ResponseEntity.ok(commentService.deleteComment(id));

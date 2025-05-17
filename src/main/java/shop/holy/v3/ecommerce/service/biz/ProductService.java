@@ -90,7 +90,12 @@ public class ProductService {
         Pageable pageableItems = PageRequest.of(0, 10, Sort.by("createdAt").descending());
         CompletableFuture<Slice<ProductItem>> itemsSlice =
                 CompletableFuture.supplyAsync(() ->
-                        productItemRepository.findAllByProductIdEquals(id, pageableItems));
+                {
+                    if (id != null)
+                        return productItemRepository.findAllByProductIdEquals(id, pageableItems);
+                    else
+                        return productItemRepository.findAllByProductSlug(slug, pageableItems);
+                });
 
         return CompletableFuture.allOf(prod, itemsSlice)
                 .thenApply(v -> {

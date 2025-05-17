@@ -66,18 +66,37 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             LEFT JOIN FETCH p.categories pc
                 WHERE p.id = :id
             """)
-//    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
     Optional<Product> findByIdWithJoinFetch(long id);
 
 
-    @EntityGraph(attributePaths = {"productDescription", "categories", "group.variants"})
-//    @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND p.id = :id")
+    @Query(value = """
+            SELECT DISTINCT p FROM Product p
+            LEFT JOIN FETCH p.productDescription pd
+            LEFT JOIN FETCH p.group pg
+            LEFT JOIN FETCH pg.variants
+            LEFT JOIN FETCH p.categories pc
+                WHERE p.id = :id AND p.deletedAt is null
+            """)
     Optional<Product> findFirstByIdEqualsAndDeletedAtIsNull(long id);
 
-    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
+    @Query(value = """
+            SELECT DISTINCT p FROM Product p
+            LEFT JOIN FETCH p.productDescription pd
+            LEFT JOIN FETCH p.group pg
+            LEFT JOIN FETCH pg.variants
+            LEFT JOIN FETCH p.categories pc
+                WHERE p.slug = :slug AND p.deletedAt is null
+            """)
     Optional<Product> findFirstBySlugEqualsAndDeletedAtIsNull(String slug);
 
-    @EntityGraph(attributePaths = {"productDescription", "categories", "group", "group.variants"})
+    @Query(value = """
+            SELECT DISTINCT p FROM Product p
+            LEFT JOIN FETCH p.productDescription pd
+            LEFT JOIN FETCH p.group pg
+            LEFT JOIN FETCH pg.variants
+            LEFT JOIN FETCH p.categories pc
+                WHERE p.slug = :slug AND p.deletedAt is null
+            """)
     Optional<Product> findFirstBySlug(String slug);
 
     @Modifying

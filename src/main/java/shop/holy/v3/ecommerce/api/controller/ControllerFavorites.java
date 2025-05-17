@@ -24,7 +24,7 @@ public class ControllerFavorites {
     @Operation(summary = "press like")
     @PutMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
-    public ResponseEntity<?> favoriteProduct(@RequestParam Long productId) {
+    public ResponseEntity<Integer> favoriteProduct(@RequestParam Long productId) {
         favoriteService.addFavorite(productId);
         return ResponseEntity.ok().build();
     }
@@ -32,7 +32,7 @@ public class ControllerFavorites {
     @Operation(summary = "press unlike")
     @DeleteMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
-    public ResponseEntity<?> unFavoriteProduct(@RequestParam Long productId) {
+    public ResponseEntity<Integer> unFavoriteProduct(@RequestParam Long productId) {
         favoriteService.removeFavorite(productId);
         return ResponseEntity.ok().build();
     }
@@ -40,7 +40,7 @@ public class ControllerFavorites {
     @Operation(summary = "get My favorite products")
     @GetMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
-    public ResponseEntity<?> getFavoriteProducts(@ParameterObject Pageable pageable) {
+    public ResponseEntity<ResponsePagination<ResponseProduct>> getFavoriteProducts(@ParameterObject Pageable pageable) {
         ResponsePagination<ResponseProduct> res = favoriteService.findFavorites(pageable);
         return ResponseEntity.ok(res);
     }

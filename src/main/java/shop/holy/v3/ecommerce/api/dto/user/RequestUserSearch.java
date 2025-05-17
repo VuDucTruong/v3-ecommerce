@@ -14,9 +14,7 @@ public record RequestUserSearch(
         @Schema(description = "Filter by user IDs", example = "[1, 2, 3]")
         List<Long> ids,
         
-        @Schema(description = "Filter by citizen ID", example = "123456789012")
-        String citizenId,
-        
+
         @Schema(description = "Filter by full name", example = "John Doe")
         String fullName,
         

@@ -27,14 +27,14 @@ public class ControllerAccount {
 
     @PostMapping(value = "otp")
     @Operation(description = "send OTP to user's email -> route to change password page with current Email context")
-    public ResponseEntity<?> verifyOtp(@RequestBody RequestOTP request) throws MessagingException {
+    public ResponseEntity<Integer> verifyOtp(@RequestBody RequestOTP request) throws MessagingException {
         accountService.saveOtp(request);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "password")
     @Operation(description = "change password the Remove cookies -> must route user to login !!")
-    public ResponseEntity<?> changePassword(@RequestBody RequestPasswordUpdate request, HttpServletResponse response){
+    public ResponseEntity<Integer> changePassword(@RequestBody RequestPasswordUpdate request, HttpServletResponse response){
         var cookies = accountService.changePassword(request);
         for (Cookie cookie : cookies) {
             response.addCookie(cookie);
@@ -44,14 +44,14 @@ public class ControllerAccount {
 
     @PostMapping("register")
     @Operation(description = "register a new user -> must route user to login !!")
-    public ResponseEntity<?> register(@RequestBody RequestAccountRegistration request) {
+    public ResponseEntity<Integer> register(@RequestBody RequestAccountRegistration request) {
         accountService.registerAccount(request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("login")
     @Operation(description = "login a user -> route to home with profile as client's global context")
-    public ResponseEntity<?> login(@RequestBody RequestLogin loginRequest, HttpServletResponse response) {
+    public ResponseEntity<ResponseLogin> login(@RequestBody RequestLogin loginRequest, HttpServletResponse response) {
         ResponseLogin loginResponse = authService.authenticateAccount(loginRequest);
         Cookie[] cookies = authService.makeCookies(loginResponse);
         for (Cookie cookie : cookies) {
@@ -63,7 +63,7 @@ public class ControllerAccount {
 
     @DeleteMapping("logout")
     @Operation(description = "logout a user -> remove cookies, must route to login page")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
+    public ResponseEntity<Integer> logout(HttpServletResponse response) {
         Cookie[] cookies = authService.removeAuthCookies();
         for (Cookie cookie : cookies) {
             response.addCookie(cookie);

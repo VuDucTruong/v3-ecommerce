@@ -26,12 +26,17 @@ public class ControllerProduct {
 
     @Operation
     @PostMapping("/searches")
-    public ResponseEntity<?> getAllProducts(@RequestBody RequestProductSearch searchReq) {
+    public ResponseEntity<ResponsePagination<ResponseProduct>> getAllProducts(@RequestBody RequestProductSearch searchReq) {
         ResponsePagination<ResponseProduct> res = productService.search(searchReq);
         return ResponseEntity.ok(res);
     }
 
-    @Operation(summary = "get 1")
+    @Operation(summary = "get 1", description = """
+            Chỉ dùng id hoặc slug \n
+            ===> nếu có cả 2 sẽ get exact by id \n
+            Với slug: Get by slug == slug (không phải phép like) \n
+            Với id: Get by id == id
+            """)
     @GetMapping("")
     public CompletableFuture<ResponseProduct> getProductById(@RequestParam(required = false) Long id,
                                                              @RequestParam(required = false) String slug,
@@ -41,20 +46,20 @@ public class ControllerProduct {
 
     @Operation(summary = "create 1")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createProduct(@ModelAttribute RequestProductCreate request) {
+    public ResponseEntity<ResponseProduct> createProduct(@ModelAttribute RequestProductCreate request) {
         return ResponseEntity.ok(productService.insert(request));
     }
 
 
     @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProductById(@PathVariable long id) {
+    public ResponseEntity<Integer> deleteProductById(@PathVariable long id) {
         return ResponseEntity.ok(productService.deleteProductById(id));
     }
 
     @Operation(summary = "delete many")
     @DeleteMapping("")
-    public ResponseEntity<?> delete(@RequestParam long[] ids) {
+    public ResponseEntity<Integer> delete(@RequestParam long[] ids) {
         var rs = productService.deleteProductByIdIn(ids);
         return ResponseEntity.ok(rs);
     }
@@ -62,7 +67,7 @@ public class ControllerProduct {
 
     @Operation(summary = "update 1")
     @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateProduct(@ModelAttribute RequestProductUpdate request) throws IOException {
+    public ResponseEntity<ResponseProduct> updateProduct(@ModelAttribute RequestProductUpdate request) throws IOException {
         return ResponseEntity.ok(productService.update(request));
     }
 

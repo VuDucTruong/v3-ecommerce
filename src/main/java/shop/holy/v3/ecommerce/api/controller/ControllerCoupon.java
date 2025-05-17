@@ -25,16 +25,21 @@ public class ControllerCoupon {
 
     @PostMapping("/searches")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    public ResponseEntity<?> getAllCoupons(@RequestBody RequestCouponSearch searchReq) {
+    public ResponseEntity<ResponsePagination<ResponseCoupon>> getAllCoupons(@RequestBody RequestCouponSearch searchReq) {
         ResponsePagination<ResponseCoupon> res = couponService.search(searchReq);
         return ResponseEntity.ok(res);
     }
 
-
-    @Operation(summary = "get 1")
+    @Operation(summary = "get 1", description = """
+    1. nếu cho cả id & code sẽ  lấy theo id
+    2. còn nếu cho 1 trong 2 thì sẽ lấy tương ứng
+    3. Lưu ý: code ở đây <b>KHÔNG</b> phải phép LIKE, là phép <b>=</b>
+    4. Dùng để check nếu coupon hợp lệ
+    ====> 
+            """)
     @GetMapping()
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
-    public ResponseEntity<?> getByIdentifier(@RequestParam(required = false) Long id,
+    public ResponseEntity<ResponseCoupon> getByIdentifier(@RequestParam(required = false) Long id,
                                              @RequestParam(required = false) String code,
                                              @RequestParam(required = false) boolean deleted) {
         return ResponseEntity.ok(couponService.findByIdentitfier(id, code, deleted));
@@ -44,14 +49,14 @@ public class ControllerCoupon {
     @Operation(summary = "create 1")
     @PostMapping(value = "")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    public ResponseEntity<?> createCoupon(@RequestBody RequestCouponCreate request) {
+    public ResponseEntity<ResponseCoupon> createCoupon(@RequestBody RequestCouponCreate request) {
         return ResponseEntity.ok(couponService.insert(request));
     }
 
     @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    public ResponseEntity<?> deleteCouponById(
+    public ResponseEntity<Integer> deleteCouponById(
             @PathVariable long id, @RequestParam(required = false) boolean isSoft) {
         return ResponseEntity.ok(couponService.deleteCoupon(id));
     }
@@ -66,7 +71,7 @@ public class ControllerCoupon {
 
     @PutMapping(value = "")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    public ResponseEntity<?> updateCoupon(@RequestBody RequestCouponUpdate request) throws IOException {
+    public ResponseEntity<ResponseCoupon> updateCoupon(@RequestBody RequestCouponUpdate request) throws IOException {
         return ResponseEntity.ok(couponService.update(request));
     }
 

@@ -28,6 +28,9 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
 
     Slice<ProductItem> findAllByProductIdEquals(long productId, org.springframework.data.domain.Pageable pageable);
 
+    Slice<ProductItem> findAllByProductSlug(String productSlug, Pageable pageable);
+
+
     List<ProQ_ProductMetadata> findAllByProductIdEquals(long productId);
 
     //    @EntityGraph(attributePaths = {"product"})

@@ -25,7 +25,7 @@ public class ControllerCategory {
 
     @GetMapping("/{id}")
     @Operation(summary = "get 1")
-    public ResponseEntity<?> getOne(@PathVariable long id,
+    public ResponseEntity<ResponseCategory> getOne(@PathVariable long id,
                                     @RequestParam(required = false) boolean deleted) {
         return ResponseEntity.ok(categoryService.getCategoryByCode(id, deleted));
     }
@@ -57,7 +57,7 @@ public class ControllerCategory {
     @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
-    public ResponseEntity<?> deleteCategory(@PathVariable long id,
+    public ResponseEntity<Integer> deleteCategory(@PathVariable long id,
                                             @RequestParam(required = false) boolean isHard) {
         var changes = categoryService.deleteCategory(id, isHard);
         return ResponseEntity.ok(changes);
@@ -66,7 +66,7 @@ public class ControllerCategory {
 
     @DeleteMapping("")
     @Operation(summary = "delete many")
-    public ResponseEntity<?> deleteCategories(@RequestParam long[] ids, @RequestParam(required = false) boolean isHard) {
+    public ResponseEntity<Integer> deleteCategories(@RequestParam long[] ids, @RequestParam(required = false) boolean isHard) {
         var changes = categoryService.deleteCategories(ids, isHard);
         return ResponseEntity.ok(changes);
     }

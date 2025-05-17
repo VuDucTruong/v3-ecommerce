@@ -73,10 +73,6 @@ public class UserService {
     }
 
     public ResponsePagination<ResponseUser> search(RequestUserSearch requestSearch) {
-        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
-        if (!authAccount.isAdmin())
-            throw BizErrors.AUTHORISATION_INVALID.exception();
-
         Specification<Account> spec = accountMapper.fromRequestToSpecification(requestSearch);
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(requestSearch.pageRequest());
         Page<Account> accounts = accountRepository.findAll(spec, pageable);

@@ -27,7 +27,7 @@ public class ControllerUser {
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     @Operation(summary = "create 1: admin only", description = "Use for Admin only, to manually Create a User \n -> this is authenticated")
-    public ResponseEntity<?> createAccount(
+    public ResponseEntity<ResponseUser> createAccount(
             @ModelAttribute @Valid RequestUserCreate request) {
         ResponseUser account = userService.createUser(request);
         return ResponseEntity.ok(account);
@@ -51,7 +51,7 @@ public class ControllerUser {
     @PostMapping("searches")
     @Operation(summary = "Search users: role >= staff", description = "Search users with pagination, \n all conditions are 'AND' concatenated ")
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
-    public ResponseEntity<?> search(
+    public ResponseEntity<ResponsePagination<ResponseUser>> search(
             @RequestBody RequestUserSearch searchSpecs
     ) {
         ResponsePagination<ResponseUser> accounts = userService.search(searchSpecs);
@@ -61,11 +61,11 @@ public class ControllerUser {
     @PatchMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
     @Operation(summary = "Update oneSelf's profile", description = """
-            ID là id của profile
-            => if Admin && id != null
-            ====> update profile by Id (chính là profileId)
+            ID là id của profile \n
+            => if Admin && id != null \n
+            ====> update profile by Id (chính là profileId) \n
             """)
-    public ResponseEntity<?> updateProfile(@ModelAttribute RequestProfileUpdate request) {
+    public ResponseEntity<ResponseProfile> updateProfile(@ModelAttribute RequestProfileUpdate request) {
         ResponseProfile profile = userService.updateProfile(request);
         return ResponseEntity.ok(profile);
     }

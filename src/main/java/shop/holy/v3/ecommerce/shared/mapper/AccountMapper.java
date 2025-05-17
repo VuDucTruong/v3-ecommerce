@@ -19,6 +19,7 @@ import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
+import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 
 @Mapper(componentModel = "spring",
 uses = CommonMapper.class)
@@ -49,11 +50,9 @@ public abstract class AccountMapper  {
             if (CollectionUtils.isEmpty(searchReq.ids())) {
                 predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
             }
-            if (StringUtils.hasLength(searchReq.citizenId())) {
-                predicate = criteriaBuilder.and(predicate, root.get("profile").get("citizenId").in(searchReq.citizenId()));
-            }
+
             if (StringUtils.hasLength(searchReq.fullName())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("profile").get("fullName"), searchReq.fullName()));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("profile").get("fullName"), "%" + searchReq.fullName().toLowerCase() + "%"));
             }
 
             if (!searchReq.deleted()) {
@@ -62,15 +61,15 @@ public abstract class AccountMapper  {
 
             if (searchReq.createdAtFrom() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), searchReq.createdAtFrom()));
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), AppDateUtils.toStartOfDay(searchReq.createdAtFrom())));
             }
             if (searchReq.createdAtTo() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), searchReq.createdAtTo()));
+                        criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), AppDateUtils.toStartOfDay(searchReq.createdAtTo())));
             }
 
             if (StringUtils.hasLength(searchReq.email())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("email"), searchReq.email()));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("profile").get("fullName"), "%" + searchReq.email().toLowerCase() + "%"));
             }
             return predicate;
         };

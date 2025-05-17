@@ -39,7 +39,6 @@ public class AuthAccount implements UserDetails {
     }
 
     @Override
-    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.stream(role.getRoles())
                 .map(role -> (GrantedAuthority) () -> role)
