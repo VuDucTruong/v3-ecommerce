@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.dto;
 
+import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public record ResponsePagination<T>(
                 page.getContent().stream().map(mapper).toList());
     }
 
-    public static <T> ResponsePagination<T> fromPage(Page<T> page) {
+    public static <T> ResponsePagination<T> fromPage(@Nonnull Page<T> page) {
         return new ResponsePagination<>(
                 page.getTotalElements(),
                 page.getTotalPages(),

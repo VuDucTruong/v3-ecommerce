@@ -1,10 +1,9 @@
 package shop.holy.v3.ecommerce.api.dto.comment;
 
-import java.util.Set;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.data.domain.PageRequest;
 import shop.holy.v3.ecommerce.api.dto.RequestPageable;
+
+import java.util.Set;
 
 public record RequestCommentSearch(
         RequestPageable pageRequest,
@@ -17,4 +16,8 @@ public record RequestCommentSearch(
         @Schema(description = "Include deleted comments", example = "false", defaultValue = "false")
         boolean deleted
 ) {
+//        @AssertTrue
+//        public boolean isValid(){
+//                return ids != null && !ids.isEmpty();
+//        }
 }

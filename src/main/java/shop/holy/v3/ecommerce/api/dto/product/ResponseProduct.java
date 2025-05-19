@@ -20,6 +20,7 @@ public record ResponseProduct(
                 Whether this product is representative of its group,
                 1 product -> 1 group -> N represent Products
                 """) boolean represent,
+        Boolean favorite,
         long groupId,
         @Schema(example = "9.99") BigDecimal price,
         @Schema(example = "12.99") BigDecimal originalPrice,

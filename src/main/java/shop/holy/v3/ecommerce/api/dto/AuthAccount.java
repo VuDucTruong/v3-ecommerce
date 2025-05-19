@@ -78,6 +78,9 @@ public class AuthAccount implements UserDetails {
     public boolean isStaff(){
         return role == RoleEnum.STAFF;
     }
+    public boolean isCustomer(){
+        return role == RoleEnum.CUSTOMER;
+    }
 
     public boolean isNotSelf(long id) {
         return this.id != id;

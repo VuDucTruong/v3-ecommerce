@@ -21,18 +21,19 @@ import java.util.List;
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ProductMapper {
 
-    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
-//    @Mapping(source = "group", target = "group")
-    @Mapping(source = "quantity", target = "status", qualifiedByName = "fromCntToStatus")
-    @Mapping(source = "productItems", target = "productItems", ignore = true)
-    @Mapping(source = "represent", target = "represent")
-    public abstract ResponseProduct fromEntityToResponse_Light(Product product);
+    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus")
+    @Mapping(source = "product.productItems", target = "productItems", ignore = true)
+    @Mapping(source = "product.represent", target = "represent")
+    @Mapping(source = "favorite", target = "favorite")
+    public abstract ResponseProduct fromEntityToResponse_Light(Product product, Boolean favorite);
 
     @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
     @Mapping(source = "product.group.variants", target = "variants")
     @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus")
     @Mapping(source = "productItems", target = "productItems")
-    public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, List<ProductItem> productItems);
+    @Mapping(source = "favorite", target = "favorite")
+    public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, List<ProductItem> productItems, Boolean favorite);
 
 
 //    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)

@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +42,11 @@ public class ControllerFavorites {
     @Operation(summary = "get My favorite products")
     @GetMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
-    public ResponseEntity<ResponsePagination<ResponseProduct>> getFavoriteProducts(@ParameterObject Pageable pageable) {
+    public ResponseEntity<ResponsePagination<ResponseProduct>> getFavoriteProducts(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("created_at").descending());
         ResponsePagination<ResponseProduct> res = favoriteService.findFavorites(pageable);
         return ResponseEntity.ok(res);
     }

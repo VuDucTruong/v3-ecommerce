@@ -12,12 +12,15 @@ import shop.holy.v3.ecommerce.api.dto.comment.RequestComment;
 import shop.holy.v3.ecommerce.api.dto.comment.RequestCommentSearch;
 import shop.holy.v3.ecommerce.api.dto.comment.ResponseComment;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
+import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.persistence.repository.ICommentRepository;
+import shop.holy.v3.ecommerce.persistence.repository.IProfileRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class CommentService {
 
     private final ICommentRepository commentRepository;
+    private final IProfileRepository profileRepository;
     private final CommentMapper commentMapper;
 
     public ResponsePagination<ResponseComment> search(RequestCommentSearch searchReq) {
@@ -55,14 +59,16 @@ public class CommentService {
         return ResponsePagination.fromPage(rs);
     }
 
-
     @Transactional
     public ResponseComment insert(RequestComment request) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         Comment comment = commentMapper.fromCreateRequestToEntity(request);
         comment.setAuthorId(authAccount.getProfileId());
+        Comment result = commentRepository.save(comment);
+        profileRepository.findById(authAccount.getProfileId()).ifPresent(result::setAuthor);
+        result.setCreatedAt(new Date());
 
-        return commentMapper.fromEntityToResponse(commentRepository.save(comment));
+        return commentMapper.fromEntityToResponse(result);
     }
 
     @Transactional

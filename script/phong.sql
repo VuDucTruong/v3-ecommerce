@@ -88,37 +88,10 @@ from accounts;
 select *
 from product_favorites;
 
+select 1
+from product_favorites
+where product_id = 8;
 
-select b1_0.id,
-       b1_0.content,
-       b1_0.created_at,
-       b1_0.deleted_at,
-       g1_0.id,
-       g1_0.created_at,
-       g1_0.deleted_at,
-       g2_0.genre1_id,
-       g2_0.id,
-       g2_0.created_at,
-       g2_0.deleted_at,
-       g2_0.name,
-       g1_0.name,
-       b1_0.genre_id,
-       b1_0.image_url_id,
-       p1_0.id,
-       p1_0.account_id,
-       p1_0.created_at,
-       p1_0.deleted_at,
-       p1_0.full_name,
-       p1_0.image_url_id,
-       b1_0.profile_id,
-       b1_0.published_at,
-       b1_0.subtitle,
-       b1_0.title
-from public.blogs b1_0
-         join public.genre1 g1_0 on g1_0.id = b1_0.genre_id
-         left join public.genre2 g2_0 on g1_0.id = g2_0.genre1_id
-         join public.profiles p1_0 on p1_0.id = b1_0.profile_id
-where 1 = 1
-  and b1_0.title like ? escape
-      '' and g1_0.name like ? escape '' and b1_0.published_at>=? and b1_0.published_at<=? and b1_0.deleted_at is null
-order by b1_0.id
+
+select * from products;
+select * from comments;

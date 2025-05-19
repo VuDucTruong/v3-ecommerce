@@ -16,15 +16,18 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
+import shop.holy.v3.ecommerce.persistence.entity.EntityBase;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.repository.IProductDescriptionRepository;
+import shop.holy.v3.ecommerce.persistence.repository.IProductFavoriteRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
+import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.mapper.ProductMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
@@ -34,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +48,7 @@ public class ProductService {
     private final IProductRepository productRepository;
     private final IProductDescriptionRepository productDescriptionRepository;
     private final IProductItemRepository productItemRepository;
+    private final IProductFavoriteRepository favoriteRepository;
     private final CloudinaryFacadeService cloudinaryFacadeService;
 
     @SneakyThrows
@@ -51,18 +56,17 @@ public class ProductService {
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Specification<Product> spec = productMapper.fromRequestSearchToSpec(searchReq);
         Page<Product> products = productRepository.findAll(spec, pageable);
+        AuthAccount authAccount = SecurityUtil.getAuthNullable();
+        Page<ResponseProduct> resultsPage;
+        if (authAccount != null && authAccount.getProfileId() != null) {
+            Set<Long> productIds = products.getContent().stream().map(Product::getId).collect(Collectors.toSet());
+            Set<Long> favoriteProductIds = favoriteRepository.checkFavorites(authAccount.getProfileId(), productIds);
+            resultsPage = products.map(p -> productMapper.fromEntityToResponse_Light(p, favoriteProductIds.contains(p.getId())));
+        } else
+            resultsPage = products.map(p -> productMapper.fromEntityToResponse_Light(p, false));
 
-        Page<ResponseProduct> responses;
-        responses = products.map(productMapper::fromEntityToResponse_Light);
-
-        return ResponsePagination.fromPage(responses);
+        return ResponsePagination.fromPage(resultsPage);
     }
-
-    public void teststh() {
-        Product optionalProduct = productRepository.findByIdWithJoinFetch(8).orElse(null);
-        log.info("teststh optionalProduct: {}", optionalProduct);
-    }
-
 
     public CompletableFuture<ResponseProduct> getByIdentifier(Long id, String slug, boolean deleted) {
         if (id == null && slug == null)
@@ -82,9 +86,18 @@ public class ProductService {
                 })
                 .thenApply(opt -> opt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception));
 
-        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
-        if (!authAccount.isAdmin())
-            return prod.thenApply(productMapper::fromEntityToResponse_Light);
+        AuthAccount authAccount = SecurityUtil.getAuthNullable();
+        CompletableFuture<Boolean> isFav;
+        if (authAccount != null) {
+            Long profileId = authAccount.getProfileId();
+            isFav = profileId != null
+                    ? CompletableFuture.supplyAsync(() -> favoriteRepository.checkFavorite(profileId, id).isPresent())
+                    : CompletableFuture.completedFuture(false);
+        } else isFav = CompletableFuture.completedFuture(false);
+
+        /// NO ADMIN HANDLING ==> no productItems revealed
+        if (authAccount == null || !authAccount.isAdmin()) /// already null check fisrt then -> check NOT ADMIN
+            return CompletableFuture.allOf(prod, isFav).thenApply(v -> productMapper.fromEntityToResponse_Light(prod.join(), isFav.join()));
 
         ///  WHEN ADMIN, CAN SEE first 10 items orderedBy created at
         Pageable pageableItems = PageRequest.of(0, 10, Sort.by("createdAt").descending());
@@ -97,14 +110,13 @@ public class ProductService {
                         return productItemRepository.findAllByProductSlug(slug, pageableItems);
                 });
 
-        return CompletableFuture.allOf(prod, itemsSlice)
+        return CompletableFuture.allOf(prod, itemsSlice, isFav)
                 .thenApply(v -> {
                     List<ProductItem> items = itemsSlice.join().getContent();
                     Product p = prod.join();
-                    return productMapper.fromEntity_Items_ToResponse_Detailed(p, items);
+                    return productMapper.fromEntity_Items_ToResponse_Detailed(p, items, isFav.join());
                 });
     }
-
 
     @Transactional
     public ResponseProduct insert(RequestProductCreate request) {
@@ -125,7 +137,7 @@ public class ProductService {
                 productRepository.insertProductCategories(product.getId(), catId);
             });
         }
-        return productMapper.fromEntityToResponse_Light(rs);
+        return productMapper.fromEntityToResponse_Light(rs, false);
     }
 
     @Transactional
@@ -162,7 +174,9 @@ public class ProductService {
                 productDescriptionRepository.updateProductDescriptionById(prod_Desc);
             }
         }
-        return productMapper.fromEntityToResponse_Light(product);
+
+        /// TODO: use Redis cache -> get Profile -> favoriteProductIds -> if match -> true
+        return productMapper.fromEntityToResponse_Light(product, false);
     }
 
     @Transactional

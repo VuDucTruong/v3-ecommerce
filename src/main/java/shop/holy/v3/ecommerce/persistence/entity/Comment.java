@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "comments")
 @Getter
@@ -44,4 +44,14 @@ public class Comment extends EntityBase {
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private Product product;
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Comment comment)) return false;
+        return id == comment.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

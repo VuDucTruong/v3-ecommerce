@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.shared.util;
 
+import jakarta.annotation.Nullable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -7,7 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
-import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 
 public class SecurityUtil {
     public static boolean isAuthenticated(Authentication authentication) {
@@ -18,8 +18,8 @@ public class SecurityUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         switch (authentication) {
             case null -> throw BizErrors.AUTHORISATION_NULL.exception();
-            case AnonymousAuthenticationToken ignored -> throw BizErrors.AUTHORISATION_ANNONYMOUS.exception();
-            case UsernamePasswordAuthenticationToken ignored -> {
+            case AnonymousAuthenticationToken _ -> throw BizErrors.AUTHORISATION_ANNONYMOUS.exception();
+            case UsernamePasswordAuthenticationToken _ -> {
                 Object authAccount = authentication.getPrincipal();
                 if (authAccount == null) {
                     throw BizErrors.AUTHORISATION_INVALID.exception();
@@ -30,6 +30,23 @@ public class SecurityUtil {
             }
         }
         throw BizErrors.AUTHORISATION_INVALID.exception();
+    }
+
+    @Nullable
+    public static AuthAccount getAuthNullable() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        switch (authentication) {
+            case null ->{}
+            case UsernamePasswordAuthenticationToken _ -> {
+                Object authAccount = authentication.getPrincipal();
+                if (authAccount == null) {
+                    throw BizErrors.AUTHORISATION_INVALID.exception();
+                }
+                return (AuthAccount) authAccount;
+            }
+            default -> {}
+        }
+        return null;
     }
 
     public static long getAuthProfileId() {
