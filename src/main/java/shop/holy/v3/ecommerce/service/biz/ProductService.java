@@ -68,16 +68,16 @@ public class ProductService {
         return ResponsePagination.fromPage(resultsPage);
     }
 
-    public CompletableFuture<ResponseProduct> getByIdentifier(Long id, String slug, boolean deleted) {
-        if (id == null && slug == null)
+    public CompletableFuture<ResponseProduct> getByIdentifier(Long productId, String slug, boolean deleted) {
+        if (productId == null && !StringUtils.hasLength(slug))
             return CompletableFuture.completedFuture(null);
 
         CompletableFuture<Product> prod = CompletableFuture.supplyAsync(() -> {
-                    if (id != null) {
+                    if (productId != null) {
                         if (deleted)
-                            return productRepository.findByIdWithJoinFetch(id);
+                            return productRepository.findByIdWithJoinFetch(productId);
                         else
-                            return productRepository.findFirstByIdEqualsAndDeletedAtIsNull(id);
+                            return productRepository.findFirstByIdEqualsAndDeletedAtIsNull(productId);
                     } else {
                         return deleted
                                 ? productRepository.findFirstBySlug(slug)
@@ -88,11 +88,12 @@ public class ProductService {
 
         AuthAccount authAccount = SecurityUtil.getAuthNullable();
         CompletableFuture<Boolean> isFav;
-        if (authAccount != null) {
-            Long profileId = authAccount.getProfileId();
-            isFav = profileId != null
-                    ? CompletableFuture.supplyAsync(() -> favoriteRepository.checkFavorite(profileId, id).isPresent())
-                    : CompletableFuture.completedFuture(false);
+        if (authAccount != null && authAccount.getProfileId() != null) {
+            long profileId = authAccount.getProfileId();
+            if(productId != null )
+                isFav =CompletableFuture.supplyAsync(() -> favoriteRepository.checkFavorite(profileId, productId).isPresent());
+            else
+                isFav = prod.thenApply(p-> favoriteRepository.checkFavorite(profileId, p.getId()).isPresent());
         } else isFav = CompletableFuture.completedFuture(false);
 
         /// NO ADMIN HANDLING ==> no productItems revealed
@@ -104,8 +105,8 @@ public class ProductService {
         CompletableFuture<Slice<ProductItem>> itemsSlice =
                 CompletableFuture.supplyAsync(() ->
                 {
-                    if (id != null)
-                        return productItemRepository.findAllByProductIdEquals(id, pageableItems);
+                    if (productId != null)
+                        return productItemRepository.findAllByProductIdEquals(productId, pageableItems);
                     else
                         return productItemRepository.findAllByProductSlug(slug, pageableItems);
                 });
