@@ -61,9 +61,7 @@ public class ControllerComment {
 
     @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Integer> deleteCommentById(
-            long id
-    ) {
+    public ResponseEntity<Integer> deleteCommentById(@PathVariable long id) {
         return ResponseEntity.ok(commentService.deleteComment(id));
     }
 
@@ -81,13 +79,13 @@ public class ControllerComment {
         return ResponseEntity.ok(commentService.insert(request));
     }
 
-//    @Operation(summary = "update 1")
-//    @PutMapping("")
-//    public ResponseEntity<ResponseComment> updateComment(
-//            @RequestBody @NotNull(message = "Invalid Request must not be null") @Valid RequestCommentUpdate request){
-//
-//        return
-//    }
+    @Operation(summary = "update 1")
+    @PutMapping("")
+    public ResponseEntity<ResponseComment> updateComment(
+            @RequestBody @NotNull(message = "Invalid Request must not be null") @Valid RequestCommentUpdate request){
+        var cmt = commentService.update(request);
+        return ResponseEntity.ok(cmt);
+    }
 
 
 }

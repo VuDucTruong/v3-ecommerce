@@ -32,8 +32,11 @@ public interface ICommentRepository extends JpaRepository<Comment, Long>, JpaSpe
 
 
     @Modifying
-    @Query("UPDATE Comment c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id = (?1)")
+    @Query("UPDATE Comment c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id IN (:ids)")
     int updateDeletedAtByIdIn(long[] ids);
 
 
+    @Query(value = "update comments c set content = :content where c.id = :id returning *", nativeQuery = true)
+    @Modifying
+    Comment updateContentById(String content, long id);
 }

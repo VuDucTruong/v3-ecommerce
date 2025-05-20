@@ -111,12 +111,12 @@ INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id,
 -- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (2, '2025-04-25 16:21:07.625201', NULL, 1, 'string', NULL, 9);
 INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (3, '2025-04-25 16:23:52.76518', NULL, 4, '123', NULL, 9);
-INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (4, '2025-04-25 16:40:36.213105', NULL, 4, '123', 2, 9);
 INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (5, '2025-05-16 22:13:31.586052', NULL, 4, 'asdfasdfasdfadsf', NULL, 9);
 INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (6, '2025-05-19 13:53:50.004373', NULL, 4, 'hi my comment', NULL, 9);
-INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (7, '2025-05-19 13:59:31.536416', NULL, 4, 'my another comment', NULL, 8);
+INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (2, '2025-04-25 16:21:07.625201', '2025-05-20 08:42:36.655472', 1, 'string', NULL, 9);
+INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (4, '2025-04-25 16:40:36.213105', '2025-05-20 08:42:36.655472', 4, '123', 2, 9);
+INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, parent_comment_id, product_id) VALUES (7, '2025-05-19 13:59:31.536416', '2025-05-20 09:45:30.335485', 4, 'my another comment', NULL, 8);
 
 
 --
@@ -185,6 +185,7 @@ INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, d
 INSERT INTO public.product_favorites (created_at, product_id, profile_id) VALUES ('2025-05-19 13:14:04.77749', 8, 4);
 INSERT INTO public.product_favorites (created_at, product_id, profile_id) VALUES ('2025-05-19 13:14:04.77749', 9, 3);
 INSERT INTO public.product_favorites (created_at, product_id, profile_id) VALUES ('2025-05-19 13:44:14.225414', 14, 3);
+INSERT INTO public.product_favorites (created_at, product_id, profile_id) VALUES ('2025-05-20 09:33:56.144749', 17, 4);
 
 
 --

@@ -88,10 +88,21 @@ from accounts;
 select *
 from product_favorites;
 
-select 1
+select *
 from product_favorites
 where product_id = 8;
 
 
-select * from products;
-select * from comments;
+select *
+from products;
+select *
+from comments;
+select *
+from public.products p1_0
+         left join public.products_categories c1_0 on p1_0.id = c1_0.product_id
+         left join public.categories c1_1 on c1_1.id = c1_0.category_id
+         left join public.product_description pd1_0 on pd1_0.id = p1_0.prod_desc_id
+where p1_0.represent=true
+  and p1_0.id in (1,17)
+  and p1_0.deleted_at is null
+order by p1_0.id

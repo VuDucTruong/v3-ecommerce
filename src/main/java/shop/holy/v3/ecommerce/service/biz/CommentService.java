@@ -10,6 +10,7 @@ import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.comment.RequestComment;
 import shop.holy.v3.ecommerce.api.dto.comment.RequestCommentSearch;
+import shop.holy.v3.ecommerce.api.dto.comment.RequestCommentUpdate;
 import shop.holy.v3.ecommerce.api.dto.comment.ResponseComment;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
@@ -35,8 +36,11 @@ public class CommentService {
         Specification<Comment> specs = commentMapper.fromSearchRequestToSpec(searchReq);
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Comment> comments = commentRepository.findAll(specs, pageable);
-        var pageRes = comments
-                .map(commentMapper::fromEntityToResponse);
+        Page<ResponseComment> pageRes ;
+        if(searchReq.deleted())
+            pageRes = comments.map(commentMapper::fromEntityToResponse);
+        else
+            pageRes = comments.map(commentMapper::fromEntityToResponse_Censored);
         return ResponsePagination.fromPage(pageRes);
     }
 
@@ -53,9 +57,9 @@ public class CommentService {
         var comments = commentRepository.findAllByProductIdAndParentCommentIdIsNull(productId, pageable);
         Page<ResponseComment.Light> rs;
         if (deleted)
-            rs = comments.map(commentMapper::fromEntityToResponse_CensoredLight);
-        else
             rs = comments.map(commentMapper::fromEntityToResponseLight);
+        else
+            rs = comments.map(commentMapper::fromEntityToResponse_CensoredLight);
         return ResponsePagination.fromPage(rs);
     }
 
@@ -69,6 +73,12 @@ public class CommentService {
         result.setCreatedAt(new Date());
 
         return commentMapper.fromEntityToResponse(result);
+    }
+
+    public ResponseComment update(RequestCommentUpdate request) {
+        String content = request.content();
+        Comment comment = commentRepository.updateContentById(content, request.id());
+        return commentMapper.fromEntityToResponse(comment);
     }
 
     @Transactional
