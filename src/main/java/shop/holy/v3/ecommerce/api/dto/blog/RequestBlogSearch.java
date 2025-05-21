@@ -12,8 +12,8 @@ public record RequestBlogSearch(
         @Schema(description = "Search by blog title or author", example = "tech")
         String search,
         
-        @Schema(description = "Filter by blog genres", example = "[\"tech\", \"news\", \"reviews\"]")
-        List<String> genres,
+        @Schema(description = "Filter by blog genres", example = "[1, 2, 3]")
+        List<Long> genreIds,
         
         @Schema(description = "Filter by publication start date", format = "date", example = "2023-01-01")
         LocalDate publishedFrom,

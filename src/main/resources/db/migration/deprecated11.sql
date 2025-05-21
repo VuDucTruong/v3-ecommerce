@@ -28,6 +28,16 @@ INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, en
 
 
 --
+-- Data for Name: genre1; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (1, '2025-04-25 15:19:19.259669', NULL, 'Game');
+INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (2, '2025-05-14 02:11:06.184225', NULL, 'Mẹo hay');
+INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (3, '2025-05-14 02:11:07.893819', NULL, 'AI');
+INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (4, '2025-05-14 02:11:09.183369', NULL, 'Movies');
+
+
+--
 -- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
@@ -46,51 +56,6 @@ INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, 
 
 INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (1, '2025-05-18 00:38:35.529595', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
 INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (2, '2025-05-18 00:40:01.774669', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (3, '2025-05-21 18:42:05.171284', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (4, '2025-05-21 18:43:09.769097', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (5, '2025-05-21 18:43:25.194611', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (6, '2025-05-21 18:45:21.956605', NULL, '<p>ok</p>', NULL, 4, '2025-05-21 18:46:53.565', 'olka', 'olka');
-
-
---
--- Data for Name: genre1; Type: TABLE DATA; Schema: public; Owner: phong
---
-
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (1, '2025-04-25 15:19:19.259669', NULL, 'Game');
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (2, '2025-05-14 02:11:06.184225', NULL, 'Mẹo hay');
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (3, '2025-05-14 02:11:07.893819', NULL, 'AI');
-INSERT INTO public.genre1 (id, created_at, deleted_at, name) VALUES (4, '2025-05-14 02:11:09.183369', NULL, 'Movies');
-
-
---
--- Data for Name: genre2; Type: TABLE DATA; Schema: public; Owner: phong
---
-
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (1, '2025-04-25 15:23:37.771039', NULL, 1, 'Esport');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (2, '2025-04-25 15:23:37.771039', NULL, 1, 'game miễn phí');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (3, '2025-05-14 02:12:10.241431', NULL, 1, 'Mẹo chơi game');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (4, '2025-05-14 02:12:10.256542', NULL, 1, 'Tin tức game');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (5, '2025-05-14 02:12:13.593002', NULL, 2, 'Điện thoại');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (6, '2025-05-14 02:12:13.606242', NULL, 2, 'Ứng dụng');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (7, '2025-05-14 02:12:13.617468', NULL, 2, 'Máy tính');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (8, '2025-05-14 02:12:13.630135', NULL, 2, 'Phần cứng');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (9, '2025-05-14 02:12:13.641187', NULL, 2, 'Thủ thuật');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (10, '2025-05-14 02:12:16.524289', NULL, 4, 'Đánh giá');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (11, '2025-05-14 02:12:16.54024', NULL, 4, 'Giới thiệu phim');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (12, '2025-05-14 02:12:16.553861', NULL, 4, 'Netflix');
-INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (13, '2025-05-14 02:12:16.567998', NULL, 4, 'Phim chiếu rạp');
-
-
---
--- Data for Name: blogs_genres; Type: TABLE DATA; Schema: public; Owner: phong
---
-
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (1, 1);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (2, 7);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (3, 3);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (4, 3);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (6, 9);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (6, 10);
 
 
 --
@@ -161,6 +126,26 @@ INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, par
 INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description, max_applied_amount, min_amount, type, usage_limit, value) VALUES (1, '2025-04-17 22:25:17.232006', NULL, '2025-04-17', '2025-04-17', 'PHONG', 0, 'string', 20000.00, 156000.00, 'PERCENTAGE', 1, 12.00);
 
 
+--
+-- Data for Name: genre2; Type: TABLE DATA; Schema: public; Owner: phong
+--
+
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (1, '2025-04-25 15:23:37.771039', NULL, 1, 'Esport');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (2, '2025-04-25 15:23:37.771039', NULL, 1, 'game miễn phí');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (3, '2025-05-14 02:12:10.241431', NULL, 1, 'Mẹo chơi game');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (4, '2025-05-14 02:12:10.256542', NULL, 1, 'Tin tức game');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (5, '2025-05-14 02:12:13.593002', NULL, 2, 'Điện thoại');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (6, '2025-05-14 02:12:13.606242', NULL, 2, 'Ứng dụng');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (7, '2025-05-14 02:12:13.617468', NULL, 2, 'Máy tính');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (8, '2025-05-14 02:12:13.630135', NULL, 2, 'Phần cứng');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (9, '2025-05-14 02:12:13.641187', NULL, 2, 'Thủ thuật');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (10, '2025-05-14 02:12:16.524289', NULL, 4, 'Đánh giá');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (11, '2025-05-14 02:12:16.54024', NULL, 4, 'Giới thiệu phim');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (12, '2025-05-14 02:12:16.553861', NULL, 4, 'Netflix');
+INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (13, '2025-05-14 02:12:16.567998', NULL, 4, 'Phim chiếu rạp');
+
+INSERT INTO public.blogs_genres(blog_id, genre2_id) VALUES (1, 1);
+INSERT INTO public.blogs_genres(BLOG_ID, GENRE2_ID) VALUES (2,7);
 --
 -- Data for Name: keywords; Type: TABLE DATA; Schema: public; Owner: phong
 --
@@ -260,7 +245,7 @@ SELECT pg_catalog.setval('public.accounts_id_seq', 9, true);
 -- Name: blogs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.blogs_id_seq', 6, true);
+SELECT pg_catalog.setval('public.blogs_id_seq', 2, true);
 
 
 --

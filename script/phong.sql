@@ -98,14 +98,19 @@ from products;
 select *
 from comments;
 select *
-from public.products p1_0
-         left join public.products_categories c1_0 on p1_0.id = c1_0.product_id
-         left join public.categories c1_1 on c1_1.id = c1_0.category_id
-         left join public.product_description pd1_0 on pd1_0.id = p1_0.prod_desc_id
-where p1_0.represent=true
-  and p1_0.id in (1,17)
-  and p1_0.deleted_at is null
-order by p1_0.id;
+from public.blogs b1_0
+         join public.blogs_genres g1_0 on b1_0.id = g1_0.blog_id
+         join public.genre2 g1_1 on g1_1.id = g1_0.genre2_id
+         join public.genre1 g2_0 on g2_0.id = g1_1.genre1_id
+         join public.profiles p1_0 on p1_0.id = b1_0.profile_id
+where 1 = 1
+  and b1_0.deleted_at is null
+order by b1_0.id
 
-select * from genre2;
-SELECT * FROM public.genre2 WHERE id = 7;
+select *
+from genre2;
+SELECT *
+FROM blogs_genres;
+select *
+from blogs;
+select *
