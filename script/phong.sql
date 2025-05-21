@@ -105,4 +105,7 @@ from public.products p1_0
 where p1_0.represent=true
   and p1_0.id in (1,17)
   and p1_0.deleted_at is null
-order by p1_0.id
+order by p1_0.id;
+
+select * from genre2;
+SELECT * FROM public.genre2 WHERE id = 7;
