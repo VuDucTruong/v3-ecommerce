@@ -1,12 +1,12 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Getter
@@ -24,12 +24,13 @@ public class Blog extends EntityBase {
     @Column(name = "profile_id")
     private long profileId;
 
-    @Column(name = "genre_id")
-    private Long genreId;
-
-    @ManyToOne()
-    @JoinColumn(name = "genre_id", insertable = false, updatable = false)
-    private Genre1 genre1;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "blogs_genres",
+            joinColumns = @JoinColumn(name = "blog_id", insertable = false, updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "genre2_id", insertable = false, updatable = false)
+    )
+    private List<Genre2> genre2s;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)

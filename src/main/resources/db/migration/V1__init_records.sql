@@ -54,8 +54,8 @@ INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, 
 -- Data for Name: blogs; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.blogs (id, created_at, deleted_at, content, genre_id, image_url_id, profile_id, published_at, subtitle, title) VALUES (1, '2025-05-18 00:38:35.529595', NULL, '<p>string</p>', 1, NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, genre_id, image_url_id, profile_id, published_at, subtitle, title) VALUES (2, '2025-05-18 00:40:01.774669', NULL, '<p>string</p>', 1, NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (1, '2025-05-18 00:38:35.529595', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (2, '2025-05-18 00:40:01.774669', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
 
 
 --
@@ -144,7 +144,8 @@ INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (
 INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (12, '2025-05-14 02:12:16.553861', NULL, 4, 'Netflix');
 INSERT INTO public.genre2 (id, created_at, deleted_at, genre1_id, name) VALUES (13, '2025-05-14 02:12:16.567998', NULL, 4, 'Phim chiếu rạp');
 
-
+INSERT INTO public.blogs_genres(blog_id, genre2_id) VALUES (1, 1);
+INSERT INTO public.blogs_genres(BLOG_ID, GENRE2_ID) VALUES (2,7);
 --
 -- Data for Name: keywords; Type: TABLE DATA; Schema: public; Owner: phong
 --

@@ -10,12 +10,11 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 @Table(name = "genre1")
 public class Genre1 extends EntityBase {
@@ -25,7 +24,16 @@ public class Genre1 extends EntityBase {
 
     @OneToMany(mappedBy = "genre1", orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Genre2> genre2s = new HashSet<>();
+    private List<Genre2> genre2s = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Genre1 that)) return false;
+        return Objects.equals(id, that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

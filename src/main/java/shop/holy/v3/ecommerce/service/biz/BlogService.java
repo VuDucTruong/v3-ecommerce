@@ -14,6 +14,7 @@ import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogUpdate;
 import shop.holy.v3.ecommerce.api.dto.blog.ResponseBlog;
 import shop.holy.v3.ecommerce.persistence.entity.Blog;
 import shop.holy.v3.ecommerce.persistence.repository.IBlogRepository;
+import shop.holy.v3.ecommerce.persistence.repository.IGenre2Repository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
@@ -21,9 +22,7 @@ import shop.holy.v3.ecommerce.shared.mapper.BlogMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
-import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +31,7 @@ public class BlogService {
     private final IBlogRepository blogRepository;
     private final BlogMapper blogMapper;
     private final CloudinaryFacadeService cloudinaryService;
+    private final IGenre2Repository genre2Repository;
 
     public ResponseBlog createBlog(RequestBlogCreation request) {
         long profileId = SecurityUtil.getAuthProfileId();

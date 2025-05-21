@@ -3,16 +3,19 @@ package shop.holy.v3.ecommerce.service.biz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.holy.v3.ecommerce.api.dto.blog.genre.RequestGenreUpsert;
-import shop.holy.v3.ecommerce.api.dto.blog.genre.ResponseGenre;
+import shop.holy.v3.ecommerce.api.dto.blog.genre.RequestGenre1Upsert;
+import shop.holy.v3.ecommerce.api.dto.blog.genre.ResponseGenre1;
 import shop.holy.v3.ecommerce.persistence.entity.Genre1;
+import shop.holy.v3.ecommerce.persistence.entity.Genre2;
 import shop.holy.v3.ecommerce.persistence.repository.IGenre2Repository;
 import shop.holy.v3.ecommerce.persistence.repository.IGenreRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
 import shop.holy.v3.ecommerce.shared.mapper.GenreMapper;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +32,14 @@ public class GenreService {
     }
 
     @Transactional
-    public ResponseGenre upsert(RequestGenreUpsert request) {
+    public ResponseGenre1 upsert(RequestGenre1Upsert request) {
         Genre1 genre1 = genreMapper.fromGenreUpsertToEntity(request);
-        Genre1 rs = genreRepository.save(genre1);
-        genre2Repository.deleteAllByGenre1Id(genre1.getId());
-        var genre2s = genreMapper.from_StringArr_To_Genre2s(request.genres(), rs.getId());
-        genre2Repository.saveAll(genre2s);
-
-        return genreMapper.fromRequestToResponse(request);
+        for (var l : request.genreIds())
+            genre2Repository.updateGenre2ById(genre1.getId(), l);
+        return genreMapper.fromEntityToResponse(genre1);
     }
 
-    public ResponseGenre getByIdentifier(Long id, String name, boolean deleted) {
+    public ResponseGenre1 getByIdentifier(Long id, String name, boolean deleted) {
         Genre1 rs;
         if (id != null)
             if (deleted)
@@ -50,12 +50,12 @@ public class GenreService {
             rs = genreRepository.findFirstByName(name).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
         else
             rs = genreRepository.findFirstByNameAndDeletedAtIsNull(name).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
-        return genreMapper.fromEntityToResposne(rs);
+        return genreMapper.fromEntityToResponse(rs);
     }
 
-    public ResponseGenre[] getAllGenres() {
+    public ResponseGenre1[] getAllGenres() {
         List<Genre1> genres = genreRepository.findAll();
-        return genres.stream().map(genreMapper::fromEntityToResposne).toArray(ResponseGenre[]::new);
+        return genres.stream().map(genreMapper::fromEntityToResponse).toArray(ResponseGenre1[]::new);
     }
 
 }

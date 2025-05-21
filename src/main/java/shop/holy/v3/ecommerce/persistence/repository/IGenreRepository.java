@@ -21,15 +21,6 @@ public interface IGenreRepository extends JpaRepository<Genre1, Long> {
     @Query("update Genre1 g set g.deletedAt = CURRENT_TIMESTAMP where g.id = :id")
     int updateDeletedAtById(long id);
 
-    @Modifying
-    @Query(value = """
-            insert into genre2 (genre1_id, name)
-                        values (:genre1Id,:name)
-            """, nativeQuery = true)
-    int upsertGenre(long genre1Id, String name);
-
-
-
     Optional<Genre1> findFirstByIdAndDeletedAtIsNull(long id);
 
     Optional<Genre1> findFirstByNameAndDeletedAtIsNull(String name);

@@ -21,4 +21,7 @@ public class Genre2 extends EntityBase {
     @JoinColumn(name = "genre1_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Genre1 genre1;
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genre2s")
+    private java.util.List<Blog> blogs;
+
 }

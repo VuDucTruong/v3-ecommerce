@@ -16,7 +16,7 @@ public interface IBlogRepository extends JpaRepository<Blog, Long>, JpaSpecifica
     Optional<Blog> findFirstByIdAndDeletedAtIsNull(long id);
 
     @Override
-    @EntityGraph(attributePaths = {"profile","genre1",  "genre1.genre2s"})
+    @EntityGraph(attributePaths = {"profile",  "genre2s"})
     Page<Blog> findAll(Specification<Blog> spec, Pageable pageable);
 
     @Modifying

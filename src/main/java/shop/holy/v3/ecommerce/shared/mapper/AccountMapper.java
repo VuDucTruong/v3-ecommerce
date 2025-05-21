@@ -47,7 +47,7 @@ public abstract class AccountMapper  {
     public Specification<Account> fromRequestToSpecification(RequestUserSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
-            if (CollectionUtils.isEmpty(searchReq.ids())) {
+            if (!CollectionUtils.isEmpty(searchReq.ids())) {
                 predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
             }
 
