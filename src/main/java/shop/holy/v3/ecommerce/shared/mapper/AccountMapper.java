@@ -59,6 +59,10 @@ public abstract class AccountMapper  {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
 
+            if(!CollectionUtils.isEmpty(searchReq.roles())) {
+                predicate = criteriaBuilder.and(predicate, root.get("role").in(searchReq.roles()) );
+            }
+
             if (searchReq.createdAtFrom() != null) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), AppDateUtils.toStartOfDay(searchReq.createdAtFrom())));
