@@ -51,7 +51,7 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
             INSERT INTO product_items (product_id, product_key, region)
             (SELECT id, key, region
             FROM unnest(:productIds, :productKeys, :regions) as t(id, key, region))
-            ON CONFLICT (product_key) DO NOTHING
+            ON CONFLICT (product_id,product_key) DO NOTHING
             RETURNING product_key AS accepted_key, product_id
             """, nativeQuery = true)
     List<ProQ_ProductId_AcceptedKey> insertProductItems(

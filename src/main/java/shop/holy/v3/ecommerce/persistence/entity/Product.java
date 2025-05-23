@@ -31,7 +31,7 @@ public class Product extends EntityBase {
     private BigDecimal price;
 
     @Column(name = "prod_desc_id")
-    private long proDescId;
+    private Long proDescId;
 
     @Column(name = "group_id")
     private Long groupId;

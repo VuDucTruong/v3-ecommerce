@@ -10,7 +10,7 @@ public record ResponseBlog(
         String title,
         String subtitle,
         ResponseProfile author,
-        List<String> genres,
+        List<Long> genre2Ids,
         Date publishedAt,
         String imageUrl,
         String content

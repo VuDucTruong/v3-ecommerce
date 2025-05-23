@@ -117,11 +117,4 @@ select *;
 
 
 
-select *
-from public.accounts a1_0
-where 1 = 1
-  and a1_0.deleted_at is null
-  and a1_0.role in ('ADMIN', 'STAFF')
-    AND
-order by a1_0.id
-offset ? rows fetch first ? rows only
+select * from products;

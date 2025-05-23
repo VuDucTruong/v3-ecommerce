@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.Join;
 import org.mapstruct.Mapper;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogCreation;
@@ -17,6 +18,7 @@ import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
         uses = CommonMapper.class)
@@ -28,9 +30,17 @@ public abstract class BlogMapper {
     public abstract Blog fromRequestUpdateToEntity(RequestBlogUpdate request);
 
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
-    @Mapping(source = "genre2s", target = "genres")
+    @Mapping(source = "genre2s", target = "genre2Ids", qualifiedByName = "fromGenre2EntityToIds")
     @Mapping(source = "profile", target = "author")
     public abstract ResponseBlog fromEntityToResponse(Blog blog);
+
+    @Named("fromGenre2EntityToIds")
+    public List<Long> fromGenre2EntityToIds(List<Genre2> genre2s) {
+        if (CollectionUtils.isEmpty(genre2s)) {
+            return Collections.emptyList();
+        }
+        return genre2s.stream().map(Genre2::getId).collect(Collectors.toList());
+    }
 
     public List<String> fromGenreToStringArray(List<Genre2> genre2s) {
         if (genre2s == null || genre2s.isEmpty())

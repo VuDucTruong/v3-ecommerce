@@ -90,10 +90,10 @@ public class ProductService {
         CompletableFuture<Boolean> isFav;
         if (authAccount != null && authAccount.getProfileId() != null) {
             long profileId = authAccount.getProfileId();
-            if(productId != null )
-                isFav =CompletableFuture.supplyAsync(() -> favoriteRepository.checkFavorite(profileId, productId).isPresent());
+            if (productId != null)
+                isFav = CompletableFuture.supplyAsync(() -> favoriteRepository.checkFavorite(profileId, productId).isPresent());
             else
-                isFav = prod.thenApply(p-> favoriteRepository.checkFavorite(profileId, p.getId()).isPresent());
+                isFav = prod.thenApply(p -> favoriteRepository.checkFavorite(profileId, p.getId()).isPresent());
         } else isFav = CompletableFuture.completedFuture(false);
 
         /// NO ADMIN HANDLING ==> no productItems revealed
@@ -166,15 +166,15 @@ public class ProductService {
         }
 
         ///  update product && update description as well
-        {
-            Product rs = productRepository.save(product);
-            ProductDescription prod_Desc = productMapper.fromRequestToDescription(request.productDescription());
-            if (prod_Desc != null) {
-//                prod_Desc.setProductId(rs.getId());
-                prod_Desc.setId(rs.getProDescId());
-                productDescriptionRepository.updateProductDescriptionById(prod_Desc);
-            }
+        ProductDescription prod_Desc = productMapper.fromRequestToDescription(request.productDescription());
+        if (prod_Desc != null) {
+            var optionalPd = productDescriptionRepository.updateProductDescriptionByProductId(request.id(), prod_Desc);
+            optionalPd.ifPresent(pd -> {
+                product.setProDescId(pd.getId());
+                product.setProductDescription(pd);
+            });
         }
+        Product rs = productRepository.save(product);
 
         /// TODO: use Redis cache -> get Profile -> favoriteProductIds -> if match -> true
         return productMapper.fromEntityToResponse_Light(product, false);
