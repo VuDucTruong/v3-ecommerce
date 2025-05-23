@@ -10,7 +10,7 @@ import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
-import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_Id_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
@@ -95,7 +95,7 @@ public class ProductItemService {
         Stream<RequestProductItemCreate> insertable = requests.stream()
                 .filter(s -> existingProdIds.contains(s.productId()));
 
-        List<ProQ_ProductId_AcceptedKey> accepted;
+        List<ProQ_Id_ProductId_AcceptedKey> accepted;
         if (used) {
             ProductItemUsed[] usedItems = insertable.map(mapper::from_Request_ToUsedEntity)
                     .toArray(ProductItemUsed[]::new);
@@ -111,11 +111,11 @@ public class ProductItemService {
             accepted = productItemRepository.insertProductItems(tri.getLeft(), tri.getMiddle(), tri.getRight());
             ///  TO UPDATE PRODUCT'S QUANTITY
             accepted.stream().collect(
-                    Collectors.groupingBy(ProQ_ProductId_AcceptedKey::getProductId,
+                    Collectors.groupingBy(ProQ_Id_ProductId_AcceptedKey::getProductId,
                             Collectors.reducing(0, _ -> 1, Integer::sum))
             ).forEach(productRepository::updateAddProductItemCountsByProductIdEquals);
         }
-        var results = accepted.stream().map(a -> new ResponseProductItemCreate.ResponseAccepted(a.getProductId(), a.getAcceptedKey()))
+        var results = accepted.stream().map(a -> new ResponseProductItemCreate.ResponseAccepted(a.getId(),a.getProductId(), a.getAcceptedKey()))
                 .toList();
         return new ResponseProductItemCreate(results);
     }

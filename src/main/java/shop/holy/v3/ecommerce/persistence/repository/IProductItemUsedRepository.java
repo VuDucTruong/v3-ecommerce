@@ -6,12 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
-import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_Id_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface IProductItemUsedRepository extends JpaRepository<ProductItemUsed, Long>, JpaSpecificationExecutor<ProductItemUsed> {
@@ -23,7 +22,7 @@ public interface IProductItemUsedRepository extends JpaRepository<ProductItemUse
             ON CONFLICT (product_key) DO NOTHING
             RETURNING product_id ,product_key AS accepted_key
             """, nativeQuery = true)
-    List<ProQ_ProductId_AcceptedKey> insertProductItems(
+    List<ProQ_Id_ProductId_AcceptedKey> insertProductItems(
             @Param("productIds") long[] productIds,
             @Param("productKeys") String[] productKeys,
             @Param("regions") String[] regions);

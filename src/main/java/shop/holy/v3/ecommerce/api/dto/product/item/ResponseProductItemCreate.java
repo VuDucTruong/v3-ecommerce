@@ -15,6 +15,7 @@ public record ResponseProductItemCreate(
         List<ResponseAccepted> productItemDetails
 ) {
     public record ResponseAccepted(
+            Long id,
             Long productId,
             String productKey
     ) {

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
-import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_AcceptedKey;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_Id_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 
@@ -52,9 +52,9 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
             (SELECT id, key, region
             FROM unnest(:productIds, :productKeys, :regions) as t(id, key, region))
             ON CONFLICT (product_id,product_key) DO NOTHING
-            RETURNING product_key AS accepted_key, product_id
+            RETURNING id, product_key AS accepted_key, product_id
             """, nativeQuery = true)
-    List<ProQ_ProductId_AcceptedKey> insertProductItems(
+    List<ProQ_Id_ProductId_AcceptedKey> insertProductItems(
             @Param("productIds") long[] productIds,
             @Param("productKeys") String[] productKeys,
             @Param("regions") String[] regions);
