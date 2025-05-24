@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.Objects;
 import java.util.Set;
@@ -25,6 +26,7 @@ public class Comment extends EntityBase {
     private Long productId;
 
     @Column(name = "content")
+    @Length(max = 500)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

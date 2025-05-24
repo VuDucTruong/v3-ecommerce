@@ -19,8 +19,7 @@ public interface IProductItemUsedRepository extends JpaRepository<ProductItemUse
             INSERT INTO product_items_used (product_id, product_key, region)
             (SELECT id, key, region
             FROM unnest(:productIds, :productKeys, :regions) as t(id, key, region))
-            ON CONFLICT (product_key) DO NOTHING
-            RETURNING product_id ,product_key AS accepted_key
+            RETURNING id, product_id ,product_key AS accepted_key
             """, nativeQuery = true)
     List<ProQ_Id_ProductId_AcceptedKey> insertProductItems(
             @Param("productIds") long[] productIds,

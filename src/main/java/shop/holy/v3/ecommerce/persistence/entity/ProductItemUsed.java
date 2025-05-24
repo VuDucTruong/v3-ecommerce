@@ -25,7 +25,7 @@ public class ProductItemUsed {
     @Column(name = "product_id")
     private long productId;
 
-    @Column(name = "product_key", unique = true)
+    @Column(name = "product_key")
     private String productKey;
 
     private String region;

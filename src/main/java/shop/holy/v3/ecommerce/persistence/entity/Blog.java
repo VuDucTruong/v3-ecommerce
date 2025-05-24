@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ public class Blog extends EntityBase {
     private String title;
     private String subtitle;
 
+    @Length(max = 5000)
     private String content;
     private Date publishedAt;
     private String imageUrlId;

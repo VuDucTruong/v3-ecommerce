@@ -9,27 +9,34 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.type.SqlTypes;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "product_description")
-@Getter @Setter
+@Getter
+@Setter
 public class ProductDescription extends EntityBase {
 
     @Column(name = "description")
+    @Length(max = 5000)
     private String description;
 
     @Column(name = "info")
+    @Length(max = 5000)
     private String info;
 
     @Column(name = "platform")
+    @Length(max = 5000)
     private String platform;
 
     @Column(name = "policy")
+    @Length(max = 5000)
     private String policy;
 
     @Column(name = "tutorial")
+    @Length(max = 5000)
     private String tutorial;
 
 //    @OneToOne(fetch = FetchType.LAZY)

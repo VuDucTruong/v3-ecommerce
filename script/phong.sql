@@ -114,7 +114,10 @@ FROM blogs_genres;
 select *
 from blogs;
 select *;
-
+select * from product_items_used
+where product_id = 8;
 
 
 select * from products;
+select * from products_categories;
+
