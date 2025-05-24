@@ -77,7 +77,9 @@ public abstract class ProductItemMapper {
             assert query != null;
             if (searchReq == null) return criteriaBuilder.conjunction();
 
-            root.fetch("product", JoinType.LEFT);
+            if (!query.getResultType().equals(Long.class)) {
+                root.fetch("product", JoinType.INNER);
+            }
 
             Predicate predicate = criteriaBuilder.conjunction();
 
