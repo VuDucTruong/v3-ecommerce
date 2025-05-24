@@ -20,7 +20,7 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class CommentMapper  {
+public abstract class CommentMapper {
 
     @Mapping(source = "content", target = "content")
     public abstract Comment fromCreateRequestToEntity(RequestComment requestComment);
@@ -44,7 +44,7 @@ public abstract class CommentMapper  {
     @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
     public abstract ResponseComment.Light fromEntityToResponse_CensoredLight(Comment comment);
 
-    @IterableMapping( elementTargetType = ResponseReply.class, qualifiedByName = "toReply")
+    @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply")
     @Named("mapReplies")
     public abstract ResponseReply[] mapReplies(Set<Comment> replies);
 
@@ -63,13 +63,15 @@ public abstract class CommentMapper  {
 
     public Specification<Comment> fromSearchRequestToSpec(RequestCommentSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
-            root.fetch("product", JoinType.INNER);
-            root.fetch("author", JoinType.INNER);
+            if (!query.getResultType().equals(Long.class)) {
+                root.fetch("product", JoinType.INNER);
+                root.fetch("author", JoinType.INNER);
+            }
 
             if (searchReq == null) return criteriaBuilder.conjunction();
 
             Predicate predicate = criteriaBuilder.conjunction();
-            if(!CollectionUtils.isEmpty(searchReq.ids())){
+            if (!CollectionUtils.isEmpty(searchReq.ids())) {
                 predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
             }
             if (StringUtils.hasLength(searchReq.content())) {

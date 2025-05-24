@@ -63,8 +63,10 @@ public abstract class BlogMapper {
         return (root, query, criteriaBuilder) -> {
             var predicate = criteriaBuilder.conjunction();
             Join<Blog, Genre2> genre2s = root.join("genre2s");
-            genre2s.join("genre1");
-            root.fetch("profile");
+            if (!query.getResultType().equals(Long.class)) {
+                genre2s.join("genre1");
+                root.fetch("profile");
+            }
 
             if (searchReq.search() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("title"), "%" + searchReq.search() + "%"));
