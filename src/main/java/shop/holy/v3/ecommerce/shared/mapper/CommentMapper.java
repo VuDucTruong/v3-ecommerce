@@ -81,9 +81,9 @@ public abstract class CommentMapper {
             if (StringUtils.hasLength(searchReq.productName())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%"));
             }
-//            if (!searchReq.deleted()) {
-//                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
-//            }
+            if (!searchReq.deleted()) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
+            }
 
             return predicate;
         };

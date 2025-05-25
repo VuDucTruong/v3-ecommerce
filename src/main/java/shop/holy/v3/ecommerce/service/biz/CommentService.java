@@ -40,25 +40,18 @@ public class CommentService {
         if (searchReq.deleted())
             pageRes = comments.map(commentMapper::fromEntityToResponse);
         else
-            pageRes = comments.map(c -> {
-                if (c.getDeletedAt() != null)
-                    c.setContent(null);
-                return commentMapper.fromEntityToResponse(c);
-            });
+            pageRes = comments.map(c -> commentMapper.fromEntityToResponse(c));
         return ResponsePagination.fromPage(pageRes);
     }
 
 
     public ResponseComment getById(long id, boolean deleted) {
-        Optional<Comment> queryRs = commentRepository.findById(id);
-        var cmt = deleted
-                ? queryRs.map(commentMapper::fromEntityToResponse)
-                : queryRs.map(c -> {
-            if (c.getDeletedAt() != null)
-                c.setContent(null);
-            return commentMapper.fromEntityToResponse(c);
-        });
-        return cmt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
+        Optional<Comment> queryRs;
+        if(deleted)
+            queryRs = commentRepository.findById(id);
+        else
+            queryRs = commentRepository.findByIdAndDeletedAtIsNull(id);
+        return queryRs.map(commentMapper::fromEntityToResponse).orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
     }
 
     public ResponsePagination<ResponseComment.Light> getCommentsByProductId(long productId, boolean deleted, Pageable pageable) {
