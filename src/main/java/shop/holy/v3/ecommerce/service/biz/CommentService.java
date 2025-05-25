@@ -60,7 +60,11 @@ public class CommentService {
         if (deleted)
             rs = comments.map(commentMapper::fromEntityToResponseLight);
         else
-            rs = comments.map(commentMapper::fromEntityToResponse_CensoredLight);
+            rs = comments.map(c->{
+                if(c.getDeletedAt()!=null)
+                    c.setContent(null);
+                return commentMapper.fromEntityToResponseLight(c);
+            });
         return ResponsePagination.fromPage(rs);
     }
 

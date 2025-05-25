@@ -30,9 +30,9 @@ public abstract class CommentMapper {
     @Mapping(source = "author", target = "author")
     public abstract ResponseComment fromEntityToResponse(Comment comment);
 
-    @Mapping(source = "content", target = "content", ignore = true)
-    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
-    public abstract ResponseComment fromEntityToResponse_Censored(Comment comment);
+//    @Mapping(source = "content", target = "content", ignore = true)
+//    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
+//    public abstract ResponseComment fromEntityToResponse_Censored(Comment comment);
 
 
     @Mapping(source = "content", target = "content")
@@ -40,24 +40,24 @@ public abstract class CommentMapper {
     @Mapping(source = "author", target = "author")
     public abstract ResponseComment.Light fromEntityToResponseLight(Comment comment);
 
-    @Mapping(source = "content", target = "content", ignore = true)
-    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
-    public abstract ResponseComment.Light fromEntityToResponse_CensoredLight(Comment comment);
+//    @Mapping(source = "content", target = "content", ignore = true)
+//    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
+//    public abstract ResponseComment.Light fromEntityToResponse_CensoredLight(Comment comment);
 
     @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply")
     @Named("mapReplies")
     public abstract ResponseReply[] mapReplies(Set<Comment> replies);
 
-    @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply_Censored")
-    @Named("mapReplies_Censored")
-    public abstract ResponseReply[] mapReplies_Censored(Set<Comment> replies);
+//    @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply_Censored")
+//    @Named("mapReplies_Censored")
+//    public abstract ResponseReply[] mapReplies_Censored(Set<Comment> replies);
 
     @Named("toReply")
     public abstract ResponseReply toResponseReply(Comment reply);
 
-    @Named("toReply_Censored")
-    @Mapping(source = "content", target = "content", ignore = true)
-    public abstract ResponseReply toResponseReply_censored(Comment reply);
+//    @Named("toReply_Censored")
+//    @Mapping(source = "content", target = "content", ignore = true)
+//    public abstract ResponseReply toResponseReply_censored(Comment reply);
 
     public abstract ResponseProfile fromProfileToResponseProfile(Profile profile);
 
