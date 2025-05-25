@@ -36,11 +36,15 @@ public class CommentService {
         Specification<Comment> specs = commentMapper.fromSearchRequestToSpec(searchReq);
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Comment> comments = commentRepository.findAll(specs, pageable);
-        Page<ResponseComment> pageRes ;
-        if(searchReq.deleted())
+        Page<ResponseComment> pageRes;
+        if (searchReq.deleted())
             pageRes = comments.map(commentMapper::fromEntityToResponse);
         else
-            pageRes = comments.map(commentMapper::fromEntityToResponse_Censored);
+            pageRes = comments.map(c -> {
+                if (c.getDeletedAt() != null)
+                    c.setContent(null);
+                return commentMapper.fromEntityToResponse(c);
+            });
         return ResponsePagination.fromPage(pageRes);
     }
 
@@ -49,7 +53,11 @@ public class CommentService {
         Optional<Comment> queryRs = commentRepository.findById(id);
         var cmt = deleted
                 ? queryRs.map(commentMapper::fromEntityToResponse)
-                : queryRs.map(commentMapper::fromEntityToResponse_Censored);
+                : queryRs.map(c -> {
+            if (c.getDeletedAt() != null)
+                c.setContent(null);
+            return commentMapper.fromEntityToResponse(c);
+        });
         return cmt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception);
     }
 

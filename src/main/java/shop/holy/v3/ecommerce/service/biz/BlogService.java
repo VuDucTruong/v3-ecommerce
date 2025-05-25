@@ -1,6 +1,8 @@
 package shop.holy.v3.ecommerce.service.biz;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,7 +61,7 @@ public class BlogService {
         return blogMapper.fromEntityToResponse(rs);
     }
 
-    private List<Genre2> insertAndFetchGenre2s(long blogId, Collection<Long> genre2Ids, boolean update) {
+    private List<Genre2> insertAndFetchGenre2s(long blogId, @Valid @NotEmpty(message = "genres must not be empty") Collection<Long> genre2Ids, boolean update) {
         if (update) genre2Repository.deleteBlogsGenres(blogId);
         for (long genreId : genre2Ids) {
             genre2Repository.insertBlogsGenres(blogId, genreId);

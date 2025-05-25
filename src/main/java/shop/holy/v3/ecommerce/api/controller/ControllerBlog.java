@@ -2,7 +2,6 @@ package shop.holy.v3.ecommerce.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +30,7 @@ public class ControllerBlog {
         return responseBlog;
     }
 
-    @PutMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
     @Operation(summary = "update 1")
     public ResponseBlog updateBlog(@ModelAttribute RequestBlogUpdate updateRequest) {
@@ -54,7 +53,7 @@ public class ControllerBlog {
 
     @GetMapping(value = "{id}")
     @Operation(summary = "get 1")
-    public ResponseBlog getBlog(@PathParam("id") long id,
+    public ResponseBlog getBlog(@PathVariable("id") long id,
                                 @RequestParam(name = "deleted", required = false) boolean deleted) {
         return blogService.getBlog(id, deleted);
     }
@@ -62,7 +61,7 @@ public class ControllerBlog {
     @DeleteMapping(value = "{id}")
     @Operation(summary = "delete 1")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
-    public int deleteBlog(@PathParam("id") long id) {
+    public int deleteBlog(@PathVariable("id") long id) {
         return blogService.deleteBlog(id);
     }
 

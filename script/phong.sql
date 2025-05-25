@@ -105,7 +105,7 @@ from public.blogs b1_0
          join public.profiles p1_0 on p1_0.id = b1_0.profile_id
 where 1 = 1
   and b1_0.deleted_at is null
-order by b1_0.id
+order by b1_0.id;
 
 select *
 from genre2;
