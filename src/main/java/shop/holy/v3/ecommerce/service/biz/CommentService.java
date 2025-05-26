@@ -36,11 +36,7 @@ public class CommentService {
         Specification<Comment> specs = commentMapper.fromSearchRequestToSpec(searchReq);
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Comment> comments = commentRepository.findAll(specs, pageable);
-        Page<ResponseComment> pageRes;
-        if (searchReq.deleted())
-            pageRes = comments.map(commentMapper::fromEntityToResponse);
-        else
-            pageRes = comments.map(c -> commentMapper.fromEntityToResponse(c));
+        Page<ResponseComment> pageRes= comments.map(commentMapper::fromEntityToResponse);
         return ResponsePagination.fromPage(pageRes);
     }
 

@@ -114,10 +114,42 @@ FROM blogs_genres;
 select *
 from blogs;
 select *;
-select * from product_items_used
+select *
+from product_items_used
 where product_id = 8;
 
 
-select * from products;
-select * from products_categories;
+select *
+from products;
+select *
+from products_categories;
 
+select *
+from public.comments c1_0
+         join public.products p1_0 on p1_0.id = c1_0.product_id
+         join public.profiles a1_0 on a1_0.id = c1_0.author_id
+         left join public.comments r1_0 on c1_0.id = r1_0.parent_comment_id
+         join public.comments r2_0 on c1_0.id = r2_0.parent_comment_id
+where c1_0.parent_comment_id is null
+order by c1_0.id;
+
+select *
+from public.comments c1_0
+         join public.products p1_0 on p1_0.id = c1_0.product_id
+         join public.profiles a1_0 on a1_0.id = c1_0.author_id
+         left join public.comments r1_0 on c1_0.id = r1_0.parent_comment_id
+where (c1_0.content like '%ye%' escape '' or r1_0.content like '%ye%' escape '')
+  and c1_0.deleted_at is null
+  and r1_0.deleted_at is null
+order by c1_0.id;
+
+
+select *
+from public.comments c1_0
+         join public.products p1_0 on p1_0.id = c1_0.product_id
+         join public.profiles a1_0 on a1_0.id = c1_0.author_id
+         left join public.comments r1_0 on c1_0.id = r1_0.parent_comment_id
+where (c1_0.content like ? escape '' or r1_0.content like ? escape '')
+  and c1_0.deleted_at is null
+  and r1_0.deleted_at is null
+order by c1_0.id

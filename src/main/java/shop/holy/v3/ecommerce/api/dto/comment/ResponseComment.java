@@ -8,6 +8,7 @@ import java.util.Date;
 public record ResponseComment(
         long id,
         ResponseProductMetadata product,
+        Long parentCommentId,
         ResponseProfile author,
         Date createdAt,
         Date deletedAt,

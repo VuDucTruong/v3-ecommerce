@@ -14,7 +14,6 @@ import shop.holy.v3.ecommerce.api.dto.comment.ResponseReply;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
-import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 import java.util.Set;
 
@@ -30,59 +29,58 @@ public abstract class CommentMapper {
     @Mapping(source = "author", target = "author")
     public abstract ResponseComment fromEntityToResponse(Comment comment);
 
-//    @Mapping(source = "content", target = "content", ignore = true)
-//    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
-//    public abstract ResponseComment fromEntityToResponse_Censored(Comment comment);
-
 
     @Mapping(source = "content", target = "content")
     @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies")
     @Mapping(source = "author", target = "author")
     public abstract ResponseComment.Light fromEntityToResponseLight(Comment comment);
 
-//    @Mapping(source = "content", target = "content", ignore = true)
-//    @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies_Censored")
-//    public abstract ResponseComment.Light fromEntityToResponse_CensoredLight(Comment comment);
-
     @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply")
     @Named("mapReplies")
     public abstract ResponseReply[] mapReplies(Set<Comment> replies);
 
-//    @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply_Censored")
-//    @Named("mapReplies_Censored")
-//    public abstract ResponseReply[] mapReplies_Censored(Set<Comment> replies);
-
     @Named("toReply")
     public abstract ResponseReply toResponseReply(Comment reply);
-
-//    @Named("toReply_Censored")
-//    @Mapping(source = "content", target = "content", ignore = true)
-//    public abstract ResponseReply toResponseReply_censored(Comment reply);
 
     public abstract ResponseProfile fromProfileToResponseProfile(Profile profile);
 
     public Specification<Comment> fromSearchRequestToSpec(RequestCommentSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
+            if (query == null || searchReq == null)
+                return criteriaBuilder.conjunction();
             if (!query.getResultType().equals(Long.class)) {
                 root.fetch("product", JoinType.INNER);
                 root.fetch("author", JoinType.INNER);
+
             }
 
-            if (searchReq == null) return criteriaBuilder.conjunction();
-
-            Predicate predicate = criteriaBuilder.conjunction();
+            Predicate predicate = root.get("parentCommentId").isNull();
+            var repliesGet = root.get("replies");
             if (!CollectionUtils.isEmpty(searchReq.ids())) {
-                predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
+                var searchParentContent = root.get("id").in(searchReq.ids());
+                var searchRepliesContent = repliesGet.get("id").in(searchReq.ids());
+
+                var idInSearch = criteriaBuilder.or(searchParentContent, searchRepliesContent);
+                predicate = criteriaBuilder.and(predicate, idInSearch);
             }
-            if (StringUtils.hasLength(searchReq.content())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("content"), "%" + searchReq.content().toLowerCase() + "%"));
+            if (StringUtils.hasLength(searchReq.search())) {
+                var searchParentContent = criteriaBuilder.like(root.get("content"), "%" + searchReq.search().toLowerCase() + "%");
+                var searchRepliesContent = criteriaBuilder.like(repliesGet.get("content"), "%" + searchReq.search().toLowerCase() + "%");
+                var contentSearch = criteriaBuilder.or(searchParentContent, searchRepliesContent);
+                predicate = criteriaBuilder.and(predicate, contentSearch);
             }
 
             if (StringUtils.hasLength(searchReq.productName())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%"));
+                var searchParentProduct = criteriaBuilder.like(root.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
+                var searchRepliesProduct = criteriaBuilder.like(repliesGet.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
+                var productSearch = criteriaBuilder.or(searchParentProduct, searchRepliesProduct);
+                predicate = criteriaBuilder.and(predicate, productSearch);
             }
             if (!searchReq.deleted()) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
+                var searchParentDeletedAt = criteriaBuilder.isNull(root.get("deletedAt"));
+                var searchRepliesDeletedAt = criteriaBuilder.isNull(repliesGet.get("deletedAt"));
+                var searchDeletedAt = criteriaBuilder.and(searchParentDeletedAt, searchRepliesDeletedAt);
+                predicate = criteriaBuilder.and(predicate, searchDeletedAt);
             }
 
             return predicate;

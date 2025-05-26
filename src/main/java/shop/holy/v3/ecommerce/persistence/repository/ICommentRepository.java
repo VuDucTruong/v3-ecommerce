@@ -15,12 +15,13 @@ public interface ICommentRepository extends JpaRepository<Comment, Long>, JpaSpe
 
     @Nonnull
     @Override
-    @EntityGraph(attributePaths = {"author", "replies", "product"})
+    @EntityGraph(attributePaths = {"author",  "product", "replies"})
     Page<Comment> findAll(Specification<Comment> spec, @Nonnull Pageable pageable);
 
+    @Nonnull
     @Override
     @EntityGraph(attributePaths = {"author", "replies", "product"})
-    Optional<Comment> findById(Long aLong);
+    Optional<Comment> findById(@Nonnull Long aLong);
 
     @EntityGraph(attributePaths = {"author", "replies", "product"})
     Optional<Comment> findByIdAndDeletedAtIsNull(Long aLong);

@@ -10,7 +10,7 @@ public record RequestCommentSearch(
         @Schema(description = "Filter by comment IDs", example = "[1, 2, 3]")
         Set<Long> ids,
         @Schema(description = "will returns all the product's schemas") Long productId,
-        String content,
+        String search,
         String productName,
 
         @Schema(description = "Include deleted comments", example = "false", defaultValue = "false")

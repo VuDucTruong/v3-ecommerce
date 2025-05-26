@@ -6,6 +6,7 @@ import java.util.Date;
 
 public record ResponseReply(long id,
                             ResponseProfile author,
+                            Long parentCommentId,
                             Date createdAt,
                             Date deletedAt,
                             String content) {
