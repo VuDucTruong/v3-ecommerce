@@ -29,6 +29,10 @@ public abstract class CommentMapper {
     @Mapping(source = "author", target = "author")
     public abstract ResponseComment fromEntityToResponse(Comment comment);
 
+    @Mapping(source = "content", target = "content")
+    @Mapping(source = "author", target = "author")
+    public abstract ResponseComment.Flattened fromEntityToResponseFlattened(Comment comment);
+
 
     @Mapping(source = "content", target = "content")
     @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies")
@@ -51,36 +55,36 @@ public abstract class CommentMapper {
             if (!query.getResultType().equals(Long.class)) {
                 root.fetch("product", JoinType.INNER);
                 root.fetch("author", JoinType.INNER);
-
+                root.fetch("parent", JoinType.LEFT);
             }
 
-            Predicate predicate = root.get("parentCommentId").isNull();
-            var repliesGet = root.get("replies");
+            Predicate predicate = criteriaBuilder.conjunction();
+
             if (!CollectionUtils.isEmpty(searchReq.ids())) {
                 var searchParentContent = root.get("id").in(searchReq.ids());
-                var searchRepliesContent = repliesGet.get("id").in(searchReq.ids());
+//                var searchRepliesContent = parentGet.get("id").in(searchReq.ids());
+//                var idInSearch = criteriaBuilder.or(searchParentContent, searchRepliesContent);
 
-                var idInSearch = criteriaBuilder.or(searchParentContent, searchRepliesContent);
-                predicate = criteriaBuilder.and(predicate, idInSearch);
+                predicate = criteriaBuilder.and(predicate, searchParentContent);
             }
+
             if (StringUtils.hasLength(searchReq.search())) {
                 var searchParentContent = criteriaBuilder.like(root.get("content"), "%" + searchReq.search().toLowerCase() + "%");
-                var searchRepliesContent = criteriaBuilder.like(repliesGet.get("content"), "%" + searchReq.search().toLowerCase() + "%");
-                var contentSearch = criteriaBuilder.or(searchParentContent, searchRepliesContent);
-                predicate = criteriaBuilder.and(predicate, contentSearch);
+//                var searchRepliesContent = criteriaBuilder.like(parentGet.get("content"), "%" + searchReq.search().toLowerCase() + "%");
+//                var contentSearch = criteriaBuilder.or(searchParentContent, searchRepliesContent);
+                predicate = criteriaBuilder.and(predicate, searchParentContent);
             }
 
             if (StringUtils.hasLength(searchReq.productName())) {
                 var searchParentProduct = criteriaBuilder.like(root.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
-                var searchRepliesProduct = criteriaBuilder.like(repliesGet.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
-                var productSearch = criteriaBuilder.or(searchParentProduct, searchRepliesProduct);
-                predicate = criteriaBuilder.and(predicate, productSearch);
+//                var searchRepliesProduct = criteriaBuilder.like(parentGet.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
+//                var productSearch = criteriaBuilder.or(searchParentProduct, searchRepliesProduct);
+                predicate = criteriaBuilder.and(predicate, searchParentProduct);
             }
             if (!searchReq.deleted()) {
                 var searchParentDeletedAt = criteriaBuilder.isNull(root.get("deletedAt"));
-                var searchRepliesDeletedAt = criteriaBuilder.isNull(repliesGet.get("deletedAt"));
-                var searchDeletedAt = criteriaBuilder.and(searchParentDeletedAt, searchRepliesDeletedAt);
-                predicate = criteriaBuilder.and(predicate, searchDeletedAt);
+//                var searchDeletedAt = criteriaBuilder.and(searchParentDeletedAt, searchRepliesDeletedAt);
+                predicate = criteriaBuilder.and(predicate, searchParentDeletedAt);
             }
 
             return predicate;

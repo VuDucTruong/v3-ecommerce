@@ -13,7 +13,6 @@ import shop.holy.v3.ecommerce.api.dto.comment.RequestCommentSearch;
 import shop.holy.v3.ecommerce.api.dto.comment.RequestCommentUpdate;
 import shop.holy.v3.ecommerce.api.dto.comment.ResponseComment;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
-import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.persistence.repository.ICommentRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProfileRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
@@ -32,11 +31,11 @@ public class CommentService {
     private final IProfileRepository profileRepository;
     private final CommentMapper commentMapper;
 
-    public ResponsePagination<ResponseComment> search(RequestCommentSearch searchReq) {
+    public ResponsePagination<ResponseComment.Flattened> search(RequestCommentSearch searchReq) {
         Specification<Comment> specs = commentMapper.fromSearchRequestToSpec(searchReq);
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         Page<Comment> comments = commentRepository.findAll(specs, pageable);
-        Page<ResponseComment> pageRes= comments.map(commentMapper::fromEntityToResponse);
+        Page<ResponseComment.Flattened> pageRes= comments.map(commentMapper::fromEntityToResponseFlattened);
         return ResponsePagination.fromPage(pageRes);
     }
 

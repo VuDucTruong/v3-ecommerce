@@ -55,7 +55,12 @@ public class ControllerComment {
 
 
     @PostMapping("/searches")
-    public ResponseEntity<ResponsePagination<ResponseComment>> search(
+    @Operation(summary = "đọc description trước", description = """
+            1. <b>response.Parent</b> sẽ ko có product => lấy product từ <b>response.Product</b> luôn
+            2. parentCommentId == parent.id
+            3. search params sẽ áp dụng trên cả response & <b>response.Parent</b>
+            """)
+    public ResponseEntity<ResponsePagination<ResponseComment.Flattened>> search(
             @RequestBody RequestCommentSearch searchReq
     ) {
         return ResponseEntity.ok(commentService.search(searchReq));
