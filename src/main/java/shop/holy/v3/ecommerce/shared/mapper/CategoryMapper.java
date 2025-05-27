@@ -10,7 +10,7 @@ import shop.holy.v3.ecommerce.api.dto.category.RequestCategorySearch;
 import shop.holy.v3.ecommerce.api.dto.category.RequestCategoryUpdate;
 import shop.holy.v3.ecommerce.api.dto.category.ResponseCategory;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
-import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
+import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 
 @Mapper(componentModel = "spring",
 uses = CommonMapper.class)
@@ -19,12 +19,12 @@ public abstract class CategoryMapper {
 
     public abstract Category fromCreateRequestToEntity(RequestCategoryCreate categoryCreateRequest);
 
+//    @Mapping(source = "imageUrl", target = "imageUrlId", qualifiedByName = MapFuncs.EXTRACT_CATEGORY_PUBLIC_ID)
     public abstract Category fromUpdateRequestToEntity(RequestCategoryUpdate categoryUpdateRequest);
 
-    @Mapping(target = "imageUrl", source = "imageUrlId", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(target = "imageUrl", source = "imageUrlId", qualifiedByName = MapFuncs.GEN_URL)
     public abstract ResponseCategory fromEntityToResponse(Category category);
 
-    public abstract Category fromResponseToEntity(ResponseCategory categoryResponse);
 
     public Specification<Category> fromRequestSearchToSpec(RequestCategorySearch searchReq) {
         return ((root, query, criteriaBuilder) -> {

@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.product.*;
 import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.*;
-import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
+import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
@@ -21,14 +21,14 @@ import java.util.List;
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ProductMapper {
 
-    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
     @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus")
     @Mapping(source = "product.productItems", target = "productItems", ignore = true)
     @Mapping(source = "product.represent", target = "represent")
     @Mapping(source = "favorite", target = "favorite")
     public abstract ResponseProduct fromEntityToResponse_Light(Product product, Boolean favorite);
 
-    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
     @Mapping(source = "product.group.variants", target = "variants")
     @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus")
     @Mapping(source = "productItems", target = "productItems")
@@ -36,12 +36,13 @@ public abstract class ProductMapper {
     public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, List<ProductItem> productItems, Boolean favorite);
 
 
-//    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+//    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
 //    @Mapping(source = "product.group.variants", target = "variants")
 
     /// /    @Mapping(source = "quantity", target = "quantity")
 //    public abstract ResponseProduct fromEntityToResponse_Light(Product product);
     @Mapping(source = "productDescription", target = "productDescription", ignore = true)
+//    @Mapping(source = "imageUrl", target = "imageUrlId", qualifiedByName = MapFuncs.EXTRACT_PRODUCT_PUBLIC_ID)
     public abstract Product fromRequestUpdateToEntity(RequestProductUpdate request);
 
     @Mapping(source = "productDescription", target = "productDescription", ignore = true)

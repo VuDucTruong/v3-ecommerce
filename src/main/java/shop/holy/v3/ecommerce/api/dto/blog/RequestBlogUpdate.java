@@ -11,6 +11,7 @@ public record RequestBlogUpdate(long id,
                                 String subtitle,
                                 List<Long> genreIds,
                                 Date publishedAt,
+                                String imageUrl,
                                 MultipartFile image,
                                 String content
 ) {

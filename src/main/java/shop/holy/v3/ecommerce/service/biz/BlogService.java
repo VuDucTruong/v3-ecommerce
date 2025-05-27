@@ -100,18 +100,25 @@ public class BlogService {
 
 
     private Blog upsertAndReturnChanges(Blog blogPost, MultipartFile image, boolean isUpdate) throws BadRequestException {
-        if (image != null) {
-            String imageUrl = cloudinaryService.uploadBlogBlob(image);
-            blogPost.setImageUrlId(imageUrl);
+        Blog rs = blogPost;
+        if (image == null || image.isEmpty()) {
+            if (isUpdate)
+                blogRepository.updateBlogIfNotNull(blogPost, blogPost.getId(), blogPost.getProfileId());
+            else
+                rs = blogRepository.save(blogPost);
+            return rs;
         }
+        /// IMAGE IS NOT NULL
+        String imageUrl = cloudinaryService.uploadBlogBlob(image);
+        blogPost.setImageUrlId(imageUrl);
         if (isUpdate) {
             blogRepository.updateBlogIfNotNull(blogPost, blogPost.getId(), blogPost.getProfileId());
         } else
-            blogRepository.save(blogPost);
+            rs = blogRepository.save(blogPost);
+        /// IMAGE URL WILL BE OVERRIDDEN by the file image if set. or take imageUrl by default
 
-        return blogPost;
+        return rs;
     }
-
 
 
 }

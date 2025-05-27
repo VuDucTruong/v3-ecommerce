@@ -18,7 +18,7 @@ import shop.holy.v3.ecommerce.api.dto.user.profile.RequestProfileCreate;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
-import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
+import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 
 @Mapper(componentModel = "spring",
@@ -35,11 +35,12 @@ public abstract class AccountMapper  {
     @Mapping(source = "profile", target = "profile", ignore = true)
     public abstract Account fromUserCreateRequestToAccountEntity(RequestUserCreate request);
 
+//    @Mapping(source = "imageUrl", target = "imageUrlId", qualifiedByName = MapFuncs.EXTRACT_ACCOUNT_PUBLIC_ID)
     public abstract Profile fromProfileUpdateRequestToEntity(RequestProfileUpdate request);
 
     public abstract Profile fromProfileRequestToEntity(RequestProfileCreate request);
 
-    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
     public abstract ResponseProfile fromEntityToResponseProfile(Profile profile);
 
     public abstract ResponseUser fromEntityToResponseAccountDetail(Account account);
@@ -73,7 +74,7 @@ public abstract class AccountMapper  {
             }
 
             if (StringUtils.hasLength(searchReq.email())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("profile").get("fullName"), "%" + searchReq.email().toLowerCase() + "%"));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("email"), "%" + searchReq.email().toLowerCase() + "%"));
             }
             return predicate;
         };

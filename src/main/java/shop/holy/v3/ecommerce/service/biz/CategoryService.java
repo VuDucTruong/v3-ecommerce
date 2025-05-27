@@ -13,6 +13,7 @@ import shop.holy.v3.ecommerce.api.dto.category.ResponseCategory;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 import shop.holy.v3.ecommerce.persistence.repository.ICategoryRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.CategoryMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
@@ -53,7 +54,7 @@ public class CategoryService {
             String imageUrl = cloudinaryFacadeService.uploadCategoryBlob(request.image());
             category.setImageUrlId(imageUrl);
         }
-        return this.upsert(category);
+        return categoryMapper.fromEntityToResponse(categoryRepository.save(category));
     }
 
     public ResponseCategory update(RequestCategoryUpdate request) {
@@ -63,11 +64,11 @@ public class CategoryService {
             String imageUrl = cloudinaryFacadeService.uploadBlogBlob(request.image());
             category.setImageUrlId(imageUrl);
         }
-        return this.upsert(category);
-    }
+        int changes = categoryRepository.updateCategoryById(category);
+        if (changes == 0)
+            throw BizErrors.CATEGORY_NOT_FOUND.exception();
 
-    public ResponseCategory upsert(Category category) {
-        return categoryMapper.fromEntityToResponse(categoryRepository.save(category));
+        return categoryMapper.fromEntityToResponse(category);
     }
 
     @Transactional(timeout = 15)

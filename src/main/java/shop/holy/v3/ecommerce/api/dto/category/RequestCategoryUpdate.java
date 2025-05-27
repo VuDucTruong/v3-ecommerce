@@ -6,6 +6,7 @@ public record RequestCategoryUpdate(
         long id,
         String description,
         String name,
+//        String imageUrl,
         MultipartFile image
 ) {
 

@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.service.biz;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,6 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
-import shop.holy.v3.ecommerce.persistence.entity.EntityBase;
 import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
@@ -26,14 +26,11 @@ import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.constant.DefaultValues;
-import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.mapper.ProductMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -50,6 +47,7 @@ public class ProductService {
     private final IProductItemRepository productItemRepository;
     private final IProductFavoriteRepository favoriteRepository;
     private final CloudinaryFacadeService cloudinaryFacadeService;
+    private final ObjectMapper objectMapper;
 
     @SneakyThrows
     public ResponsePagination<ResponseProduct> search(RequestProductSearch searchReq) {
@@ -174,7 +172,9 @@ public class ProductService {
                 product.setProductDescription(pd);
             });
         }
-        Product rs = productRepository.save(product);
+        int changes = productRepository.updateProductById(product, product.getTags() == null ? "[]" : objectMapper.writeValueAsString(product.getTags()));
+        if (changes == 0)
+            throw BizErrors.PRODUCT_NOT_FOUND.exception();
 
         /// TODO: use Redis cache -> get Profile -> favoriteProductIds -> if match -> true
         return productMapper.fromEntityToResponse_Light(product, false);

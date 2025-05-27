@@ -14,6 +14,7 @@ public record RequestProductUpdate(
         @Schema(example = "Spotify Premium") String name,
         @Schema(description = "ID of the variant group", example = "123") Long groupId,
         @Schema(description = "New product image file", format = "binary") MultipartFile image,
+//        String imageUrl,
         @Schema(description = "Whether this product is representative of its group") boolean represent,
         @Schema(example = "9.99") BigDecimal price,
         @Schema(example = "12.99") BigDecimal originalPrice,

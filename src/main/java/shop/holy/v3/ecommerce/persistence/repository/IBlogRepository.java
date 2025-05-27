@@ -35,7 +35,8 @@ public interface IBlogRepository extends JpaRepository<Blog, Long>, JpaSpecifica
     title = COALESCE(:#{#blog.title}, title),
     subtitle = COALESCE(:#{#blog.subtitle}, subtitle),
     content = COALESCE(:#{#blog.content}, content),
-    published_at = COALESCE(:#{#blog.publishedAt}, published_at)
+    published_at = COALESCE(:#{#blog.publishedAt}, published_at),
+        image_url_id = COALESCE(:#{#blog.imageUrlId}, image_url_id)
     WHERE id = :id AND b.profile_id = :profileId
     """, nativeQuery = true)
     void updateBlogIfNotNull(@Param("blog") Blog blog, @Param("id") long id, @Param("profileId") long profileId);

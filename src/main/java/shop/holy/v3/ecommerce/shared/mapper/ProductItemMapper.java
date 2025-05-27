@@ -8,11 +8,10 @@ import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
 import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
-import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
+import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         uses = {CommonMapper.class})
@@ -33,7 +32,7 @@ public abstract class ProductItemMapper {
     @Mapping(source = "used", target = "used")
     @Mapping(target = "slug", source = "productMetadata.product.slug")
     @Mapping(target = "name", source = "productMetadata.product.name")
-    @Mapping(target = "imageUrl", source = "productMetadata.product.imageUrlId", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(target = "imageUrl", source = "productMetadata.product.imageUrlId", qualifiedByName = MapFuncs.GEN_URL)
     @Mapping(target = "represent", source = "productMetadata.product.represent")
     @Mapping(target = "price", source = "productMetadata.product.price")
     @Mapping(target = "originalPrice", source = "productMetadata.product.originalPrice")

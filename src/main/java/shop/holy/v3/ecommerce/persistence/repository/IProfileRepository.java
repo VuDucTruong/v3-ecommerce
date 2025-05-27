@@ -17,11 +17,12 @@ public interface IProfileRepository extends JpaRepository<Profile, Long> {
             WHERE p.accountId = :#{#profile.accountId}
             """)
     int updateProfileByAccountId(Profile profile);
+
     @Modifying
     @Query("""
             UPDATE Profile p
             SET p.fullName = :#{#profile.fullName},
-                p.imageUrlId = :#{#profile.imageUrlId}
+                p.imageUrlId = coalesce(:#{#profile.imageUrlId}, p.imageUrlId)
             WHERE p.id = :#{#profile.id}
             """)
     int updateProfileById(Profile profile);

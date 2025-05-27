@@ -13,8 +13,7 @@ import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogUpdate;
 import shop.holy.v3.ecommerce.api.dto.blog.ResponseBlog;
 import shop.holy.v3.ecommerce.persistence.entity.Blog;
 import shop.holy.v3.ecommerce.persistence.entity.Genre2;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
-import shop.holy.v3.ecommerce.shared.constant.MappingFunctions;
+import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 
 import java.util.*;
@@ -27,12 +26,14 @@ public abstract class BlogMapper {
 
     public abstract Blog fromRequestCreateToEntity(RequestBlogCreation request);
 
+    @Mapping(source = "imageUrl", target = "imageUrlId", qualifiedByName = MapFuncs.EXTRACT_BLOG_PUBLIC_ID)
     public abstract Blog fromRequestUpdateToEntity(RequestBlogUpdate request);
 
-    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MappingFunctions.GEN_URL)
+    @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
     @Mapping(source = "genre2s", target = "genre2Ids", qualifiedByName = "fromGenre2EntityToIds")
     @Mapping(source = "profile", target = "author")
     public abstract ResponseBlog fromEntityToResponse(Blog blog);
+
 
     @Named("fromGenre2EntityToIds")
     public List<Long> fromGenre2EntityToIds(List<Genre2> genre2s) {

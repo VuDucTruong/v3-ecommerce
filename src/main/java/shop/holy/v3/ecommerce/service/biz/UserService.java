@@ -90,16 +90,11 @@ public class UserService {
         if (request.image() != null) {
             String blobUrl = cloudinaryFacadeService.uploadAccountBlob(request.image());
             profile.setImageUrlId(blobUrl);
-            if ((request.id() == null))
-                changes = profileRepository.updateProfileByAccountId(profile);
-            else
-                changes = profileRepository.updateProfileById(profile);
-        } else {
-            if (request.id() == null)
-                changes = profileRepository.updateProfileExcludeImageByAccountId(profile);
-            else
-                changes = profileRepository.updateProfileById(profile);
         }
+        if ((request.id() == null))
+            changes = profileRepository.updateProfileByAccountId(profile);
+        else
+            changes = profileRepository.updateProfileById(profile);
         if (changes <= 0)
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
 

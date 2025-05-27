@@ -30,6 +30,16 @@ public interface ICategoryRepository extends JpaRepository<Category, Long>, JpaS
     @Query("UPDATE Category c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id in (:ids)")
     int updateDeletedAtByIdIn(long[] ids);
 
+    @Modifying
+    @Query(value = """
+            update categories c set
+            name = :#{#category.name},
+            description = :#{#category.description},
+            image_url_id = coalesce(:#{#category.imageUrlId}, image_url_id)
+                        where id = :#{#category.id}
+            """, nativeQuery = true)
+    int updateCategoryById(Category category);
+
     int deleteAllByIdIn(long[] ids);
 
     int deleteByIdEquals(long id);

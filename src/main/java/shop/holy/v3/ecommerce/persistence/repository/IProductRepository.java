@@ -36,13 +36,25 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             """)
     int updateProductDeletedAtByIdIn(long[] ids);
 
-
-
-
     List<Product> findProductsByIdIn(Collection<Long> id);
 
 
 
+    @Modifying
+    @Query(value = """
+            UPDATE products p set 
+            slug = coalesce(:#{#product.slug}, p.slug),
+                        name = :#{#product.name},
+                        image_url_id = coalesce(:#{#product.imageUrlId}, p.image_url_id),
+                        original_price = :#{#product.originalPrice},
+                        price = :#{#product.price},
+                        prod_desc_id = :#{#product.proDescId},
+                        group_id = :#{#product.groupId},
+                        represent = :#{#product.represent},
+                        tags = CAST(:tags AS jsonb)
+            where p.id = :#{#product.id}
+            """, nativeQuery = true)
+    int updateProductById(Product product, String tags);
 
 
 
