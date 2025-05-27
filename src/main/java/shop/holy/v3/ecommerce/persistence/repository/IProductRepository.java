@@ -21,8 +21,11 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @EntityGraph(attributePaths = {"productDescription", "categories"})
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
-    @Query(value = "select id from products where id IN (:ids) and created_at is not null", nativeQuery = true)
+    @Query(value = "select id from products where id IN (:ids)", nativeQuery = true)
     Set<Long> findExistingProductIds(Set<Long> ids);
+
+    @Query(value = "select id from products where id IN (:ids) AND deleted_at is null", nativeQuery = true)
+    Set<Long> findExistingProductIdsAndDeletedAtIsNull(Set<Long> ids);
 
     @Modifying
     @Query("""

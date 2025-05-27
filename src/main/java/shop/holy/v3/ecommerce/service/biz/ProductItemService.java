@@ -89,9 +89,15 @@ public class ProductItemService {
     }
 
     @Transactional
-    public ResponseProductItemCreate inserts(List<RequestProductItemCreate> requests, boolean used) {
+    public ResponseProductItemCreate inserts(List<RequestProductItemCreate> requests, boolean used, boolean ignoreDeleted) {
+
         Set<Long> groupedProductIds = requests.stream().map(RequestProductItemCreate::productId).collect(Collectors.toSet());
-        Set<Long> existingProdIds = productRepository.findExistingProductIds(groupedProductIds);
+        Set<Long> existingProdIds;
+        if (ignoreDeleted)
+            existingProdIds = productRepository.findExistingProductIds(groupedProductIds);
+        else
+            existingProdIds = productRepository.findExistingProductIdsAndDeletedAtIsNull(groupedProductIds);
+
         Stream<RequestProductItemCreate> insertable = requests.stream()
                 .filter(s -> existingProdIds.contains(s.productId()));
 
@@ -115,7 +121,9 @@ public class ProductItemService {
                             Collectors.reducing(0, _ -> 1, Integer::sum))
             ).forEach(productRepository::updateAddProductItemCountsByProductIdEquals);
         }
-        var results = accepted.stream().map(a -> new ResponseProductItemCreate.ResponseAccepted(a.getId(),a.getProductId(), a.getAcceptedKey()))
+
+
+        var results = accepted.stream().map(a -> new ResponseProductItemCreate.ResponseAccepted(a.getId(), a.getProductId(), a.getAcceptedKey()))
                 .toList();
         return new ResponseProductItemCreate(results);
     }

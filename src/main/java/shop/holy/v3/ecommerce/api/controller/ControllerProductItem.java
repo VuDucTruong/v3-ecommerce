@@ -66,9 +66,11 @@ public class ControllerProductItem {
     @PostMapping("")
     public ResponseEntity<ResponseProductItemCreate> createProductItem(
             @RequestBody @Valid @Nonnull @NotEmpty(message = "Request for creation must not be empty") List< @Valid RequestProductItemCreate> productItem,
-            @RequestParam(required = false) boolean used) {
+            @RequestParam(required = false) boolean used,
+            @RequestParam(required = false) boolean ignoreDeleted
+    ) {
 
-        ResponseProductItemCreate res = productItemService.inserts(productItem, used);
+        ResponseProductItemCreate res = productItemService.inserts(productItem, used, ignoreDeleted);
         return ResponseEntity.ok(res);
     }
 
