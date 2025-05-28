@@ -13,7 +13,7 @@ import shop.holy.v3.ecommerce.api.dto.category.RequestCategoryCreate;
 import shop.holy.v3.ecommerce.api.dto.category.RequestCategorySearch;
 import shop.holy.v3.ecommerce.api.dto.category.RequestCategoryUpdate;
 import shop.holy.v3.ecommerce.api.dto.category.ResponseCategory;
-import shop.holy.v3.ecommerce.service.biz.CategoryService;
+import shop.holy.v3.ecommerce.service.biz.category.CategoryService;
 
 @Tag(name = "Categories")
 @RestController
@@ -26,7 +26,7 @@ public class ControllerCategory {
     @GetMapping("/{id}")
     @Operation(summary = "get 1")
     public ResponseEntity<ResponseCategory> getOne(@PathVariable long id,
-                                    @RequestParam(required = false) boolean deleted) {
+                                                   @RequestParam(required = false) boolean deleted) {
         return ResponseEntity.ok(categoryService.getCategoryByCode(id, deleted));
     }
 
@@ -58,7 +58,7 @@ public class ControllerCategory {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<Integer> deleteCategory(@PathVariable long id,
-                                            @RequestParam(required = false) boolean isHard) {
+                                                  @RequestParam(required = false) boolean isHard) {
         var changes = categoryService.deleteCategory(id, isHard);
         return ResponseEntity.ok(changes);
     }

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.blog.genre.RequestGenre1Upsert;
 import shop.holy.v3.ecommerce.api.dto.blog.genre.ResponseGenre1;
-import shop.holy.v3.ecommerce.service.biz.GenreService;
+import shop.holy.v3.ecommerce.service.biz.blog.GenreService;
 
 @RestController
 @RequestMapping("/genres")

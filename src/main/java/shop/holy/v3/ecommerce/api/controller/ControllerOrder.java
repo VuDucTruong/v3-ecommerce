@@ -11,8 +11,8 @@ import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderCreate;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderSearch;
 import shop.holy.v3.ecommerce.api.dto.order.ResponseOrder;
-import shop.holy.v3.ecommerce.service.biz.OrderInsertService;
-import shop.holy.v3.ecommerce.service.biz.OrderService;
+import shop.holy.v3.ecommerce.service.biz.order.OrderCommand;
+import shop.holy.v3.ecommerce.service.biz.order.OrderQuery;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,14 +21,14 @@ import java.util.concurrent.CompletableFuture;
 @Tag(name = "Orders", description = "doesn't support Update order")
 @RequestMapping("orders")
 public class ControllerOrder {
-    private final OrderService orderService;
-    private final OrderInsertService orderInsertService;
+    private final OrderQuery orderQuery;
+    private final OrderCommand orderCommand;
 
     @Operation(summary = "get 1")
     @GetMapping("/{id}")
     public CompletableFuture<ResponseEntity<ResponseOrder>> getOrderById(@PathVariable long id,
                                           @RequestParam(required = false) boolean deleted) {
-        return orderService.findById(id, deleted).thenApply(ResponseEntity::ok);
+        return orderQuery.findById(id, deleted).thenApply(ResponseEntity::ok);
     }
 
 
@@ -40,26 +40,26 @@ public class ControllerOrder {
     public ResponseEntity<ResponsePagination<ResponseOrder>> search(
             RequestOrderSearch searchReq
     ) {
-        ResponsePagination<ResponseOrder> categories = orderService.search(searchReq);
+        ResponsePagination<ResponseOrder> categories = orderQuery.search(searchReq);
         return ResponseEntity.ok(categories);
     }
 
     @Operation(summary = "create 1")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseOrder> createOrder(@RequestBody @Valid RequestOrderCreate request) {
-        return ResponseEntity.ok(orderInsertService.insert(request));
+        return ResponseEntity.ok(orderCommand.insert(request));
     }
 
     @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
     public ResponseEntity<Integer> deleteOrderById(@PathVariable long id) {
-        return ResponseEntity.ok(orderService.deleteOrderById(id));
+        return ResponseEntity.ok(orderCommand.deleteOrderById(id));
     }
 
     @Operation(summary = "delete many")
     @DeleteMapping("")
     public ResponseEntity<Integer> deleteMultiples(@RequestParam long[] ids) {
-        return ResponseEntity.ok(orderService.deleteOrders(ids));
+        return ResponseEntity.ok(orderCommand.deleteOrders(ids));
     }
 
 

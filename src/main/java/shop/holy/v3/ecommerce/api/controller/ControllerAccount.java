@@ -13,7 +13,7 @@ import shop.holy.v3.ecommerce.api.dto.account.RequestOTP;
 import shop.holy.v3.ecommerce.api.dto.account.RequestPasswordUpdate;
 import shop.holy.v3.ecommerce.api.dto.account.token.RequestLogin;
 import shop.holy.v3.ecommerce.api.dto.account.token.ResponseLogin;
-import shop.holy.v3.ecommerce.service.biz.AccountService;
+import shop.holy.v3.ecommerce.service.biz.user.AccountCommand;
 import shop.holy.v3.ecommerce.service.security.AuthService;
 
 @Tag(name = "Accounts", description = "-> to serve functional ops, auths, cookies,...")
@@ -22,7 +22,7 @@ import shop.holy.v3.ecommerce.service.security.AuthService;
 @RequestMapping("accounts")
 public class ControllerAccount {
 
-    private final AccountService accountService;
+    private final AccountCommand accountService;
     private final AuthService authService;
 
     @PostMapping(value = "otp")

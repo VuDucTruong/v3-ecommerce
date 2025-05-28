@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.user;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
@@ -21,7 +21,7 @@ import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
-public class AccountService {
+public class AccountCommand {
 
     private final IAccountRepository accountRepository;
     private final IProfileRepository profileRepository;

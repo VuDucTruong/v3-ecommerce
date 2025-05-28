@@ -11,7 +11,8 @@ import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogCreation;
 import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogSearch;
 import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogUpdate;
 import shop.holy.v3.ecommerce.api.dto.blog.ResponseBlog;
-import shop.holy.v3.ecommerce.service.biz.BlogService;
+import shop.holy.v3.ecommerce.service.biz.blog.BlogCommand;
+import shop.holy.v3.ecommerce.service.biz.blog.BlogQuery;
 
 @RequiredArgsConstructor
 //@Tags({@Tag(name = "Blogs"), @Tag(name = "Blog")})
@@ -20,13 +21,14 @@ import shop.holy.v3.ecommerce.service.biz.BlogService;
 @RequestMapping("blogs")
 public class ControllerBlog {
 
-    private final BlogService blogService;
+    private final BlogCommand blogCommand;
+    private final BlogQuery blogQuery;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
     @Operation(summary = "create 1")
     public ResponseBlog createBlog(@ModelAttribute RequestBlogCreation createRequest) {
-        ResponseBlog responseBlog = blogService.createBlog(createRequest);
+        ResponseBlog responseBlog = blogCommand.createBlog(createRequest);
         return responseBlog;
     }
 
@@ -35,7 +37,7 @@ public class ControllerBlog {
     @Operation(summary = "update 1")
     public ResponseBlog updateBlog(@ModelAttribute RequestBlogUpdate updateRequest) {
 
-        ResponseBlog responseBlog = blogService.updateBlog(updateRequest);
+        ResponseBlog responseBlog = blogCommand.updateBlog(updateRequest);
         return responseBlog;
     }
 
@@ -46,7 +48,7 @@ public class ControllerBlog {
             """)
     public ResponsePagination<ResponseBlog> getBlogs(
             @RequestBody RequestBlogSearch searchRequest) {
-        ResponsePagination<ResponseBlog> responsePagination = blogService.search(searchRequest);
+        ResponsePagination<ResponseBlog> responsePagination = blogQuery.search(searchRequest);
         return responsePagination;
     }
 
@@ -55,14 +57,14 @@ public class ControllerBlog {
     @Operation(summary = "get 1")
     public ResponseBlog getBlog(@PathVariable("id") long id,
                                 @RequestParam(name = "deleted", required = false) boolean deleted) {
-        return blogService.getBlog(id, deleted);
+        return blogQuery.getBlog(id, deleted);
     }
 
     @DeleteMapping(value = "{id}")
     @Operation(summary = "delete 1")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
     public int deleteBlog(@PathVariable("id") long id) {
-        return blogService.deleteBlog(id);
+        return blogCommand.deleteBlog(id);
     }
 
 
@@ -70,7 +72,7 @@ public class ControllerBlog {
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     @Operation(summary = "delete many")
     public int deleteBlogs(@RequestParam long ids[]) {
-        return blogService.deleteBlogs(ids);
+        return blogCommand.deleteBlogs(ids);
     }
 
 }

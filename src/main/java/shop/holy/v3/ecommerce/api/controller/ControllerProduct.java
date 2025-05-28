@@ -11,9 +11,12 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
-import shop.holy.v3.ecommerce.service.biz.ProductService;
+import shop.holy.v3.ecommerce.service.biz.product.ProductCommand;
+import shop.holy.v3.ecommerce.service.biz.product.ProductQuery;
+import shop.holy.v3.ecommerce.service.biz.product.tag.ProductTagQuery;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
@@ -22,12 +25,14 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("products")
 public class ControllerProduct {
 
-    private final ProductService productService;
+    private final ProductCommand productCommand;
+    private final ProductQuery productQuery;
+    private final ProductTagQuery tagQuery;
 
     @Operation
     @PostMapping("/searches")
     public ResponseEntity<ResponsePagination<ResponseProduct>> getAllProducts(@RequestBody RequestProductSearch searchReq) {
-        ResponsePagination<ResponseProduct> res = productService.search(searchReq);
+        ResponsePagination<ResponseProduct> res = productQuery.search(searchReq);
         return ResponseEntity.ok(res);
     }
 
@@ -41,26 +46,26 @@ public class ControllerProduct {
     public CompletableFuture<ResponseProduct> getProductById(@RequestParam(required = false) Long id,
                                                              @RequestParam(required = false) String slug,
                                                              @RequestParam(required = false) boolean deleted) {
-        return productService.getByIdentifier(id, slug, deleted);
+        return productQuery.getByIdentifier(id, slug, deleted);
     }
 
     @Operation(summary = "create 1")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseProduct> createProduct(@ModelAttribute RequestProductCreate request) {
-        return ResponseEntity.ok(productService.insert(request));
+        return ResponseEntity.ok(productCommand.insert(request));
     }
 
 
     @Operation(summary = "delete 1")
     @DeleteMapping("/{id}")
     public ResponseEntity<Integer> deleteProductById(@PathVariable long id) {
-        return ResponseEntity.ok(productService.deleteProductById(id));
+        return ResponseEntity.ok(productCommand.deleteProductById(id));
     }
 
     @Operation(summary = "delete many")
     @DeleteMapping("")
     public ResponseEntity<Integer> delete(@RequestParam long[] ids) {
-        var rs = productService.deleteProductByIdIn(ids);
+        var rs = productCommand.deleteProductByIdIn(ids);
         return ResponseEntity.ok(rs);
     }
 
@@ -68,7 +73,15 @@ public class ControllerProduct {
     @Operation(summary = "update 1")
     @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseProduct> updateProduct(@ModelAttribute RequestProductUpdate request) throws IOException {
-        return ResponseEntity.ok(productService.update(request));
+        return ResponseEntity.ok(productCommand.update(request));
+    }
+
+
+    @GetMapping("tags")
+    @Tag(name = "Tags")
+    public ResponseEntity<List<String>> getProductTags() {
+        var rs = tagQuery.getAll();
+        return ResponseEntity.ok(rs);
     }
 
 }

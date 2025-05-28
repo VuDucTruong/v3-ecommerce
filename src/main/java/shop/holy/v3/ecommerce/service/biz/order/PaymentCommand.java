@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.order;
 
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentService {
+public class PaymentCommand {
 
     private final IPaymentRepository paymentRepository;
     private final IOrderRepository orderRepository;

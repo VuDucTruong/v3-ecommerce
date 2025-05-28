@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.comment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

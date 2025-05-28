@@ -10,7 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
-import shop.holy.v3.ecommerce.service.biz.ProductItemService;
+import shop.holy.v3.ecommerce.service.biz.product.item.ProductItemCommand;
+import shop.holy.v3.ecommerce.service.biz.product.item.ProductItemQuery;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 
 import java.util.List;
@@ -20,7 +21,8 @@ import java.util.List;
 @RequestMapping("/products/items")
 @RequiredArgsConstructor
 public class ControllerProductItem {
-    private final ProductItemService productItemService;
+    private final ProductItemCommand productItemCommand;
+    private final ProductItemQuery productItemQuery;
 
     @PostMapping("/searches")
     @Operation(description = """
@@ -31,7 +33,7 @@ public class ControllerProductItem {
             ====> IS Different from <b> deleted </b> ---> only find productKey on "used Table" \n
             """)
     public ResponseEntity<ResponsePagination<ResponseProductItems_Indetails>> search(@RequestBody RequestProductItemSearch searchReq) {
-        ResponsePagination<ResponseProductItems_Indetails> productItems = productItemService.search(searchReq);
+        ResponsePagination<ResponseProductItems_Indetails> productItems = productItemQuery.search(searchReq);
         return ResponseEntity.ok(productItems);
     }
 
@@ -58,7 +60,7 @@ public class ControllerProductItem {
         if (overlapCount > 1)
             throw new BadRequestException("sth");
 
-        return ResponseEntity.ok(productItemService.getByIdentifier(id, productId, orderDetailId, productKey, used));
+        return ResponseEntity.ok(productItemQuery.getByIdentifier(id, productId, orderDetailId, productKey, used));
     }
 
 
@@ -70,20 +72,20 @@ public class ControllerProductItem {
             @RequestParam(required = false) boolean ignoreDeleted
     ) {
 
-        ResponseProductItemCreate res = productItemService.inserts(productItem, used, ignoreDeleted);
+        ResponseProductItemCreate res = productItemCommand.inserts(productItem, used, ignoreDeleted);
         return ResponseEntity.ok(res);
     }
 
     @Operation(summary = "update 1")
     @PutMapping("")
     public int updateProductItem(@RequestBody RequestProductItemUpdate productItemUpdate) {
-        return productItemService.update(productItemUpdate);
+        return productItemCommand.update(productItemUpdate);
     }
 
     @Operation(summary = "delete 1")
     @DeleteMapping("")
     public ResponseEntity<Integer> deleteProductItems(@RequestParam long[] ids) {
-        int changes = productItemService.deleteProductItems(ids);
+        int changes = productItemCommand.deleteProductItems(ids);
         return ResponseEntity.ok(changes);
     }
 
@@ -93,7 +95,7 @@ public class ControllerProductItem {
         if (ids == null || ids.length == 0) {
             return ResponseEntity.ok().build();
         }
-        int changes = productItemService.makeProductUsed(ids);
+        int changes = productItemCommand.makeProductUsed(ids);
         return ResponseEntity.ok(changes);
     }
 

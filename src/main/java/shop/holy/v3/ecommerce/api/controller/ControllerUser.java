@@ -14,7 +14,8 @@ import shop.holy.v3.ecommerce.api.dto.account.ResponseUser;
 import shop.holy.v3.ecommerce.api.dto.user.RequestUserCreate;
 import shop.holy.v3.ecommerce.api.dto.user.RequestUserSearch;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
-import shop.holy.v3.ecommerce.service.biz.UserService;
+import shop.holy.v3.ecommerce.service.biz.user.UserCommand;
+import shop.holy.v3.ecommerce.service.biz.user.UserQuery;
 
 @RestController
 @RequestMapping("users")
@@ -22,14 +23,15 @@ import shop.holy.v3.ecommerce.service.biz.UserService;
 @RequiredArgsConstructor
 public class ControllerUser {
 
-    private final UserService userService;
+    private final UserCommand userCommand;
+    private final UserQuery userQuery;
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     @Operation(summary = "create 1: admin only", description = "Use for Admin only, to manually Create a User \n -> this is authenticated")
     public ResponseEntity<ResponseUser> createAccount(
             @ModelAttribute @Valid RequestUserCreate request) {
-        ResponseUser account = userService.createUser(request);
+        ResponseUser account = userCommand.createUser(request);
         return ResponseEntity.ok(account);
     }
 
@@ -44,7 +46,7 @@ public class ControllerUser {
     public ResponseEntity<ResponseUser> getuser(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) boolean deleted) {
-        ResponseUser account = userService.getById(id, deleted);
+        ResponseUser account = userQuery.getById(id, deleted);
         return ResponseEntity.ok(account);
     }
 
@@ -54,7 +56,7 @@ public class ControllerUser {
     public ResponseEntity<ResponsePagination<ResponseUser>> search(
             @RequestBody RequestUserSearch searchSpecs
     ) {
-        ResponsePagination<ResponseUser> accounts = userService.search(searchSpecs);
+        ResponsePagination<ResponseUser> accounts = userQuery.search(searchSpecs);
         return ResponseEntity.ok(accounts);
     }
 
@@ -66,7 +68,7 @@ public class ControllerUser {
             ====> update profile by Id (chính là profileId) \n
             """)
     public ResponseEntity<ResponseProfile> updateProfile(@ModelAttribute RequestProfileUpdate request) {
-        ResponseProfile profile = userService.updateProfile(request);
+        ResponseProfile profile = userCommand.updateProfile(request);
         return ResponseEntity.ok(profile);
     }
 
@@ -74,7 +76,7 @@ public class ControllerUser {
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
     @Operation(summary = "delete 1 ==> admin can't delete self")
     public ResponseEntity<Integer> deleteMe() {
-        var x = userService.deleteAccount();
+        var x = userCommand.deleteAccount();
         return ResponseEntity.ok(x);
     }
 
@@ -82,7 +84,7 @@ public class ControllerUser {
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     @Operation(summary = "delete 1 : admin only ==> use this to delete 1 by Id")
     public ResponseEntity<Integer> delete1(@PathVariable long id) {
-        var x = userService.deleteAccountById(id);
+        var x = userCommand.deleteAccountById(id);
         return ResponseEntity.ok(x);
     }
 
@@ -90,7 +92,7 @@ public class ControllerUser {
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     @Operation(summary = "delete many: admin only ==> use this to delete 1 is ok")
     public ResponseEntity<Integer> deletemany(@RequestParam long[] ids) {
-        var x = userService.deleteAccounts(ids);
+        var x = userCommand.deleteAccounts(ids);
         return ResponseEntity.ok(x);
     }
 

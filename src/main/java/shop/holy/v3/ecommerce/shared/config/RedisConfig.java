@@ -14,8 +14,10 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
+import shop.holy.v3.ecommerce.shared.constant.CacheKeys;
 
 @Configuration
+@Profile({"cacheredis", "cachemem"})
 public class RedisConfig {
 
     @Value("${app.cache.test.enable}")
@@ -72,7 +74,7 @@ public class RedisConfig {
     @Bean
     @Profile("cachemem")
     public CacheManager memoryCacheManager() {
-        return new ConcurrentMapCacheManager();
+        return new ConcurrentMapCacheManager(CacheKeys.values());
     }
 
 }

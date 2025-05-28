@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.product.favorite;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,7 @@ import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 @Service
 @RequiredArgsConstructor
-public class ProductFavoriteService {
+public class ProductFavoriteCommand {
     private final IProductFavoriteRepository favoriteRepository;
     private final ProductMapper productMapper;
     private final ProductTagMapper tagMapper;

@@ -11,7 +11,8 @@ import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponCreate;
 import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponSearch;
 import shop.holy.v3.ecommerce.api.dto.coupon.RequestCouponUpdate;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
-import shop.holy.v3.ecommerce.service.biz.CouponService;
+import shop.holy.v3.ecommerce.service.biz.coupon.CouponCommand;
+import shop.holy.v3.ecommerce.service.biz.coupon.CouponQuery;
 
 import java.io.IOException;
 
@@ -21,12 +22,13 @@ import java.io.IOException;
 @RequestMapping("coupons")
 public class ControllerCoupon {
 
-    private final CouponService couponService;
+    private final CouponCommand couponCommand;
+    private final CouponQuery couponQuery;
 
     @PostMapping("/searches")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<ResponsePagination<ResponseCoupon>> getAllCoupons(@RequestBody RequestCouponSearch searchReq) {
-        ResponsePagination<ResponseCoupon> res = couponService.search(searchReq);
+        ResponsePagination<ResponseCoupon> res = couponQuery.search(searchReq);
         return ResponseEntity.ok(res);
     }
 
@@ -42,7 +44,7 @@ public class ControllerCoupon {
     public ResponseEntity<ResponseCoupon> getByIdentifier(@RequestParam(required = false) Long id,
                                              @RequestParam(required = false) String code,
                                              @RequestParam(required = false) boolean deleted) {
-        return ResponseEntity.ok(couponService.findByIdentitfier(id, code, deleted));
+        return ResponseEntity.ok(couponQuery.findByIdentitfier(id, code, deleted));
     }
 
 
@@ -50,7 +52,7 @@ public class ControllerCoupon {
     @PostMapping(value = "")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<ResponseCoupon> createCoupon(@RequestBody RequestCouponCreate request) {
-        return ResponseEntity.ok(couponService.insert(request));
+        return ResponseEntity.ok(couponCommand.insert(request));
     }
 
     @Operation(summary = "delete 1")
@@ -58,13 +60,13 @@ public class ControllerCoupon {
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<Integer> deleteCouponById(
             @PathVariable long id, @RequestParam(required = false) boolean isSoft) {
-        return ResponseEntity.ok(couponService.deleteCoupon(id));
+        return ResponseEntity.ok(couponCommand.deleteCoupon(id));
     }
 
     @Operation(summary = "delete many")
     @DeleteMapping("")
     public ResponseEntity<Integer> deleteMany(@RequestParam long[] ids) {
-        return ResponseEntity.ok(couponService.deleteCouponsIn(ids));
+        return ResponseEntity.ok(couponCommand.deleteCouponsIn(ids));
     }
 
     @Operation(summary = "update 1")
@@ -72,7 +74,7 @@ public class ControllerCoupon {
     @PutMapping(value = "")
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<ResponseCoupon> updateCoupon(@RequestBody RequestCouponUpdate request) throws IOException {
-        return ResponseEntity.ok(couponService.update(request));
+        return ResponseEntity.ok(couponCommand.update(request));
     }
 
 }

@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.order;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderSearch;
@@ -26,7 +25,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderQuery {
 
     private final IOrderRepository orderRepository;
     private final IOrderDetailRepository detailRepository;
@@ -62,18 +61,6 @@ public class OrderService {
         Page<Order> orders = orderRepository.findAll(specs, pageable);
 
         return ResponsePagination.fromPage(orders.map(orderMapper::fromEntityToResponse_Light));
-    }
-
-    @Transactional
-    public int deleteOrderById(Long id) {
-        return orderRepository.updateOrderDeletedAt(id);
-    }
-
-    @Transactional
-    public int deleteOrders(long[] ids) {
-        if (ids.length > 0)
-            return orderRepository.updateOrderDeletedAtByIdIn(ids);
-        return 0;
     }
 
 

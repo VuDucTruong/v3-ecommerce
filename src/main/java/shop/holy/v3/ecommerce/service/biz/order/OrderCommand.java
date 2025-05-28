@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.order;
 
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.Pair;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class OrderInsertService {
+public class OrderCommand {
     private final ICouponRepository couponRepository;
     private final IOrderRepository orderRepository;
     private final IOrderDetailRepository detailRepository;
@@ -107,4 +107,18 @@ public class OrderInsertService {
 
         return new Pair<>(coupon, result.max(BigDecimal.ZERO)); // Final safety net
     }
+
+
+    @Transactional
+    public int deleteOrderById(Long id) {
+        return orderRepository.updateOrderDeletedAt(id);
+    }
+
+    @Transactional
+    public int deleteOrders(long[] ids) {
+        if (ids.length > 0)
+            return orderRepository.updateOrderDeletedAtByIdIn(ids);
+        return 0;
+    }
+
 }

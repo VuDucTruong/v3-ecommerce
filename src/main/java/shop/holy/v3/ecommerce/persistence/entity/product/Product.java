@@ -11,7 +11,6 @@ import shop.holy.v3.ecommerce.persistence.entity.EntityBase;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,8 +25,6 @@ import java.util.Set;
 })
 public class Product extends EntityBase {
 
-    //    @Column(name = "prod_desc_id")
-//    private Long prodDescId;
     private String slug;
     private String name;
     private String imageUrlId;

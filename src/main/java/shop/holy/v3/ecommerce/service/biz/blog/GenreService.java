@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.blog;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,16 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.blog.genre.RequestGenre1Upsert;
 import shop.holy.v3.ecommerce.api.dto.blog.genre.ResponseGenre1;
 import shop.holy.v3.ecommerce.persistence.entity.Genre1;
-import shop.holy.v3.ecommerce.persistence.entity.Genre2;
 import shop.holy.v3.ecommerce.persistence.repository.IGenre2Repository;
 import shop.holy.v3.ecommerce.persistence.repository.IGenreRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.GenreMapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor

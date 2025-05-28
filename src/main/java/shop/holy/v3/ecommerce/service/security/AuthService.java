@@ -8,23 +8,21 @@ import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.account.token.RequestLogin;
 import shop.holy.v3.ecommerce.api.dto.account.token.ResponseLogin;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
-import shop.holy.v3.ecommerce.persistence.entity.Profile;
-import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
+import shop.holy.v3.ecommerce.service.biz.user.UserQuery;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.CookieKeys;
-import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final IAccountRepository accountRepository;
+    private final UserQuery userQueryService;
     private final AccountMapper accountMapper;
     private final JwtService jwtService;
 
 
     public ResponseLogin authenticateAccount(RequestLogin request) {
-        Account account = accountRepository.findByEmail(request.email());
+        Account account = userQueryService.findByEmail(request.email());
 
         if (account != null && account.getPassword().equals(request.password())) {
 //            Profile profile = account.getProfile();

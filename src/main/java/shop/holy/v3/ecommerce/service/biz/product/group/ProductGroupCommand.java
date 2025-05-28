@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.service.biz;
+package shop.holy.v3.ecommerce.service.biz.product.group;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import shop.holy.v3.ecommerce.shared.mapper.product.ProductGroupMapper;
 
 @Service
 @RequiredArgsConstructor
-public class ProductGroupService {
+public class ProductGroupCommand {
     private final IProductGroupRepository productGroupRepository;
     private final ProductGroupMapper mapper;
 
