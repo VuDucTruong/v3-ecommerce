@@ -1,5 +1,6 @@
-package shop.holy.v3.ecommerce.shared.mapper;
+package shop.holy.v3.ecommerce.shared.mapper.product;
 
+import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -7,46 +8,57 @@ import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import shop.holy.v3.ecommerce.api.dto.product.*;
+import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
+import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
+import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
+import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescription;
-import shop.holy.v3.ecommerce.persistence.entity.*;
+import shop.holy.v3.ecommerce.persistence.entity.Category;
+import shop.holy.v3.ecommerce.persistence.entity.product.Product;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductDescription;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductTag;
 import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
+import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
+import shop.holy.v3.ecommerce.shared.mapper.CommonMapper;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {ProductItemMapper.class, CommentMapper.class, CommonMapper.class})
+        uses = {ProductItemMapper.class, CommonMapper.class, CommentMapper.class, ProductTagMapper.class,})
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ProductMapper {
 
-    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
-    @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus")
-    @Mapping(source = "product.productItems", target = "productItems", ignore = true)
-    @Mapping(source = "product.represent", target = "represent")
-    @Mapping(source = "favorite", target = "favorite")
-    public abstract ResponseProduct fromEntityToResponse_Light(Product product, Boolean favorite);
+    @Mappings({
+            @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL),
+            @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus"),
+            @Mapping(source = "product.productItems", target = "productItems", ignore = true),
+            @Mapping(source = "product.represent", target = "represent"),
+            @Mapping(source = "favorite", target = "favorite"),
+            @Mapping(target = "tags", source = "tags"),
+    })
+    public abstract ResponseProduct fromEntityToResponse_Light(Product product, String[] tags, Boolean favorite);
 
-    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
-    @Mapping(source = "product.group.variants", target = "variants")
-    @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus")
-    @Mapping(source = "productItems", target = "productItems")
-    @Mapping(source = "favorite", target = "favorite")
-    public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, List<ProductItem> productItems, Boolean favorite);
+    @Mappings({
+            @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL),
+            @Mapping(source = "product.group.variants", target = "variants"),
+            @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus"),
+            @Mapping(source = "productItems", target = "productItems"),
+            @Mapping(source = "favorite", target = "favorite"),
+            @Mapping(target = "tags", source = "tags"),
+    })
+    public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, String[] tags, List<ProductItem> productItems, Boolean favorite);
 
-
-//    @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
-//    @Mapping(source = "product.group.variants", target = "variants")
-
-    /// /    @Mapping(source = "quantity", target = "quantity")
-//    public abstract ResponseProduct fromEntityToResponse_Light(Product product);
     @Mapping(source = "productDescription", target = "productDescription", ignore = true)
-//    @Mapping(source = "imageUrl", target = "imageUrlId", qualifiedByName = MapFuncs.EXTRACT_PRODUCT_PUBLIC_ID)
+    @Mapping(target = "tags", ignore = true)
     public abstract Product fromRequestUpdateToEntity(RequestProductUpdate request);
 
     @Mapping(source = "productDescription", target = "productDescription", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     public abstract Product fromCreateRequestToEntity(RequestProductCreate request);
+
 
     public abstract ProductDescription fromRequestToDescription(RequestProductDescription request);
 
@@ -55,15 +67,15 @@ public abstract class ProductMapper {
         return cnt > 0 ? ProductStatus.IN_STOCK : ProductStatus.OUT_OF_STOCK;
     }
 
-
     public Specification<Product> fromRequestSearchToSpec(RequestProductSearch searchReq) {
         return ((root, query, criteriaBuilder) -> {
+
             // Prevent N+1 problems with fetch joins
             assert query != null;
+            Fetch<Product, ProductTag> tagJoin = root.fetch("tags", JoinType.INNER);
             if (query.getResultType() == Product.class) {
                 root.fetch("categories", JoinType.LEFT);
                 root.fetch("productDescription", JoinType.LEFT);
-//                root.fetch("variants", JoinType.LEFT);
             }
 
             if (searchReq == null) return criteriaBuilder.conjunction();
@@ -97,7 +109,9 @@ public abstract class ProductMapper {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.lessThanOrEqualTo(root.get("price"), searchReq.priceTo()));
             }
-
+            if (!CollectionUtils.isEmpty(searchReq.tags())) {
+                predicate = criteriaBuilder.and(predicate,((Join<Product, ProductTag>) tagJoin).get("name").in(searchReq.tags()));
+            }
 
             // Filter deleted products
             if (!searchReq.deleted()) {
@@ -107,9 +121,6 @@ public abstract class ProductMapper {
             return predicate;
         });
     }
-
-//    public abstract ProductChangesResponse fromEntityToChangesResponse(Product product);
-//    public abstract ProductImageResponse fromImageToImageResponse(ProductImage image);
 
 
 }

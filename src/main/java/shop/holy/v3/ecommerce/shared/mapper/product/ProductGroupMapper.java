@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.shared.mapper;
+package shop.holy.v3.ecommerce.shared.mapper.product;
 
 
 import org.mapstruct.Mapper;
@@ -8,7 +8,7 @@ import org.mapstruct.ReportingPolicy;
 import shop.holy.v3.ecommerce.api.dto.product.group.RequestProductGroupCreate;
 import shop.holy.v3.ecommerce.api.dto.product.group.RequestProductGroupUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.group.ResponseProductGroup;
-import shop.holy.v3.ecommerce.persistence.entity.ProductGroup;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductGroup;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)

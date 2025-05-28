@@ -17,9 +17,9 @@ public abstract class CommonMapper {
     @Autowired
     protected CloudinaryProperties cloudinaryProperties;
 
-    @Named("genUrl") // Ensure MapStruct picks up this method
+    @Named("genUrl")
     public String genUrl(String publicId) {
-        return (publicId != null) ? cloudinaryService.makeUrl(publicId) : null;
+        return cloudinaryService.makeUrl(publicId);
     }
 
 

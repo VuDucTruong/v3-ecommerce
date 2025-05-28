@@ -6,11 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.product.group.RequestProductGroupCreate;
 import shop.holy.v3.ecommerce.api.dto.product.group.RequestProductGroupUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.group.ResponseProductGroup;
-import shop.holy.v3.ecommerce.persistence.entity.ProductGroup;
-import shop.holy.v3.ecommerce.persistence.repository.IProductGroupRepository;
-import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductGroup;
+import shop.holy.v3.ecommerce.persistence.repository.product.IProductGroupRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.mapper.ProductGroupMapper;
+import shop.holy.v3.ecommerce.shared.mapper.product.ProductGroupMapper;
 
 @Service
 @RequiredArgsConstructor

@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
-import shop.holy.v3.ecommerce.persistence.repository.IProductFavoriteRepository;
-import shop.holy.v3.ecommerce.shared.mapper.ProductMapper;
+import shop.holy.v3.ecommerce.persistence.entity.product.Product;
+import shop.holy.v3.ecommerce.persistence.repository.product.IProductFavoriteRepository;
+import shop.holy.v3.ecommerce.shared.mapper.product.ProductMapper;
+import shop.holy.v3.ecommerce.shared.mapper.product.ProductTagMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 @Service
@@ -17,6 +18,7 @@ import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 public class ProductFavoriteService {
     private final IProductFavoriteRepository favoriteRepository;
     private final ProductMapper productMapper;
+    private final ProductTagMapper tagMapper;
 
     @Transactional
     public void addFavorite(Long productId) {
@@ -34,7 +36,7 @@ public class ProductFavoriteService {
     public ResponsePagination<ResponseProduct> findFavorites(Pageable pageable) {
         long accountId = SecurityUtil.getAuthNonNull().getProfileId();
         Page<Product> products = favoriteRepository.findFavorites(accountId, pageable);
-        Page<ResponseProduct> responses = products.map(p->productMapper.fromEntityToResponse_Light(p,true));
+        Page<ResponseProduct> responses = products.map(p->productMapper.fromEntityToResponse_Light(p, tagMapper.fromTagEntitiesToStringTags(p.getTags()) ,true));
         return ResponsePagination.fromPage(responses);
     }
 }

@@ -123,14 +123,21 @@ where product_id = 8;
 
 
 select *
-from products order by id;
+from products
+order by id;
 
 
-select * from product_items order by id desc;
+select *
+from product_items
+order by id desc;
 
 
 select *
 from products_categories
 where product_id = 20;
 
-select * from blogs;
+select *
+from blogs;
+
+
+select * from product_groups;

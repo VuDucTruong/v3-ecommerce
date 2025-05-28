@@ -1,14 +1,17 @@
-package shop.holy.v3.ecommerce.persistence.entity;
+package shop.holy.v3.ecommerce.persistence.entity.product;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import shop.holy.v3.ecommerce.persistence.entity.Category;
+import shop.holy.v3.ecommerce.persistence.entity.Comment;
+import shop.holy.v3.ecommerce.persistence.entity.EntityBase;
+import shop.holy.v3.ecommerce.persistence.entity.Profile;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,7 +19,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = {
+        @Index(name = "idx_products_createdAt_DESC", columnList = "createdAt DESC"),
+        @Index(name = "idx_products_name", columnList = "name"),
+        @Index(name = "idx_products_price", columnList = "price")
+})
 public class Product extends EntityBase {
 
     //    @Column(name = "prod_desc_id")
@@ -39,11 +46,10 @@ public class Product extends EntityBase {
     @ColumnDefault("true")
     private boolean represent;
 
-    // JSON
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "tags")
-    @ColumnDefault(value = "'[]'")
-    private String[] tags;
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = ProductTag.class)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @BatchSize(size = 100)
+    private Set<ProductTag> tags;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "products")
     @BatchSize(size = 20)

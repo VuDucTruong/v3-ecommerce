@@ -1,9 +1,10 @@
-package shop.holy.v3.ecommerce.persistence.entity;
+package shop.holy.v3.ecommerce.persistence.entity.product;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.persistence.entity.keys.ProductFavoriteKey;
 
 import java.util.Date;

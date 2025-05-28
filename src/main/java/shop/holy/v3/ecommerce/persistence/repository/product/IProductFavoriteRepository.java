@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.persistence.repository;
+package shop.holy.v3.ecommerce.persistence.repository.product;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
-import shop.holy.v3.ecommerce.persistence.entity.ProductFavorite;
+import shop.holy.v3.ecommerce.persistence.entity.product.Product;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductFavorite;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

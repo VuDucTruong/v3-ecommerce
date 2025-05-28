@@ -10,6 +10,9 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     hikari:
       maximum-pool-size: 50
+  threads:
+    virtual:
+      enabled: true
 
   jpa:
     properties:
@@ -54,4 +57,5 @@ server:
     include-binding-errors: never
     include-message: always
     include-path: always
+
 

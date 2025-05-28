@@ -1,9 +1,9 @@
-package shop.holy.v3.ecommerce.persistence.repository;
+package shop.holy.v3.ecommerce.persistence.repository.product;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import shop.holy.v3.ecommerce.persistence.entity.ProductGroup;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductGroup;
 
 import java.util.Optional;
 

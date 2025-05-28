@@ -142,18 +142,35 @@ INSERT INTO public.product_groups (id, created_at, deleted_at, name) VALUES (5, 
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (19, '2025-05-12 23:37:51.33737', NULL, 1, NULL, 'Spotify Premium', 12.99, 9.99, 18, 0, true, 'spotify-premium', '["digital"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (17, '2025-05-12 21:36:49.037095', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 16, 0, true, 'as', '["sds"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (18, '2025-05-12 21:51:07.058552', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 17, 0, true, '21520507', '["sds"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 2, 5, false, '', '[]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (22, '2025-05-24 12:23:53.166715', NULL, 1, NULL, 'product with long desc', 12.99, 9.99, 21, 0, true, 'product-with-long-desc', '["digital", "music", "streaming"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (23, '2025-05-24 12:27:02.83541', NULL, 1, NULL, 'A very long product', 150000.00, 100000.00, 22, 0, true, 'a-very-long-product', '["digital", "music", "streaming"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (20, '2025-05-13 00:13:31.037736', NULL, 1, 'https://res.cloudinary.com/dm45tt6nt/image/upload/v1747070010/ecommerce/product/8ea092fb-c495-4f43-b7cb-26c5ef20b8a9.png', 'prod with image', 99800.00, 100000.00, 19, 0, true, 'a', '["music", "tech"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (16, '2025-05-12 21:32:20.404573', '2025-05-27 19:45:02.352884', 1, NULL, 'product phong', 12.99, 9.99, 15, 0, true, 'product-phong', '["digital", "music", "streaming"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (14, '2025-05-11 17:06:00.69428', NULL, 1, NULL, 'Youtube', 12.99, 9.99, 13, 0, true, 'youtube', '["digital", "music", "streaming"]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 3, 6, false, 'the-jakarta-product', '[]');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug, tags) VALUES (10, '2025-04-24 11:48:34.205537', NULL, 1, NULL, 'youtube abc', 12.99, 9.99, 1, 2, true, NULL, '["oke", "mytag"]');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (19, '2025-05-12 23:37:51.33737', NULL, 1, NULL, 'Spotify Premium', 12.99, 9.99, 18, 0, true, 'spotify-premium');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (17, '2025-05-12 21:36:49.037095', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 16, 0, true, 'as');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (18, '2025-05-12 21:51:07.058552', '2025-05-13 10:13:16.594586', 1, NULL, '21520507', 0.00, 0.00, 17, 0, true, '21520507');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (9, '2025-04-23 21:09:11.903325', NULL, 1, NULL, 'thanh phong', 1991.00, 99.00, 2, 5, false, '');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (22, '2025-05-24 12:23:53.166715', NULL, 1, NULL, 'product with long desc', 12.99, 9.99, 21, 0, true, 'product-with-long-desc');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (23, '2025-05-24 12:27:02.83541', NULL, 1, NULL, 'A very long product', 150000.00, 100000.00, 22, 0, true, 'a-very-long-product');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (20, '2025-05-13 00:13:31.037736', NULL, 1, 'https://res.cloudinary.com/dm45tt6nt/image/upload/v1747070010/ecommerce/product/8ea092fb-c495-4f43-b7cb-26c5ef20b8a9.png', 'prod with image', 99800.00, 100000.00, 19, 0, true, 'a');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (16, '2025-05-12 21:32:20.404573', '2025-05-27 19:45:02.352884', 1, NULL, 'product phong', 12.99, 9.99, 15, 0, true, 'product-phong');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (14, '2025-05-11 17:06:00.69428', NULL, 1, NULL, 'Youtube', 12.99, 9.99, 13, 0, true, 'youtube');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (8, '2025-04-17 16:49:31.057025', NULL, NULL, NULL, 'the jakarta product', 1000.00, 50.00, 3, 6, false, 'the-jakarta-product');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (10, '2025-04-24 11:48:34.205537', NULL, 1, NULL, 'youtube abc', 12.99, 9.99, 1, 2, true, NULL);
 
+INSERT INTO public.product_tags(product_id, name) VALUES
+(19,'digital'),
+(17,'sds'),
+(18,'sds'),
+-- (9, '[]'),
+(22,'digital'),
+(22,'music'),
+(22,'streaming'),
+(23,'digital'),
+(23,'music'),
+(23,'streaming'),
+(20,'digital'),
+(20,'tech'),
+(16,'streaming'),
+(14,'music'),
+(8, 'music'),
+(10,'ok 200');
 
 --
 -- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: phong

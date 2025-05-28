@@ -1,11 +1,10 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import shop.holy.v3.ecommerce.persistence.entity.product.Product;
 
 import java.util.Objects;
 import java.util.Set;

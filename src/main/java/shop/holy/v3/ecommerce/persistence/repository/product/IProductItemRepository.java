@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.persistence.repository;
+package shop.holy.v3.ecommerce.persistence.repository.product;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Id_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;

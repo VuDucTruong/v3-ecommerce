@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.shared.mapper;
+package shop.holy.v3.ecommerce.shared.mapper.product;
 
 
 import jakarta.persistence.criteria.JoinType;
@@ -8,10 +8,11 @@ import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
-import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
-import shop.holy.v3.ecommerce.persistence.entity.ProductItemUsed;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
+import shop.holy.v3.ecommerce.persistence.entity.product.ProductItemUsed;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
+import shop.holy.v3.ecommerce.shared.mapper.CommonMapper;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         uses = {CommonMapper.class})

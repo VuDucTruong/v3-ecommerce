@@ -2,7 +2,6 @@ package shop.holy.v3.ecommerce.persistence.entity;
 
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -21,7 +20,7 @@ public abstract class EntityBase {
     protected long id;
 
     @ColumnDefault("now()")
-    @Column(name = "created_at",insertable = false,updatable = false)
+    @Column(name = "created_at", insertable = false, updatable = false)
     protected Date createdAt;
 
     @Column(name = "deleted_at")
@@ -33,6 +32,7 @@ public abstract class EntityBase {
         if (!(o instanceof EntityBase that)) return false;
         return Objects.equals(id, that.id);
     }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(id);

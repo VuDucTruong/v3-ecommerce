@@ -28,6 +28,9 @@ spring:
         default_schema: public
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
-
+app:
+  cache:
+    test:
+      enable: ${APP_CACHE_TEST_ENABLED:true}
 #app:
 #  flyway-refresh: ${APP_FLYWAY_REFRESH:false}

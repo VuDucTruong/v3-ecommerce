@@ -16,6 +16,7 @@ import shop.holy.v3.ecommerce.persistence.entity.notification.NotificationProdKe
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Email_Fullname;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_OrderDetails;
 import shop.holy.v3.ecommerce.persistence.repository.*;
+import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;

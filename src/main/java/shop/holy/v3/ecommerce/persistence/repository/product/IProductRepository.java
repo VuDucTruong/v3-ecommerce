@@ -1,4 +1,4 @@
-package shop.holy.v3.ecommerce.persistence.repository;
+package shop.holy.v3.ecommerce.persistence.repository.product;
 
 import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Page;
@@ -6,19 +6,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
+import shop.holy.v3.ecommerce.persistence.entity.product.Product;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     // Add this method to override the default findAll
     @Override
     @Nonnull
-    @EntityGraph(attributePaths = {"productDescription", "categories"})
+    @EntityGraph(attributePaths = {"productDescription", "categories","tags"})
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
     @Query(value = "select id from products where id IN (:ids)", nativeQuery = true)
@@ -53,20 +50,18 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
                         price = :#{#product.price},
                         prod_desc_id = :#{#product.proDescId},
                         group_id = :#{#product.groupId},
-                        represent = :#{#product.represent},
-                        tags = CAST(:tags AS jsonb)
+                        represent = :#{#product.represent}
             where p.id = :#{#product.id}
             """, nativeQuery = true)
-    int updateProductById(Product product, String tags);
+    int updateProductById(Product product);
 
 
 
     @Query(value = """
             SELECT DISTINCT p FROM Product p
             LEFT JOIN FETCH p.productDescription pd
-            LEFT JOIN FETCH p.group pg
-            LEFT JOIN FETCH pg.variants
             LEFT JOIN FETCH p.categories pc
+            LEFT JOIN FETCH p.tags
                 WHERE p.id = :id
             """)
     Optional<Product> findByIdWithJoinFetch(long id);
@@ -75,9 +70,8 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @Query(value = """
             SELECT DISTINCT p FROM Product p
             LEFT JOIN FETCH p.productDescription pd
-            LEFT JOIN FETCH p.group pg
-            LEFT JOIN FETCH pg.variants
             LEFT JOIN FETCH p.categories pc
+            LEFT JOIN FETCH p.tags
                 WHERE p.id = :id AND p.deletedAt is null
             """)
     Optional<Product> findFirstByIdEqualsAndDeletedAtIsNull(long id);
@@ -85,9 +79,8 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @Query(value = """
             SELECT DISTINCT p FROM Product p
             LEFT JOIN FETCH p.productDescription pd
-            LEFT JOIN FETCH p.group pg
-            LEFT JOIN FETCH pg.variants
             LEFT JOIN FETCH p.categories pc
+            LEFT JOIN FETCH p.tags
                 WHERE p.slug = :slug AND p.deletedAt is null
             """)
     Optional<Product> findFirstBySlugEqualsAndDeletedAtIsNull(String slug);
@@ -95,9 +88,8 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @Query(value = """
             SELECT DISTINCT p FROM Product p
             LEFT JOIN FETCH p.productDescription pd
-            LEFT JOIN FETCH p.group pg
-            LEFT JOIN FETCH pg.variants
             LEFT JOIN FETCH p.categories pc
+            LEFT JOIN FETCH p.tags
                 WHERE p.slug = :slug AND p.deletedAt is null
             """)
     Optional<Product> findFirstBySlug(String slug);
@@ -116,6 +108,11 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             WHERE product_id = :productId AND category_id = :categoryId
             """, nativeQuery = true)
     void deleteProductCategories(long productId, long categoryId);
+
+    Set<Product> findByIdNotAndGroupId(long idNot, Long groupId);
+
+    Set<Product> findByIdNotAndGroupIdAndDeletedAtIsNull(long idNot, Long groupId);
+
 
     @Query(value = "select category_id from products_categories where product_id = ?1", nativeQuery = true)
     Set<Long> findCategoryIdsByProductId(long productId);

@@ -1,6 +1,5 @@
 package shop.holy.v3.ecommerce.service.biz;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -17,20 +16,17 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
-import shop.holy.v3.ecommerce.persistence.entity.Product;
-import shop.holy.v3.ecommerce.persistence.entity.ProductDescription;
-import shop.holy.v3.ecommerce.persistence.entity.ProductItem;
-import shop.holy.v3.ecommerce.persistence.repository.IProductDescriptionRepository;
-import shop.holy.v3.ecommerce.persistence.repository.IProductFavoriteRepository;
-import shop.holy.v3.ecommerce.persistence.repository.IProductItemRepository;
-import shop.holy.v3.ecommerce.persistence.repository.IProductRepository;
+import shop.holy.v3.ecommerce.persistence.entity.product.*;
+import shop.holy.v3.ecommerce.persistence.repository.product.*;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.mapper.ProductMapper;
+import shop.holy.v3.ecommerce.shared.mapper.product.ProductMapper;
+import shop.holy.v3.ecommerce.shared.mapper.product.ProductTagMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -42,12 +38,14 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductMapper productMapper;
+    private final ProductTagMapper productTagMapper;
+
+    private final IProductTagRepository tagRepository;
     private final IProductRepository productRepository;
-    private final IProductDescriptionRepository productDescriptionRepository;
-    private final IProductItemRepository productItemRepository;
+    private final IProductDescriptionRepository descriptionRepository;
+    private final IProductItemRepository itemRepository;
     private final IProductFavoriteRepository favoriteRepository;
     private final CloudinaryFacadeService cloudinaryFacadeService;
-    private final ObjectMapper objectMapper;
 
     @SneakyThrows
     public ResponsePagination<ResponseProduct> search(RequestProductSearch searchReq) {
@@ -59,9 +57,9 @@ public class ProductService {
         if (authAccount != null && authAccount.getProfileId() != null) {
             Set<Long> productIds = products.getContent().stream().map(Product::getId).collect(Collectors.toSet());
             Set<Long> favoriteProductIds = favoriteRepository.checkFavorites(authAccount.getProfileId(), productIds);
-            resultsPage = products.map(p -> productMapper.fromEntityToResponse_Light(p, favoriteProductIds.contains(p.getId())));
+            resultsPage = products.map(p -> productMapper.fromEntityToResponse_Light(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), favoriteProductIds.contains(p.getId())));
         } else
-            resultsPage = products.map(p -> productMapper.fromEntityToResponse_Light(p, false));
+            resultsPage = products.map(p -> productMapper.fromEntityToResponse_Light(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), false));
 
         return ResponsePagination.fromPage(resultsPage);
     }
@@ -82,7 +80,21 @@ public class ProductService {
                                 : productRepository.findFirstBySlugEqualsAndDeletedAtIsNull(slug);
                     }
                 })
-                .thenApply(opt -> opt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception));
+                .thenApply(opt -> opt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception))
+                .thenApply(p -> {
+                    Set<Product> variants;
+                    if (p.getGroupId() ==null || p.getGroupId()==1)
+                        variants = new HashSet<>();
+                    else if (deleted)
+                        variants = productRepository.findByIdNotAndGroupId(p.getId(), p.getGroupId());
+                    else
+                        variants = productRepository.findByIdNotAndGroupIdAndDeletedAtIsNull(p.getId(), p.getGroupId());
+                    ProductGroup group = new ProductGroup();
+                    group.setId(p.getGroupId());
+                    group.setVariants(variants);
+                    p.setGroup(group);
+                    return p;
+                });
 
         AuthAccount authAccount = SecurityUtil.getAuthNullable();
         CompletableFuture<Boolean> isFav;
@@ -96,7 +108,10 @@ public class ProductService {
 
         /// NO ADMIN HANDLING ==> no productItems revealed
         if (authAccount == null || !authAccount.isAdmin()) /// already null check fisrt then -> check NOT ADMIN
-            return CompletableFuture.allOf(prod, isFav).thenApply(v -> productMapper.fromEntityToResponse_Light(prod.join(), isFav.join()));
+            return CompletableFuture.allOf(prod, isFav).thenApply(v -> {
+                var p = prod.join();
+                return productMapper.fromEntityToResponse_Light(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), isFav.join());
+            });
 
         ///  WHEN ADMIN, CAN SEE first 10 items orderedBy created at
         Pageable pageableItems = PageRequest.of(0, 10, Sort.by("createdAt").descending());
@@ -104,16 +119,16 @@ public class ProductService {
                 CompletableFuture.supplyAsync(() ->
                 {
                     if (productId != null)
-                        return productItemRepository.findAllByProductIdEquals(productId, pageableItems);
+                        return itemRepository.findAllByProductIdEquals(productId, pageableItems);
                     else
-                        return productItemRepository.findAllByProductSlug(slug, pageableItems);
+                        return itemRepository.findAllByProductSlug(slug, pageableItems);
                 });
 
         return CompletableFuture.allOf(prod, itemsSlice, isFav)
                 .thenApply(v -> {
                     List<ProductItem> items = itemsSlice.join().getContent();
                     Product p = prod.join();
-                    return productMapper.fromEntity_Items_ToResponse_Detailed(p, items, isFav.join());
+                    return productMapper.fromEntity_Items_ToResponse_Detailed(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), items, isFav.join());
                 });
     }
 
@@ -124,19 +139,23 @@ public class ProductService {
         ///  UPLOAD images
         this.uploadSingleImageAndSetEntity(product, request.image());
         ProductDescription prod_Desc = productMapper.fromRequestToDescription(request.productDescription());
-        var desc = productDescriptionRepository.save(prod_Desc);
+        var desc = descriptionRepository.save(prod_Desc);
 
         /// SAVE PRODUCT_DESC
         product.setProDescId(desc.getId());
         Product rs = productRepository.save(product);
 
-        ///  SAVE CATEGORIES
-        {
-            request.categoryIds().forEach(catId -> {
-                productRepository.insertProductCategories(product.getId(), catId);
-            });
+        /// SAVE PRODUCT TAGS
+        if (!CollectionUtils.isEmpty(request.tags())) {
+            Set<ProductTag> tags = productTagMapper.fromStringTagsToProductTagsEntity(rs.getId(), request.tags());
+            tagRepository.saveAll(tags);
         }
-        return productMapper.fromEntityToResponse_Light(rs, false);
+
+        ///  SAVE CATEGORIES
+        request.categoryIds().forEach(catId -> {
+            productRepository.insertProductCategories(rs.getId(), catId);
+        });
+        return productMapper.fromEntityToResponse_Light(rs, request.tags().toArray(String[]::new), false);
     }
 
     @Transactional
@@ -166,18 +185,24 @@ public class ProductService {
         ///  update product && update description as well
         ProductDescription prod_Desc = productMapper.fromRequestToDescription(request.productDescription());
         if (prod_Desc != null) {
-            var optionalPd = productDescriptionRepository.updateProductDescriptionByProductId(request.id(), prod_Desc);
-            optionalPd.ifPresent(pd -> {
-                product.setProDescId(pd.getId());
-                product.setProductDescription(pd);
-            });
+            var pd = descriptionRepository.updateProductDescriptionByProductId(request.id(), prod_Desc).orElseThrow(BizErrors.PRODUCT_NOT_FOUND::exception);
+            product.setProDescId(pd.getId());
+            product.setProductDescription(pd);
         }
-        int changes = productRepository.updateProductById(product, product.getTags() == null ? "[]" : objectMapper.writeValueAsString(product.getTags()));
+
+        /// SAVE TAGS
+        if (!CollectionUtils.isEmpty(request.tags())) {
+            tagRepository.deleteAllByProductId(productId);
+            Set<ProductTag> tags = productTagMapper.fromStringTagsToProductTagsEntity(request.id(), request.tags());
+            tagRepository.saveAll(tags);
+        }
+
+        int changes = productRepository.updateProductById(product);
         if (changes == 0)
             throw BizErrors.PRODUCT_NOT_FOUND.exception();
 
         /// TODO: use Redis cache -> get Profile -> favoriteProductIds -> if match -> true
-        return productMapper.fromEntityToResponse_Light(product, false);
+        return productMapper.fromEntityToResponse_Light(product, request.tags().toArray(String[]::new), false);
     }
 
     @Transactional

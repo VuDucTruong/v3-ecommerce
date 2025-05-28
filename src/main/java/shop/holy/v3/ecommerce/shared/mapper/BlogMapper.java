@@ -62,6 +62,9 @@ public abstract class BlogMapper {
 
     public Specification<Blog> fromSearchRequestToSpec(RequestBlogSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
+            if (query == null || searchReq == null)
+                return criteriaBuilder.conjunction();
+
             var predicate = criteriaBuilder.conjunction();
             Join<Blog, Genre2> genre2s = root.join("genre2s");
             if (!query.getResultType().equals(Long.class)) {

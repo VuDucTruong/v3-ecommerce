@@ -9,10 +9,6 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.property.CloudinaryProperties;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -46,7 +42,7 @@ public class CloudinaryService {
     }
 
     // Delete a file by public ID
-    public String deleteFile(String publicIdWithExtensions) throws IOException {
+    public String deleteFile(String publicIdWithExtensions) {
         try {
             Map<?, ?> deleteResult = cloudinary.uploader().destroy(publicIdWithExtensions.split("\\.")[0],
                     ObjectUtils.emptyMap());
@@ -57,7 +53,7 @@ public class CloudinaryService {
     }
 
     public String makeUrl(String publicId) {
-        return cloudinary.url().generate(publicId);
+        return (publicId != null) ? cloudinary.url().generate(publicId) : null;
     }
 
     public boolean isValidCloudinaryUrl(String url) {
@@ -66,7 +62,7 @@ public class CloudinaryService {
     }
 
     public String extractPublicId(String url, String folder) {
-        if(!isValidCloudinaryUrl(url))
+        if (!isValidCloudinaryUrl(url))
             throw BizErrors.INVALID_IMAGE_URL.exception();
 
         int folderIndex = url.indexOf(folder);

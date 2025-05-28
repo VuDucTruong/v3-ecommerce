@@ -1,0 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: redis
+  cache:
+    type: simple
+    redis:
+      time-to-live: 5s
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      client-name: ecommerce
+      client-type: lettuce
+      timeout: 10s
+      ssl:
+        enabled: false
+      lettuce:
+        pool:
+          enabled: true
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: 1000
+
+#      database: 0
+
