@@ -68,16 +68,13 @@ public abstract class ProductMapper {
 
     public Specification<Product> fromRequestSearchToSpec(RequestProductSearch searchReq) {
         return ((root, query, criteriaBuilder) -> {
-
+            if (query == null || searchReq == null)
+                return criteriaBuilder.conjunction();
             // Prevent N+1 problems with fetch joins
-            assert query != null;
-            Fetch<Product, ProductTag> tagJoin = root.fetch("tags", JoinType.INNER);
             if (query.getResultType() == Product.class) {
                 root.fetch("categories", JoinType.LEFT);
                 root.fetch("productDescription", JoinType.LEFT);
             }
-
-            if (searchReq == null) return criteriaBuilder.conjunction();
 
             Predicate predicate = criteriaBuilder.equal(root.get("represent"), true);
 
@@ -109,7 +106,7 @@ public abstract class ProductMapper {
                         criteriaBuilder.lessThanOrEqualTo(root.get("price"), searchReq.priceTo()));
             }
             if (!CollectionUtils.isEmpty(searchReq.tags())) {
-                predicate = criteriaBuilder.and(predicate, ((Join<Product, ProductTag>) tagJoin).get("name").in(searchReq.tags()));
+                predicate = criteriaBuilder.and(predicate, root.get("tags").get("name").in(searchReq.tags()));
             }
 
             // Filter deleted products
