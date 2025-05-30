@@ -8,10 +8,7 @@ import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
-import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
+import shop.holy.v3.ecommerce.api.dto.product.*;
 import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 import shop.holy.v3.ecommerce.persistence.entity.product.Product;
@@ -50,6 +47,8 @@ public abstract class ProductMapper {
             @Mapping(target = "tags", source = "tags"),
     })
     public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, String[] tags, List<ProductItem> productItems, Boolean favorite);
+
+    public abstract ResponseProductMetadata productToResponseProductMetadata(Product product);
 
     @Mapping(source = "productDescription", target = "productDescription", ignore = true)
     @Mapping(target = "tags", ignore = true)
@@ -110,7 +109,7 @@ public abstract class ProductMapper {
                         criteriaBuilder.lessThanOrEqualTo(root.get("price"), searchReq.priceTo()));
             }
             if (!CollectionUtils.isEmpty(searchReq.tags())) {
-                predicate = criteriaBuilder.and(predicate,((Join<Product, ProductTag>) tagJoin).get("name").in(searchReq.tags()));
+                predicate = criteriaBuilder.and(predicate, ((Join<Product, ProductTag>) tagJoin).get("name").in(searchReq.tags()));
             }
 
             // Filter deleted products

@@ -109,9 +109,9 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             """, nativeQuery = true)
     void deleteProductCategories(long productId, long categoryId);
 
-    Set<Product> findByIdNotAndGroupId(long idNot, Long groupId);
+    Set<Product> findByGroupId(Long groupId);
 
-    Set<Product> findByIdNotAndGroupIdAndDeletedAtIsNull(long idNot, Long groupId);
+    Set<Product> findByGroupIdAndDeletedAtIsNull( Long groupId);
 
 
     @Query(value = "select category_id from products_categories where product_id = ?1", nativeQuery = true)

@@ -15,15 +15,15 @@ import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.product.Product;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductGroup;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
-import shop.holy.v3.ecommerce.persistence.repository.product.*;
-import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
+import shop.holy.v3.ecommerce.persistence.repository.product.IProductFavoriteRepository;
+import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemRepository;
+import shop.holy.v3.ecommerce.persistence.repository.product.IProductRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductMapper;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductTagMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -77,12 +77,12 @@ public class ProductQuery {
                 .thenApply(opt -> opt.orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception))
                 .thenApply(p -> {
                     Set<Product> variants;
-                    if (p.getGroupId() ==null || p.getGroupId()==1)
-                        variants = new HashSet<>();
+                    if (p.getGroupId() == null || p.getGroupId() == 1)
+                        variants = Set.of(p);
                     else if (deleted)
-                        variants = productRepository.findByIdNotAndGroupId(p.getId(), p.getGroupId());
+                        variants = productRepository.findByGroupId(p.getGroupId());
                     else
-                        variants = productRepository.findByIdNotAndGroupIdAndDeletedAtIsNull(p.getId(), p.getGroupId());
+                        variants = productRepository.findByGroupIdAndDeletedAtIsNull(p.getGroupId());
                     ProductGroup group = new ProductGroup();
                     group.setId(p.getGroupId());
                     group.setVariants(variants);
