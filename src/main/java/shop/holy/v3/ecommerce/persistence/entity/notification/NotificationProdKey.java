@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
 import java.util.Date;
 import java.util.List;
 
@@ -19,11 +20,13 @@ import java.util.List;
 public class NotificationProdKey {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_prod_keys_id_seq")
+    @SequenceGenerator(name = "notification_prod_keys_id_seq", sequenceName = "notification_prod_keys_id_seq",
+            allocationSize = 1, initialValue = 1)
     protected long id;
 
     @ColumnDefault("now()")
-    @Column(name = "created_at",insertable = false,updatable = false)
+    @Column(name = "created_at", insertable = false, updatable = false)
     protected Date createdAt;
 
     protected String email;

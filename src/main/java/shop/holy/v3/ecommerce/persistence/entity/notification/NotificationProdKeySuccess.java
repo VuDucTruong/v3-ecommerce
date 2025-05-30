@@ -13,9 +13,6 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class NotificationProdKeySuccess extends NotificationProdKey {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    protected long id;
 
     @Length(max = 3000)
     String mailProdKeyJson;

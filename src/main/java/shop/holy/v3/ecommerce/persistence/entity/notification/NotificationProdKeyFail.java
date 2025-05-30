@@ -13,8 +13,5 @@ import lombok.Setter;
 @Setter
 public class NotificationProdKeyFail extends NotificationProdKey {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private long id;
 
 }
