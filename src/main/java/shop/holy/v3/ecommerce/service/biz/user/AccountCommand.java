@@ -34,11 +34,12 @@ public class AccountCommand {
         int ran = new Random().nextInt(999999);
         String otp = String.format("%06d", ran);
         int changes = accountRepository.saveOtp(otpRequest.email(), otp);
-
-        smtpService.sendOTPEmail(otpRequest.email(), otp);
         if (changes == 0) {
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
         }
+
+        smtpService.sendOTPEmail(otpRequest.email(), otp);
+
     }
 
     @Transactional

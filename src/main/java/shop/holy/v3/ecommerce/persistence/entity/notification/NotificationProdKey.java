@@ -10,20 +10,26 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "notification_prod_keys")
+@Table(name = "notification_prod_keys", indexes = {
+        @Index(name = "idx_notification_prod_keys_order_id", columnList = "orderId")
+})
 @Getter
 @Setter
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class NotificationProdKey {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
 
     @ColumnDefault("now()")
     @Column(name = "created_at",insertable = false,updatable = false)
     protected Date createdAt;
 
-    private String email;
-    private Long orderId;
+    protected String email;
+    protected Long orderId;
 
+    protected Date retry1;
+    protected Date retry2;
 
 }

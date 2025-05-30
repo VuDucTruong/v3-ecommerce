@@ -8,6 +8,7 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
+import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderCreate;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderSearch;
 import shop.holy.v3.ecommerce.api.dto.order.ResponseOrder;
@@ -34,10 +35,12 @@ public abstract class OrderMapper {
 
     @Mapping(source = "details", target = "details")
     @Mapping(source = "order.status", target = "status")
-    public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, Collection<OrderDetail> details);
+    @Mapping(source = "mpk", target = "sentMail")
+    public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, MailProductKeys mpk, Collection<OrderDetail> details);
 
     @Mapping(source = "orderDetails", target = "details", ignore = true)
     @Mapping(source = "status", target = "status")
+    @Mapping(target = "sentMail", ignore = true)
     public abstract ResponseOrder fromEntityToResponse_Light(Order order);
 
 

@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.api.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
+import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
 import java.math.BigDecimal;
@@ -15,7 +16,8 @@ public record ResponseOrder(
         ResponseCoupon coupon,
         BigDecimal originalAmount,
         BigDecimal amount,
-        ResponseOrderDetail[] details
+        ResponseOrderDetail[] details,
+        MailProductKeys sentMail
 ) {
     public record ResponseOrderDetail(
             BigDecimal price,
@@ -24,6 +26,7 @@ public record ResponseOrder(
             int quantity
     ) {
     }
+
 
     public record ResponseOrderItem(
             long id,

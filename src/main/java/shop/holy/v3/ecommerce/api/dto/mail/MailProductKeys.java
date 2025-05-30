@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.thymeleaf.context.Context;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,6 +35,7 @@ public class MailProductKeys {
     @Getter
     @AllArgsConstructor
     public static class ProductKey {
+        long id;
         String productKey;
         String duration;
     }
@@ -65,7 +68,7 @@ public class MailProductKeys {
         return pm;
     }
     public static ProductKey sampleKey(){
-        return new ProductKey(UUID.randomUUID().toString(), "2 years");
+        return new ProductKey((long) (Math.random() * 1000), UUID.randomUUID().toString(), "2 years");
     }
 
 

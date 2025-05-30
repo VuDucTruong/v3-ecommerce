@@ -31,7 +31,7 @@ public class SmtpService {
             <html>
             <body>
                 <h1>Your OTP is: %s</h1>
-                <p>Please use this OTP to complete your transaction.</p>
+                <p>Please use this OTP to complete changing your password.</p>
             </body>
             </html>
             """;
@@ -40,12 +40,12 @@ public class SmtpService {
     public void sendEmail(String to, String subject, String body) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setTo(to);
-        helper.setSubject(subject);
         if (enableFallback)
             helper.setTo(this.fallbackTo);
         else
             helper.setTo(to);
+        helper.setSubject(subject);
+
         helper.setText(body, true);
         // Enable HTML
 

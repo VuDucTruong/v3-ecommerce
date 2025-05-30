@@ -95,7 +95,7 @@ public class ControllerProductItem {
         if (ids == null || ids.length == 0) {
             return ResponseEntity.ok().build();
         }
-        int changes = productItemCommand.makeProductUsed(ids);
+        int changes = productItemCommand.markItemUsed(ids);
         return ResponseEntity.ok(changes);
     }
 

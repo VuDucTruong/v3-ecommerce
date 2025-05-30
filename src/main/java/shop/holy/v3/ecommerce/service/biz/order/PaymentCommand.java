@@ -12,9 +12,9 @@ import shop.holy.v3.ecommerce.api.dto.payment.ResponsePayment;
 import shop.holy.v3.ecommerce.persistence.entity.Payment;
 import shop.holy.v3.ecommerce.persistence.entity.notification.NotificationProdKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_PayUrl_Status;
-import shop.holy.v3.ecommerce.persistence.repository.INotificationProdKeyRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IOrderRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IPaymentRepository;
+import shop.holy.v3.ecommerce.persistence.repository.notification.INotificationProdKeyRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 import shop.holy.v3.ecommerce.shared.constant.PaymentStatus;
@@ -47,7 +47,7 @@ public class PaymentCommand {
         if (optOrderId.isEmpty())
             throw BizErrors.PAYMENT_RESULT_FAILED.exception();
         if (payment.getStatus().equals(PaymentStatus.FAILED.name())) {
-            orderRepository.updateOrderStatusById(OrderStatus.FAILED.name(), payment.getOrderId());
+            orderRepository.updateStatusById(payment.getOrderId(), OrderStatus.FAILED.name());
         } else if (payment.getStatus().equals(PaymentStatus.SUCCESS.name())) {
             String email = authAccount.getEmail();
             NotificationProdKey noti = new NotificationProdKey();
@@ -78,7 +78,7 @@ public class PaymentCommand {
                 p1.setSecureHash(pUrlPair.getSecond());
                 paymentRepository.save(p1);
             }
-            int changes = orderRepository.updateOrderStatusById(OrderStatus.PROCESSING.name(), orderId);
+            int changes = orderRepository.updateStatusById(orderId, OrderStatus.PROCESSING.name());
             if (changes <= 0) throw BizErrors.ORDER_NOT_FOUND.exception();
             return pUrlPair.getFirst();
         }

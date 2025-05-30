@@ -28,9 +28,7 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
             """)
     int updateOrderDeletedAtByIdIn(long[] ids);
 
-    @Modifying
-    @Query("UPDATE Order o set o.status = :status where o.id = :orderId")
-    int updateOrderStatusById(String status, long orderId);
+
 
     Optional<Order> findFirstByIdEqualsAndDeletedAtIsNull(long id);
 
@@ -60,4 +58,7 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
             """)
     List<ProQ_Date_Revenue> findRevenues(String status, Date lowerBound, Date upperBound);
 
+    @Modifying
+    @Query("UPDATE Order o set o.status = :status where o.id = :id")
+    int updateStatusById(long id, String status);
 }

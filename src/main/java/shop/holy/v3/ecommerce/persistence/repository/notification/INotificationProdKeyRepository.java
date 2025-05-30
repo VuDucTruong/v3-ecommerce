@@ -1,5 +1,6 @@
-package shop.holy.v3.ecommerce.persistence.repository;
+package shop.holy.v3.ecommerce.persistence.repository.notification;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -19,7 +20,15 @@ public interface INotificationProdKeyRepository extends CrudRepository<Notificat
             WHERE rn = 1 LIMIT :limit
             """, nativeQuery = true)
     List<NotificationProdKey> findAllParititionByEmail(int limit);
-//    List<NotificationProdKey> findAll
+
+    @Modifying
+    @Query("UPDATE NotificationProdKey np SET np.retry1 = CURRENT_TIMESTAMP")
+    int updateRetry1ById(long id);
+
+    @Modifying
+    @Query("UPDATE NotificationProdKey np SET np.retry2 = CURRENT_TIMESTAMP")
+    int updateRetry2ById(long id);
+
 
 
 }

@@ -1,27 +1,19 @@
 package shop.holy.v3.ecommerce.service.biz.product.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductItemUsed;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Id_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
-import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemUsedRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductRepository;
-import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductItemMapper;
-import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -92,7 +84,7 @@ public class ProductItemCommand {
 
     ///  FIX THIS
     @Transactional
-    public int makeProductUsed(long[] ids) {
+    public int markItemUsed(long[] ids) {
         var productItems = productItemRepository.deleteProductItemsByIdInAndReturnAll(ids);
 //        productItemRepository.deleteByIdIn(ids);
 

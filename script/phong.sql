@@ -140,4 +140,4 @@ select *
 from blogs;
 
 
-select * from product_groups;
+select * from accounts;
