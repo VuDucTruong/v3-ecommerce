@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.account.RequestAccountRegistration;
+import shop.holy.v3.ecommerce.api.dto.account.RequestMailVerification;
 import shop.holy.v3.ecommerce.api.dto.account.RequestOTP;
 import shop.holy.v3.ecommerce.api.dto.account.RequestPasswordUpdate;
 import shop.holy.v3.ecommerce.api.dto.account.token.RequestLogin;
@@ -33,14 +34,25 @@ public class ControllerAccount {
     }
 
     @PutMapping(value = "password")
-    @Operation(description = "change password the Remove cookies -> must route user to login !!")
-    public ResponseEntity<Integer> changePassword(@RequestBody RequestPasswordUpdate request, HttpServletResponse response){
+    @Operation(description = "change password -> Remove cookies -> must route user to login !!")
+    public ResponseEntity<Integer> changePassword(@RequestBody RequestPasswordUpdate request, HttpServletResponse response) {
         var cookies = accountService.changePassword(request);
         for (Cookie cookie : cookies) {
             response.addCookie(cookie);
         }
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping(value = "verification")
+    @Operation(description = "setVerified -> Remove Cookies -> must route to login !!")
+    public ResponseEntity<Integer> setVerification(@RequestBody RequestMailVerification request, HttpServletResponse response) {
+        var cookies = accountService.verifyEmail(request);
+        for (Cookie cookie : cookies) {
+            response.addCookie(cookie);
+        }
+        return ResponseEntity.ok().build();
+    }
+
 
     @PostMapping("register")
     @Operation(description = "register a new user -> must route user to login !!")

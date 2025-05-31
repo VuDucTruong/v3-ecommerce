@@ -1,6 +1,5 @@
 package shop.holy.v3.ecommerce.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.jsonwebtoken.Claims;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -63,6 +62,7 @@ public class AuthAccount implements UserDetails {
             throw BizErrors.INVALID_TOKEN.exception();
         }
     }
+
     private Date parseDateTime(String dateTimeStr) {
         if (dateTimeStr == null) return null;
         try {
@@ -75,10 +75,12 @@ public class AuthAccount implements UserDetails {
     public boolean isAdmin() {
         return role == RoleEnum.ADMIN;
     }
-    public boolean isStaff(){
+
+    public boolean isStaff() {
         return role == RoleEnum.STAFF;
     }
-    public boolean isCustomer(){
+
+    public boolean isCustomer() {
         return role == RoleEnum.CUSTOMER;
     }
 
@@ -108,7 +110,7 @@ public class AuthAccount implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return Boolean.TRUE.equals(isVerified);
     }
 
 }

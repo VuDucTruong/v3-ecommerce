@@ -27,6 +27,7 @@ uses = CommonMapper.class)
 public abstract class AccountMapper  {
 
     @Mapping(source = "profile.id", target = "profileId")
+    @Mapping(source = "verified", target = "isVerified")
     public abstract AuthAccount fromAccountToAuthAccount(Account account);
 
     @Mapping(source = "fullName", target = "profile.fullName")

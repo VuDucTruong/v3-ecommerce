@@ -12,13 +12,14 @@ public enum BizErrors {
 
     EMAIL_ALREADY_EXISTS(new BadRequestException("Email already exists")),
     INVALID_EMAIL(new BadRequestException("Invalid email format")),
+    INVALID_OTP(new BadRequestException("OTP not found")),
+    OTP_EXPIRED(new BadRequestException("OTP is expired")),
 
     ACCOUNT_NOT_FOUND(new ResourceNotFoundException("Account not found")),
     PRODUCT_NOT_FOUND(new ResourceNotFoundException("Product not found")),
     ORDER_NOT_FOUND(new ResourceNotFoundException("Order not found")),
     CATEGORY_NOT_FOUND(new ResourceNotFoundException("Category not found")),
     ORDER_AMOUNT_TOO_MINOR(new BadRequestException("Order amount is too small")),
-    OTP_NOT_FOUND(new ResourceNotFoundException("OTP not found")),
     RESOURCE_NOT_FOUND(new ResourceNotFoundException("Resource not found")),
 
     AUTHORISATION_NULL(new UnAuthorisedException("Authorisation is not found")),
@@ -27,6 +28,7 @@ public enum BizErrors {
 
     INVALID_COUPON(new BadRequestException("Coupon not available")),
     FORBIDDEN_ACTION(new ForbiddenException("You don't have permission to do this action")),
+    FORBIDDEN_NOT_VERIFIED(new ForbiddenException("You are not verified")),
     RESOURCE_NOT_OWNED(new ForbiddenException("You don't own this resource")),
 
     INVALID_IMAGE_URL(new BadRequestException("Image upload not accepted")),

@@ -49,6 +49,8 @@ spring:
           auth: true
           starttls:
             enable: true
+
+
 phong:
   mail:
     to: ${MAIL_TO:21522458@gm.uit.edu.vn}

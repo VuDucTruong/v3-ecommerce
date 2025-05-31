@@ -42,7 +42,7 @@ public class ControllerUser {
             if this return AUTHORISATION_NULL || AUTHORISATION_ANNONYMOUS || AUTHORISATION_INVALID \n 
                     => simply route to login page \n
             """)
-    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0) and principal.enabled")
     public ResponseEntity<ResponseUser> getuser(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) boolean deleted) {
@@ -61,7 +61,7 @@ public class ControllerUser {
     }
 
     @PatchMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0) and principal.enabled")
     @Operation(summary = "Update oneSelf's profile", description = """
             ID là id của profile \n
             => if Admin && id != null \n
@@ -73,7 +73,7 @@ public class ControllerUser {
     }
 
     @DeleteMapping("me")
-    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0) and principal.enabled")
     @Operation(summary = "delete 1 ==> admin can't delete self")
     public ResponseEntity<Integer> deleteMe() {
         var x = userCommand.deleteAccount();

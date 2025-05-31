@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Email_Fullname;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_Email_Otp_OtpExpiry;
 
 import java.util.Collection;
 import java.util.Date;
@@ -33,15 +34,19 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
     @Query(value = """
             UPDATE accounts
             SET password = :password, otp = NULL, otp_expiry = NULL
-            WHERE email = :email
-              AND otp IS NOT NULL
-              AND otp = :otp
-                AND otp_expiry is not null
-              AND otp_expiry > NOW()
+            WHERE id = :id
             """, nativeQuery = true)
-    int changePassword(@Param("otp") String otp,
-                       @Param("email") String email,
-                       @Param("password") String password);
+    int changePassword(long id, @Param("password") String password);
+
+
+    @Modifying
+    @Query(value = """
+            UPDATE accounts
+            SET is_verified = true, otp = NULL, otp_expiry = NULL
+                        where id = :id
+            """, nativeQuery = true)
+    int verifyMail(long id);
+
 
     Optional<Account> findByIdAndDeletedAtIsNull(long id);
 
@@ -54,10 +59,10 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
 
     @Query("update Account a set a.deletedAt = current_timestamp where a.id in :ids")
     @Modifying
-    int updateDeletedAtByIdIn(long[]ids);
+    int updateDeletedAtByIdIn(long[] ids);
 
     @Query("select a.email as email, p.fullName as fullName from Account a join Profile p on a.id = p.accountId where email in (:emails)")
-    List<ProQ_Email_Fullname> findAllProQEmailFullname(Collection<String> emails );
+    List<ProQ_Email_Fullname> findAllProQEmailFullname(Collection<String> emails);
 
     int countAccountByRole(String role);
 }

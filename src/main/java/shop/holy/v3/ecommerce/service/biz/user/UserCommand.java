@@ -45,6 +45,7 @@ public class UserCommand {
             profile.setImageUrlId(blobUrl);
             profile.setId(account.getId());
         }
+        account.setVerified(true);
 
         Account savedAccount = accountRepository.save(account);
         profile.setAccountId(savedAccount.getId());

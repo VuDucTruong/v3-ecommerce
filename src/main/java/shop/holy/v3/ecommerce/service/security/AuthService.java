@@ -23,16 +23,18 @@ public class AuthService {
 
     public ResponseLogin authenticateAccount(RequestLogin request) {
         Account account = userQueryService.findByEmail(request.email());
+        if (account == null)
+            throw BizErrors.ACCOUNT_NOT_FOUND.exception();
+        if (!account.isVerified())
+            throw BizErrors.FORBIDDEN_NOT_VERIFIED.exception();
+        if (!account.getPassword().equals(request.password()))
+            throw BizErrors.AUTHORISATION_INVALID.exception();
 
-        if (account != null && account.getPassword().equals(request.password())) {
-//            Profile profile = account.getProfile();
-            AuthAccount authAccount = accountMapper.fromAccountToAuthAccount(account);
-            return new ResponseLogin(jwtService.generateAccessToken(authAccount),
-                    jwtService.generateRefreshToken(String.valueOf(authAccount.getId())),
-                    accountMapper.fromEntityToResponseAccountDetail(account)
-            );
-        }
-        throw BizErrors.LOGIN_FAILED.exception();
+        AuthAccount authAccount = accountMapper.fromAccountToAuthAccount(account);
+        return new ResponseLogin(jwtService.generateAccessToken(authAccount),
+                jwtService.generateRefreshToken(String.valueOf(authAccount.getId())),
+                accountMapper.fromEntityToResponseAccountDetail(account)
+        );
     }
 
     public Cookie[] makeCookies(ResponseLogin loginResponse) {

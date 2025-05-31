@@ -42,7 +42,7 @@ public class ControllerTest {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0) and principal.enabled")
     public ResponseEntity<AuthAccount> testSelf() {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         return ResponseEntity.ok(authAccount);
