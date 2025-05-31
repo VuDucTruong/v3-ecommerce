@@ -44,6 +44,7 @@ public abstract class AccountMapper  {
     @Mapping(source = "imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL)
     public abstract ResponseProfile fromEntityToResponseProfile(Profile profile);
 
+    @Mapping(source = "verified", target = "isVerified")
     public abstract ResponseUser fromEntityToResponseAccountDetail(Account account);
 
     public Specification<Account> fromRequestToSpecification(RequestUserSearch searchReq) {

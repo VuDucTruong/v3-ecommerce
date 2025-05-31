@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
 
 public record ResponseProductItem(
+        long id,
         @Schema(example = "1234") long productId,
         @Schema(example = "SPOTIFYKEY123") String productKey,
         Date createdAt,

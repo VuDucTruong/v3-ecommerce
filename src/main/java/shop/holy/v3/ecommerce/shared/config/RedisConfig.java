@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,6 +77,7 @@ public class RedisConfig {
     @Bean
     @Profile("cachemem")
     public CacheManager memoryCacheManager() {
+        CaffeineCacheManager caffe = new CaffeineCacheManager();
         return new ConcurrentMapCacheManager(CacheKeys.values());
     }
 

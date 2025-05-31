@@ -69,7 +69,7 @@ public class PaymentCommand {
             Payment p1 = paymentMapper.from_UrlRequest_to_Entity(req);
             BigDecimal amount = orderRepository.findAmountByOrderId(orderId).orElseThrow(BizErrors.ORDER_NOT_FOUND::exception);
             String tRef = UUID.randomUUID().toString();
-            Pair<String, String> pUrlPair = build_Pay_Url(p1.getBankCode(), amount, tRef, p1.getNote(), ip);
+            Pair<String, String> pUrlPair = build_Pay_Url(p1.getBankCode(), amount, tRef, p1.getNote(), ip,req.callbackUrl());
             ///  SAVE .....
             {
                 p1.setProfileId(profileId);
@@ -85,8 +85,8 @@ public class PaymentCommand {
         return opt_payment.get().getPaymentUrl();
     }
 
-    private Pair<String, String> build_Pay_Url(String bankCode, BigDecimal amount, String transRef, String orderInfo, String ip) {
-        Map<String, String> vnpParamsMap = vnpPayProperties.buildParamsMap(transRef, orderInfo);
+    private Pair<String, String> build_Pay_Url(String bankCode, BigDecimal amount, String transRef, String orderInfo, String ip, String returnUrl) {
+        Map<String, String> vnpParamsMap = vnpPayProperties.buildParamsMap(transRef, orderInfo, returnUrl);
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount.longValue() * 100));
         if (bankCode != null && !bankCode.isEmpty()) {
             vnpParamsMap.put("vnp_BankCode", bankCode);

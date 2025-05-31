@@ -26,7 +26,7 @@ public class Vnp_Pay_Properties {
     private String vnp_Command;
     private String orderType;
 
-    public Map<String, String> buildParamsMap(String transRef,String orderInfo) {
+    public Map<String, String> buildParamsMap(String transRef,String orderInfo, String returnUrl) {
         Map<String, String> vnpParamsMap = new HashMap<>();
         vnpParamsMap.put("vnp_Version", this.vnp_Version);
         vnpParamsMap.put("vnp_Command", this.vnp_Command);
@@ -36,7 +36,7 @@ public class Vnp_Pay_Properties {
         vnpParamsMap.put("vnp_OrderInfo", orderInfo);
         vnpParamsMap.put("vnp_OrderType", this.orderType);
         vnpParamsMap.put("vnp_Locale", "en");
-        vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
+        vnpParamsMap.put("vnp_ReturnUrl", returnUrl);
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnpCreateDate = formatter.format(calendar.getTime());
