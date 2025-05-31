@@ -77,7 +77,7 @@ public class RedisConfig {
     @Bean
     @Profile("cachemem")
     public CacheManager memoryCacheManager() {
-        CaffeineCacheManager caffe = new CaffeineCacheManager();
+//        CaffeineCacheManager caffe = new CaffeineCacheManager();
         return new ConcurrentMapCacheManager(CacheKeys.values());
     }
 

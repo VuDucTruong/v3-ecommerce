@@ -19,8 +19,8 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
     @EntityGraph(attributePaths = {"profile"})
     Account findByEmail(@Size(max = 100) String email);
 
-    @Query("SELECT 1 from Account a where a.email = :email")
-    Optional<Integer> isEmailExist(String email);
+
+
 
     @Modifying
     @Query(value = """

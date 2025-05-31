@@ -29,6 +29,7 @@ public enum BizErrors {
     INVALID_COUPON(new BadRequestException("Coupon not available")),
     FORBIDDEN_ACTION(new ForbiddenException("You don't have permission to do this action")),
     FORBIDDEN_NOT_VERIFIED(new ForbiddenException("You are not verified")),
+    FORBIDDEN_UNCOMPLETED_VERIFICATION(new ForbiddenException("You are having uncompleted verification, please continue or request a new OTP")),
     RESOURCE_NOT_OWNED(new ForbiddenException("You don't own this resource")),
 
     INVALID_IMAGE_URL(new BadRequestException("Image upload not accepted")),

@@ -92,16 +92,33 @@ public class AccountCommand {
 
     @Transactional
     public void registerAccount(RequestAccountRegistration registration) {
-        var emailExist = accountRepository.isEmailExist(registration.email());
+        var queriedAccount = accountRepository.findByEmail(registration.email());
 
-        if (emailExist.isPresent())
+        if (queriedAccount == null) {
+            Account account = accountMapper.fromRegistrationRequestToEntity(registration);
+            accountRepository.save(account);
+            return;
+        }
+
+        if (queriedAccount.isVerified())
             throw BizErrors.EMAIL_ALREADY_EXISTS.exception();
 
-        Account account = accountMapper.fromRegistrationRequestToEntity(registration);
-        account.setRole(RoleEnum.CUSTOMER.name());
-        var acc = accountRepository.save(account);
-        var profile = account.getProfile();
-        profile.setAccountId(acc.getId());
+        /// ACC EXIST, NOT VERIFIED
+        Date now = new Date();
+        if (StringUtils.hasLength(queriedAccount.getOtp()) && queriedAccount.getOtpExpiry() != null && queriedAccount.getOtpExpiry().after(now))
+        /// ACC EXIST, NOT VERIFIED, STILL HAS OTP ==> currently Verifying
+        ///  either complete the verification OR request new OTP
+            throw BizErrors.FORBIDDEN_UNCOMPLETED_VERIFICATION.exception();
+
+        ///  ACC EXIST, NOT VERIFIED, NOT IN VERIFICATION STEP (0 OTPs)
+
+        queriedAccount.setRole(RoleEnum.CUSTOMER.name());
+        queriedAccount.setVerified(false);
+        queriedAccount.setPassword(registration.password());
+        queriedAccount.getProfile().setFullName(registration.fullName());
+
+        accountRepository.save(queriedAccount);
+        var profile = queriedAccount.getProfile();
         profileRepository.save(profile);
     }
 

@@ -18,10 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
-import shop.holy.v3.ecommerce.shared.exception.BaseBizException;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
-import shop.holy.v3.ecommerce.shared.exception.UnAuthorisedException;
+import shop.holy.v3.ecommerce.shared.exception.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -126,6 +123,8 @@ public class OpenApiConfig {
             return "404";
         } else if (exception instanceof BadRequestException) {
             return "400";
+        } else if (exception instanceof ForbiddenException) {
+            return "403";
         }
         return "500";
     }
