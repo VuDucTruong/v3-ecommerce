@@ -136,8 +136,4 @@ select *
 from products_categories
 where product_id = 20;
 
-select *
-from blogs;
-
-select *
-from accounts;
+select * from coupons;

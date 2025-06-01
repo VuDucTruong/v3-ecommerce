@@ -15,7 +15,9 @@ import shop.holy.v3.ecommerce.api.dto.order.ResponseOrder;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
 import shop.holy.v3.ecommerce.persistence.entity.OrderDetail;
 import shop.holy.v3.ecommerce.persistence.entity.product.Product;
+import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
+import shop.holy.v3.ecommerce.shared.mapper.product.ProductTagMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
@@ -25,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {CommonMapper.class})
+@Mapper(componentModel = "spring", uses = {CommonMapper.class, ProductTagMapper.class})
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class OrderMapper {
 
@@ -51,6 +53,7 @@ public abstract class OrderMapper {
     public abstract OrderDetail fromRequestToOrderDetail(RequestOrderCreate.RequestOrderDetail detail);
 
     @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
+    @Mapping(source = "tags", target = "tags", qualifiedByName = MapFuncs.FROM_TAG_ENTITY_TO_STRING_ARRAY)
     protected abstract ResponseOrder.ResponseOrderItem productToResponseOrderItem(Product product);
 
 //    protected abstract ResponseOrder.ResponseOrderDetail orderDetailToResponseOrderDetail(OrderDetail orderDetail);

@@ -34,5 +34,7 @@ app:
       enable: ${APP_CACHE_TEST_ENABLED:true}
   strict:
     enable: ${APP_STRICT_ENABLED:false}
+  strict-password-change:
+    enable: ${APP_STRICT_PASSWORD_CHANGE:false}
 #app:
 #  flyway-refresh: ${APP_FLYWAY_REFRESH:false}

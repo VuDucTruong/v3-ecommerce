@@ -36,6 +36,9 @@ public class AccountCommand {
 
     @Value("${app.strict.enable}")
     private boolean enableStrict;
+    @Value("${app.strict-password-change.enable}")
+    private boolean enableStrictPasswordChange;
+
 
     @Transactional
     public void saveOtp(RequestOTP otpRequest) throws MessagingException {
@@ -56,9 +59,13 @@ public class AccountCommand {
         Account account = accountRepository.findByEmail(request.email());
         if (account == null)
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
-        if (enableStrict && account.isVerified())
-            throw BizErrors.FORBIDDEN_NOT_VERIFIED.exception();
-        checkOtp(account.getOtp(), account.getOtpExpiry(), request.otp());
+
+        if (enableStrictPasswordChange && !account.getRole().equals(RoleEnum.CUSTOMER.name())) {
+
+            if (enableStrict && account.isVerified())
+                throw BizErrors.FORBIDDEN_NOT_VERIFIED.exception();
+            checkOtp(account.getOtp(), account.getOtpExpiry(), request.otp());
+        }
 
         int changes = accountRepository.changePassword(account.getId(), request.password());
         if (changes == 0) {

@@ -11,6 +11,7 @@ import shop.holy.v3.ecommerce.persistence.entity.product.Product;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductFavorite;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -34,13 +35,15 @@ public interface IProductFavoriteRepository extends JpaRepository<ProductFavorit
             """, nativeQuery = true)
     Page<Product> findFavorites(long profileId, Pageable pageable);
 
+    @Query(value = "SELECT * from product_favorites pf where pf.profile_id =:profileId " ,nativeQuery = true)
+    List<Long> findAllIdsByAccountId(Long profileId);
+
     @Query(value = """
             SELECT 1 from product_favorites fp
                         where product_id = :productId
                         AND profile_id = :profileId
             """, nativeQuery = true)
     Optional<Integer> checkFavorite(long profileId, long productId);
-
 
 
 

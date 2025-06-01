@@ -7,6 +7,7 @@ import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public record ResponseOrder(
         long id,
@@ -23,7 +24,7 @@ public record ResponseOrder(
             BigDecimal price,
             BigDecimal originalPrice,
             @JsonUnwrapped ResponseOrderItem product,
-            int quantity
+            long quantity
     ) {
     }
 
@@ -32,7 +33,9 @@ public record ResponseOrder(
             long id,
             String name,
             String imageUrl,
-            String slug
-    ) {
+            String slug,
+            long quantity,
+            String[] tags
+            ) {
     }
 }

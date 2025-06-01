@@ -13,6 +13,8 @@ import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.service.biz.product.favorite.ProductFavoriteCommand;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -38,7 +40,7 @@ public class ControllerFavorites {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "get My favorite products")
+    @Operation(summary = "get My favorite products paginated")
     @GetMapping
     @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0) and principal.enabled")
     public ResponseEntity<ResponsePagination<ResponseProduct>> getFavoriteProducts(
@@ -48,6 +50,14 @@ public class ControllerFavorites {
         Pageable pageable = PageRequest.of(page, size, Sort.by("created_at").descending());
         ResponsePagination<ResponseProduct> res = favoriteService.findFavorites(pageable);
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/ids")
+    @Operation(summary = "get ALL favorite productIds")
+    @PreAuthorize("hasRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0) and principal.enabled")
+    public ResponseEntity<List<Long>> getString() {
+        var rs = favoriteService.getFavoriteProductIds();
+        return ResponseEntity.ok(rs);
     }
 
 }
