@@ -2,4 +2,16 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,prometheus
+        include: health
+  metrics:
+    export:
+      otlp:
+        enabled: true
+        step: 10s
+        url: ${SPRING_OTEL_EXPORT_URL:http://localhost:4318/v1/metrics}
+  otlp:
+    metrics:
+      export:
+        url: ${SPRING_OTEL_EXPORT_URL:http://localhost:4318/v1/metrics}
+        step: 10s
+        enabled: true
