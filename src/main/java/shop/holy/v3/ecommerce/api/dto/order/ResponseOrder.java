@@ -23,7 +23,7 @@ public record ResponseOrder(
     public record ResponseOrderDetail(
             BigDecimal price,
             BigDecimal originalPrice,
-            @JsonUnwrapped ResponseOrderItem product,
+             ResponseOrderItem product,
             long quantity
     ) {
     }

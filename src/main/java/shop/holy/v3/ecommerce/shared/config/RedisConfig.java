@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,7 @@ import shop.holy.v3.ecommerce.shared.constant.CacheKeys;
 
 @Configuration
 @EnableCaching
-@Profile({"cacheredis", "cachemem"})
+@Profile({"cacheredis", "!cachenone"})
 public class RedisConfig {
 
     @Value("${app.cache.test.enable}")
@@ -75,7 +74,7 @@ public class RedisConfig {
     }
 
     @Bean
-    @Profile("cachemem")
+    @Profile("!cachenone")
     public CacheManager memoryCacheManager() {
 //        CaffeineCacheManager caffe = new CaffeineCacheManager();
         return new ConcurrentMapCacheManager(CacheKeys.values());

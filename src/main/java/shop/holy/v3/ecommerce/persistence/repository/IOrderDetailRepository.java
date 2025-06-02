@@ -21,7 +21,7 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
                         where odd.orderId in (:orderId)""")
     List<ProQ_OrderDetails> findByOrderIdIn(Collection<Long> orderId);
 
-    @EntityGraph(attributePaths = {"product"})
+    @EntityGraph(attributePaths = {"product", "product.tags"})
     List<OrderDetail> findAllByOrderId(long orderId);
 
 

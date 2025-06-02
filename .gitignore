@@ -6,7 +6,6 @@ target/
 flyway.conf
 src/main/resources/secret/*
 env/
-container/
 
 ### STS ###
 .apt_generated

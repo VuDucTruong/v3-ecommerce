@@ -24,7 +24,9 @@ public class OrderDetail {
     @Column(name = "order_id", nullable = false)
     private long orderId;
 
+    @Column(name = "product_id", nullable = false)
     private long productId;
+
     private BigDecimal originalPrice;
     private BigDecimal price;
 
@@ -38,7 +40,6 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
-    @Transient
     private Product product;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderDetail")

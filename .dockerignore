@@ -23,7 +23,7 @@
 **/*.dbmdl
 **/*.jfm
 **/charts
-**/docker-compose*
+container/d-compose.yaml
 **/compose.y*ml
 **/Dockerfile*
 **/secrets.dev.yaml

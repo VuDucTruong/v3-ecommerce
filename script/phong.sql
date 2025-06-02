@@ -137,3 +137,4 @@ from products_categories
 where product_id = 20;
 
 select * from coupons;
+select * from orders;
