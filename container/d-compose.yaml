@@ -96,6 +96,15 @@ services:
     restart: always
     ports:
       - 9411:9411
+
+  loki:
+    image: grafana/loki:latest
+    command: [ "-config.file=/etc/loki/loki-config.yaml" ]
+    volumes:
+      - ./collector/loki.yaml:/etc/loki/loki-config.yaml
+    ports:
+      - 3100:3100
+
 #volumes:
 #  db-data:
 #    name: phong

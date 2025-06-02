@@ -1,0 +1,648 @@
+16:33:54 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:4, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from information_schema.sequences"]
+Params:[()]
+---
+16:33:54 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."blogs" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre2" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."comments" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre1" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."coupons" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."order_details" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_description" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_groups" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."categories" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:33:55 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."accounts" where 1=0"]
+Params:[()]
+---
+16:33:59 INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/holy_shop (PostgreSQL 16.9)
+---
+16:33:59 DEBUG org.flywaydb.core.FlywayExecutor - Database Type: PostgreSQL
+---
+16:33:59 DEBUG org.flywaydb.core.FlywayExecutor - Driver: PostgreSQL JDBC Driver 42.7.5
+---
+16:33:59 DEBUG org.flywaydb.core.FlywayExecutor - DDL Transactions Supported: true
+---
+16:33:59 DEBUG org.flywaydb.core.FlywayExecutor - Scanning for script callbacks ...
+---
+16:33:59 DEBUG org.flywaydb.core.FlywayExecutor - Memory usage: 70 of 154M
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:4, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from information_schema.sequences"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."blogs" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre2" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."comments" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre1" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."coupons" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."order_details" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_description" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_groups" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."categories" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:52:40 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."accounts" where 1=0"]
+Params:[()]
+---
+16:52:44 INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/holy_shop (PostgreSQL 16.9)
+---
+16:52:44 DEBUG org.flywaydb.core.FlywayExecutor - Database Type: PostgreSQL
+---
+16:52:44 DEBUG org.flywaydb.core.FlywayExecutor - Driver: PostgreSQL JDBC Driver 42.7.5
+---
+16:52:44 DEBUG org.flywaydb.core.FlywayExecutor - DDL Transactions Supported: true
+---
+16:52:44 DEBUG org.flywaydb.core.FlywayExecutor - Scanning for script callbacks ...
+---
+16:52:44 DEBUG org.flywaydb.core.FlywayExecutor - Memory usage: 120 of 158M
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:4, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from information_schema.sequences"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."blogs" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre2" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."comments" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre1" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."coupons" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."order_details" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_description" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_groups" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."categories" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+16:57:43 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."accounts" where 1=0"]
+Params:[()]
+---
+16:57:47 INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/holy_shop (PostgreSQL 16.9)
+---
+16:57:47 DEBUG org.flywaydb.core.FlywayExecutor - Database Type: PostgreSQL
+---
+16:57:47 DEBUG org.flywaydb.core.FlywayExecutor - Driver: PostgreSQL JDBC Driver 42.7.5
+---
+16:57:47 DEBUG org.flywaydb.core.FlywayExecutor - DDL Transactions Supported: true
+---
+16:57:47 DEBUG org.flywaydb.core.FlywayExecutor - Scanning for script callbacks ...
+---
+16:57:47 DEBUG org.flywaydb.core.FlywayExecutor - Memory usage: 114 of 154M
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:4, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from information_schema.sequences"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."blogs" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre2" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."comments" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."genre1" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."coupons" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."orders" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."profiles" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:1, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."order_details" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+17:09:28 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+17:09:29 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_description" where 1=0"]
+Params:[()]
+---
+17:09:29 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."product_groups" where 1=0"]
+Params:[()]
+---
+17:09:29 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."categories" where 1=0"]
+Params:[()]
+---
+17:09:29 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."products" where 1=0"]
+Params:[()]
+---
+17:09:29 DEBUG n.t.d.l.l.SLF4JQueryLoggingListener - 
+Name:dataSource, Connection:2, Time:0, Success:True
+Type:Prepared, Batch:False, QuerySize:1, BatchSize:0
+Query:["select * from "public"."accounts" where 1=0"]
+Params:[()]
+---
+17:09:32 INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/holy_shop (PostgreSQL 16.9)
+---
+17:09:32 DEBUG org.flywaydb.core.FlywayExecutor - Database Type: PostgreSQL
+---
+17:09:32 DEBUG org.flywaydb.core.FlywayExecutor - Driver: PostgreSQL JDBC Driver 42.7.5
+---
+17:09:32 DEBUG org.flywaydb.core.FlywayExecutor - DDL Transactions Supported: true
+---
+17:09:32 DEBUG org.flywaydb.core.FlywayExecutor - Scanning for script callbacks ...
+---
+17:09:32 DEBUG org.flywaydb.core.FlywayExecutor - Memory usage: 134 of 178M
+---

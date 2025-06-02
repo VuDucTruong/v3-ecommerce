@@ -5,6 +5,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +33,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Tag(name = "z-test")
 @RequestMapping("test")
+@Slf4j
 public class ControllerTest {
 
     private final SmtpService smtpService;
@@ -86,6 +88,8 @@ public class ControllerTest {
 
     @GetMapping("/hello")
     public String test() {
+        log.info("---------Hello method started---------");
+        log.error("---------Hello method started, id missing!---------");
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/test/abc", String.class);
         return response.getBody();

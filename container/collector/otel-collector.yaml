@@ -9,8 +9,8 @@ processors:
   batch:
 
 exporters:
-  logging:
-    loglevel: debug
+  debug:
+    verbosity: detailed
   otlp:
     endpoint: tempo:4317
     tls:
@@ -22,6 +22,12 @@ exporters:
   zipkin:
     endpoint: "http://zipkin:9411/api/v2/spans"
     format: proto
+#  loki:
+#    endpoint: "http://loki:3100/loki/api/v1/push"
+  otlphttp/logs:
+    endpoint: "http://loki:3100/otlp"
+    tls:
+      insecure: true
 
 extensions:
   health_check:
@@ -45,5 +51,6 @@ service:
 #      exporters: [otlp]
     logs:
       receivers: [ otlp ]
-#      processors: [ batch ]
-      exporters: [ otlp ]
+      processors: [ batch ]
+#      exporters: [ loki ]
+      exporters: [debug, otlphttp/logs]

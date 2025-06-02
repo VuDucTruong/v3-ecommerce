@@ -131,7 +131,7 @@ select *
 from product_items
 order by id desc;
 
-
+select *from categories;
 select *
 from products_categories
 where product_id = 20;

@@ -47,6 +47,7 @@ public class CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("CATEGORY NOT FOUND BY ID " + id));
     }
 
+    @Transactional
     public ResponseCategory insert(RequestCategoryCreate request) {
         Category category = categoryMapper.fromCreateRequestToEntity(request);
 
@@ -57,6 +58,7 @@ public class CategoryService {
         return categoryMapper.fromEntityToResponse(categoryRepository.save(category));
     }
 
+    @Transactional
     public ResponseCategory update(RequestCategoryUpdate request) {
         Category category = categoryMapper.fromUpdateRequestToEntity(request);
         if (request.image() != null) {
