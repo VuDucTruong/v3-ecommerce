@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.account.token.ResponseLogin;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
@@ -76,6 +77,18 @@ public class ControllerTest {
             response.addCookie(cookie);
         }
         return ResponseEntity.ok(responseLogin);
+    }
+
+    @GetMapping("abc")
+    public ResponseEntity<String> getString() {
+        return ResponseEntity.ok("asdlfjaslkdfjakj dlkajflkjalsdjf alksdjfklasd");
+    }
+
+    @GetMapping("/hello")
+    public String test() {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/test/abc", String.class);
+        return response.getBody();
     }
 
 

@@ -3,15 +3,30 @@ management:
     web:
       exposure:
         include: health
+
   metrics:
-    export:
-      otlp:
-        enabled: true
-        step: 10s
-        url: ${SPRING_OTEL_EXPORT_URL:http://localhost:4318/v1/metrics}
+#    export:
+#      otlp:
+#        enabled: true
+#        step: 10s
+#        url: ${SPRING_OTEL_EXPORT_URL:http://localhost:4318/v1/metrics}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+  tracing:
+    sampling:
+      probability: 1.0
+
   otlp:
     metrics:
       export:
         url: ${SPRING_OTEL_EXPORT_URL:http://localhost:4318/v1/metrics}
         step: 10s
         enabled: true
+    tracing:
+      export:
+        enabled: true
+      endpoint: ${SPRING_OTEL_TRACE_URL:http://localhost:4318/v1/traces}
+    logging:
+      endpoint: ${SPRING_OTEL_LOG_URL:http://localhost:4317}

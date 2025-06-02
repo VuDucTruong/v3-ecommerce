@@ -1,6 +1,6 @@
 spring:
   application:
-    name: v2-ecommerce-holy-shop
+    name: v3-ecommerce-holy-shop
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:log,security,dev,vnp,cachenone,ops}
   datasource:
