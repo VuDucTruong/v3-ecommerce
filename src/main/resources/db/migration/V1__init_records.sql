@@ -38,7 +38,7 @@ VALUES (6, '2025-05-08 10:59:23.342558', NULL, '2025-05-14', 'cus1@gmail.com', '
         'string', 'CUSTOMER', NULL);
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry,
                              password, role, verification_code)
-VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', false, '803045',
+VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', true, '803045',
         '2025-05-30 10:00:27.709892', 'string', 'ADMIN', NULL);
 
 

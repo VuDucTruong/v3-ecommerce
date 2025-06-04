@@ -27,7 +27,6 @@ public class ControllerComment {
 
     private final CommentService commentService;
 
-    @Hidden
     @GetMapping("{id}")
     @Operation(summary = "Get 1 Comment-> Có thể là ko cần dùng, vì ai đi lấy 1 comment làm gì?")
     public ResponseEntity<ResponseComment> getResponseCommentById(@PathVariable Long id, @RequestParam(required = false) boolean deleted) {

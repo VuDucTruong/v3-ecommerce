@@ -31,7 +31,6 @@ public class ControllerCategory {
     }
 
     @PostMapping("/searches")
-    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_ADMIN)")
     public ResponseEntity<ResponsePagination<ResponseCategory>> search(
             @RequestBody RequestCategorySearch searchReq) {
         ResponsePagination<ResponseCategory> categories = categoryService.search(searchReq);

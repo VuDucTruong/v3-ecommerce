@@ -51,7 +51,7 @@ public abstract class CouponMapper {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("value"), searchReq.valueFrom()));
             }
 
-            if (searchReq.valueFrom() != null) {
+            if (searchReq.valueTo() != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("value"), searchReq.valueTo()));
             }
 

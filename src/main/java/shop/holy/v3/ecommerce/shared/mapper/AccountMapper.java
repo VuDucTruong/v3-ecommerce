@@ -55,7 +55,7 @@ public abstract class AccountMapper  {
             }
 
             if (StringUtils.hasLength(searchReq.fullName())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("profile").get("fullName"), "%" + searchReq.fullName().toLowerCase() + "%"));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("profile").get("fullName")), "%" + searchReq.fullName().toLowerCase() + "%"));
             }
 
             if (!searchReq.deleted()) {
@@ -76,7 +76,7 @@ public abstract class AccountMapper  {
             }
 
             if (StringUtils.hasLength(searchReq.email())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("email"), "%" + searchReq.email().toLowerCase() + "%"));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), "%" + searchReq.email().toLowerCase() + "%"));
             }
             return predicate;
         };
