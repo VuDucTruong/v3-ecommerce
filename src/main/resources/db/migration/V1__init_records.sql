@@ -353,11 +353,12 @@ VALUES (1, '2025-04-17 22:25:17.232006', NULL, '2025-04-17', '2025-04-17', 'PHON
 
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info,
                            status)
-VALUES (1, '2025-05-07 20:08:05.216177', NULL, 100.00, NULL, 100.00, NULL, '{
+VALUES (1, '2025-05-07 20:08:05.216177', NULL, 100000.00, NULL, 100000.00, NULL, '{
   "email": "string",
   "additionalProp2": "string",
   "additionalProp3": "string"
 }', 'PROCESSING');
+
 
 
 --

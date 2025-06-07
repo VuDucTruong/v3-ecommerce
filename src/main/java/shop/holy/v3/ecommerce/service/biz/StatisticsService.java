@@ -11,7 +11,6 @@ import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -44,17 +43,17 @@ public class StatisticsService {
                 .thenApply(v -> new ResponseStatTotal(cusCount.join(), soldCount.join(), revenue.join(), orderCount.join()));
     }
 
-    public CompletableFuture<List<ResposneStatRevenues>> getRevenues(int backDateOffset) {
+    public CompletableFuture<List<ResponseStatRevenues>> getRevenues(int backDateOffset) {
         Date nDaysAgoMidnight = AppDateUtils.backDateByDays(backDateOffset);
         return CompletableFuture.supplyAsync(() -> {
             List<ProQ_Date_Revenue> revenues = orderRepository.findRevenues(OrderStatus.COMPLETED.name(), nDaysAgoMidnight, new Date());
-            return revenues.stream().map(r1 -> new ResposneStatRevenues(r1.getDate(), r1.getRevenue())).toList();
+            return revenues.stream().map(r1 -> new ResponseStatRevenues(r1.getDate(), r1.getRevenue())).toList();
         });
     }
 
     public CompletableFuture<ResponseStatistics> getStats(int backDayTotals, int backDayRevenues) {
         CompletableFuture<ResponseStatTotal> totals = getStatTotal(backDayTotals);
-        CompletableFuture<List<ResposneStatRevenues>> revenues = getRevenues(backDayRevenues);
+        CompletableFuture<List<ResponseStatRevenues>> revenues = getRevenues(backDayRevenues);
         return CompletableFuture.allOf(totals, revenues)
                 .thenApply(v -> new ResponseStatistics(totals.join(), revenues.join()));
     }

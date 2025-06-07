@@ -47,4 +47,4 @@ management:
 #        enabled: true
 spring:
   logging:
-    config: classpath:logback-spring.xml
+#    config: classpath:logback-spring.xml

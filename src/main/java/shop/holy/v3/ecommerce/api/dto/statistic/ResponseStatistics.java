@@ -6,11 +6,11 @@ import java.util.List;
 
 public record ResponseStatistics(
         ResponseStatTotal totals,
-        List<ResposneStatRevenues> revenues
+        List<ResponseStatRevenues> revenues
 ) {
 
 
-    public record ResposneStatRevenues(
+    public record ResponseStatRevenues(
             LocalDate date,
             BigDecimal value
     ){}

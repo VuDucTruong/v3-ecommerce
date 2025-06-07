@@ -139,3 +139,4 @@ where product_id = 20;
 select * from coupons;
 select * from orders;
 select * from blogs;
+
