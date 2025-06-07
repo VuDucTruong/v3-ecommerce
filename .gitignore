@@ -34,4 +34,4 @@ build/
 
 ### VS Code ###
 .vscode/
-./container/c-tempo-data/
+container/c-tempo-data/
