@@ -24,6 +24,7 @@ import org.springframework.core.env.Environment;
 public class OpenTelemetryConfig {
     @Bean
     OpenTelemetry openTelemetry(SdkLoggerProvider sdkLoggerProvider, SdkTracerProvider sdkTracerProvider, ContextPropagators contextPropagators) {
+
         OpenTelemetrySdk openTelemetrySdk = OpenTelemetrySdk.builder()
                 .setLoggerProvider(sdkLoggerProvider)
                 .setTracerProvider(sdkTracerProvider)
