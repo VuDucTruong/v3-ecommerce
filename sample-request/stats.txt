@@ -1,0 +1,29 @@
+
+query theo date from/ to ( cung cấp tháng + năm ) /statistic/total
+
+{
+		totalNewCustomers: ( Số lượng khách hang mới thừ date from đến date to )
+		totalOrders: ( Số lượng đơn hang từ date from - date to ) - - Tất cả đơn hàng ( bất kể trạng thái ) 
+
+		averageOrderValue: ( Giá trị đơn hang trung bình = tổng / số lượng trong khoảng thời gian đã cho ) - Tất cả đơn hàng ( bất kể trạng thái ) 
+		Revenue: Tính tổng giá trị của tất cả đơn hàng
+	
+}
+
+query theo date from/to ( cung cấp tháng + năm ) /statistic/order
+{
+	[
+	date: ngày tháng năm
+	pending: Số lượng xxx
+	processing : Số lượng xxx
+	completed: số lượng xxx	
+	failed: Số lượng xx
+]
+}
+
+query theo date from/to ( cung cấp tháng + năm ) /statistic/products-trend ( top 10 )
+{
+	product: object ( Không cần chi tiết )
+	saleCount: số lượng xxx
+	
+}

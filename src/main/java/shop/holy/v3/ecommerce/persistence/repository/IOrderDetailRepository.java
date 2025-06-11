@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.OrderDetail;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_OrderDetails;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_Sold_ProdId_ProdName;
 
 import java.util.Collection;
 import java.util.Date;
@@ -28,11 +29,11 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
     List<OrderDetail> findAllByOrderIdIn(Collection<Long> orderIds);
 
     @Query("""
-            SELECT SUM(od.quantity) from
-                        OrderDetail od join Order  o
-                    where o.status =  :status
-                                and o.createdAt >= :lowerBound AND
-                            o.createdAt <= :upperBound
+            SELECT SUM(od.quantity) as totalSold, od.product.id as prodId, od.product.name as prodName from
+                        OrderDetail od join Order o
+                    where o.createdAt >= :lowerBound 
+                    AND o.createdAt <= :upperBound
+                    group by od.product.id, od.product.name
             """)
-    long findSumQuantityByRecentTime(Date lowerBound, Date upperBound);
+    List<ProQ_Sold_ProdId_ProdName> findSumQuantityByRecentTime(Date lowerBound, Date upperBound);
 }

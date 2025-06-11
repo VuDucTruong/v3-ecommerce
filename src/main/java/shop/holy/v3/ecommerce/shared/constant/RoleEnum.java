@@ -8,9 +8,10 @@ import static shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles.*;
 @RequiredArgsConstructor
 @Getter
 public enum RoleEnum {
-    ADMIN(new String[]{ROLE_LEVEL_0,ROLE_STAFF, ROLE_ADMIN}),
-    STAFF(new String[]{ROLE_LEVEL_0, ROLE_STAFF}),
-    CUSTOMER(new String[]{ROLE_LEVEL_0, ROLE_CUSTOMER});
+
+    ADMIN(new String[]{ROLE_LEVEL_0, ROLE_STAFF, ROLE_ADMIN}, 10),
+    STAFF(new String[]{ROLE_LEVEL_0, ROLE_STAFF}, 5),
+    CUSTOMER(new String[]{ROLE_LEVEL_0, ROLE_CUSTOMER}, 1);
 
     public static class Roles {
         public static final String ROLE_LEVEL_0 = "ROLE_LEVEL_0";
@@ -20,9 +21,30 @@ public enum RoleEnum {
         public static final String ROLE_STAFF = "ROLE_STAFF";
         public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
     }
-
+    public static RoleEnum MAX = ADMIN;
 
     private final String[] roles;
+    private final int power;
+
+    public boolean equals(String role) {
+        return this.name().equals(role);
+    }
+
+    public boolean lt(RoleEnum role) {
+        return this.power < role.power;
+    }
+
+    public boolean gt(RoleEnum role) {
+        return this.power > role.power;
+    }
+
+    boolean gte(RoleEnum role) {
+        return this.power >= role.power;
+    }
+
+    public boolean lte(RoleEnum role) {
+        return this.power <= role.power;
+    }
 
 
 }

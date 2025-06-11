@@ -16,11 +16,26 @@ public class AppDateUtils {
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
+
     public static Date toStartOfDay(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
+    public static Date toStartOfDay(Date date) {
+        return Date.from(date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant());
+    }
+
+    public static LocalDate toLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+
     public static Date toEndOfDay(LocalDate localDate) {
         return Date.from(localDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
     }
+
 }

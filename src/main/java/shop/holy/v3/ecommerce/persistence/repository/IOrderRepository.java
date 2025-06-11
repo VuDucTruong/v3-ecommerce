@@ -1,9 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
@@ -28,8 +25,6 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
             """)
     int updateOrderDeletedAtByIdIn(long[] ids);
 
-
-
     Optional<Order> findFirstByIdEqualsAndDeletedAtIsNull(long id);
 
     Optional<Order> findFirstByIdEqualsAndProfileIdEqualsAndDeletedAtIsNull(long id, long profileId);
@@ -43,7 +38,10 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
                         and o.createdAt >= :lowerBound AND
                             o.createdAt <= :upperBound
             """)
-    BigDecimal findSumTotalByRecentTime(String status, Date lowerBound, Date upperBound);
+    Optional<BigDecimal> findSumTotalByRecentTime(String status, Date lowerBound, Date upperBound);
+
+    @EntityGraph(attributePaths = {"payment"})
+    List<Order> findAllByCreatedAtBeforeAndCreatedAtAfter(Date createdAtBefore, Date createdAtAfter);
 
     long countByStatusAndCreatedAtLessThanAndCreatedAtGreaterThan(String status, Date lowerBound, Date upperBound);
 

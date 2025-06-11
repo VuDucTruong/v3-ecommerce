@@ -8,6 +8,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Email_Fullname;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Email_Otp_OtpExpiry;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -18,8 +19,6 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
 
     @EntityGraph(attributePaths = {"profile"})
     Account findByEmail(@Size(max = 100) String email);
-
-
 
 
     @Modifying
@@ -64,5 +63,5 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, JpaSpe
     @Query("select a.email as email, p.fullName as fullName from Account a join Profile p on a.id = p.accountId where email in (:emails)")
     List<ProQ_Email_Fullname> findAllProQEmailFullname(Collection<String> emails);
 
-    int countAccountByRole(String role);
+    int countAccountByRoleAndCreatedAtBeforeAndCreatedAtAfter(String role, Date lowerBound, Date upperBound);
 }

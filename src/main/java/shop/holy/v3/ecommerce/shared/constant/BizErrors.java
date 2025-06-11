@@ -25,11 +25,13 @@ public enum BizErrors {
     AUTHORISATION_NULL(new UnAuthorisedException("Authorisation is not found")),
     AUTHORISATION_ANNONYMOUS(new UnAuthorisedException("Authorisation user is anonymous")),
     AUTHORISATION_INVALID(new UnAuthorisedException("Authorisation is invalid")),
+    AUTHORISATION_INVALID_REQUIRE_REFRESH(new UnAuthorisedException("Authorisation is invalid, please login again!")),
 
     INVALID_COUPON(new BadRequestException("Coupon not available")),
     FORBIDDEN_ACTION(new ForbiddenException("You don't have permission to do this action")),
     FORBIDDEN_NOT_VERIFIED(new ForbiddenException("You are not verified")),
     FORBIDDEN_UNCOMPLETED_VERIFICATION(new ForbiddenException("You are having uncompleted verification, please continue or request a new OTP")),
+    RESOURCE_NOT_AUTHORISED_REQUIRE_HIGHER_POWER(new ForbiddenException("Không được phép thay đổi tài nguyên này, yêu cầu tài khoản có thẩm quyền cao hơn")),
     RESOURCE_NOT_OWNED(new ForbiddenException("You don't own this resource")),
 
     INVALID_IMAGE_URL(new BadRequestException("Image upload not accepted")),
