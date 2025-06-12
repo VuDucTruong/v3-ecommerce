@@ -1,6 +1,8 @@
 package shop.holy.v3.ecommerce.service.biz.product.item;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.holy.v3.ecommerce.api.dto.product.item.*;
@@ -11,10 +13,11 @@ import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemUsedRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductRepository;
+import shop.holy.v3.ecommerce.shared.mapper.CommonMapper;
+import shop.holy.v3.ecommerce.shared.mapper.JsonMapper;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductItemMapper;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,6 +28,7 @@ public class ProductItemCommand {
     private final IProductItemUsedRepository usedRepository;
     private final IProductRepository productRepository;
     private final ProductItemMapper mapper;
+    private final JsonMapper jsonMapper;
 
     @Transactional
     public ResponseProductItemCreate inserts(List<RequestProductItemCreate> requests, boolean used, boolean ignoreDeleted) {
@@ -43,16 +47,18 @@ public class ProductItemCommand {
         if (used) {
             ProductItemUsed[] usedItems = insertable.map(mapper::from_Request_ToUsedEntity)
                     .toArray(ProductItemUsed[]::new);
-            var tri = mapper.from_UsedEntity_To_Tri_Arrays(usedItems);
-            accepted = usedRepository.insertProductItems(tri.getLeft(), tri.getMiddle(), tri.getRight());
+            var batch = mapper.fromUsedEntityToBatchInsertDTO(usedItems);
+            var batchAccounts = Arrays.stream(batch.accounts()).map(jsonMapper::writeJson).toArray(String[]::new);
+            accepted = usedRepository.insertProductItems(batch.productIds(),batch.productKeys(), batchAccounts, batch.regions());
         } else {
 
             ProductItem[] productItems = insertable.map(mapper::fromRequestToEntity)
                     .toArray(ProductItem[]::new);
-            var tri = mapper.from_Entity_To_Tri_Arrays(productItems);
+            var batch = mapper.fromEntityToBatchInsertDTO(productItems);
 
             ///  MAY BE THE ACCEPTED?
-            accepted = productItemRepository.insertProductItems(tri.getLeft(), tri.getMiddle(), tri.getRight());
+            var batchAccounts = Arrays.stream(batch.accounts()).map(jsonMapper::writeJson).toArray(String[]::new);
+            accepted = productItemRepository.insertProductItems(batch.productIds(),batch.productKeys(), batchAccounts, batch.regions());
             ///  TO UPDATE PRODUCT'S QUANTITY
             accepted.stream().collect(
                     Collectors.groupingBy(ProQ_Id_ProductId_AcceptedKey::getProductId,
@@ -61,7 +67,7 @@ public class ProductItemCommand {
         }
 
 
-        var results = accepted.stream().map(a -> new ResponseProductItemCreate.ResponseAccepted(a.getId(), a.getProductId(), a.getAcceptedKey()))
+        var results = accepted.stream().map(a -> new ResponseProductItemCreate.ResponseAccepted(a.getId(), a.getProductId(), a.getAcceptedKey(), a.getAccount()))
                 .toList();
         return new ResponseProductItemCreate(results);
     }

@@ -1,7 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.repository.product;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Id_ProductId_AcceptedKey;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductId_Quantity;
-import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductItemLight;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,41 +22,38 @@ public interface IProductItemRepository extends JpaRepository<ProductItem, Long>
 
     List<ProductItem> findAllByProductId(long productId, Pageable pageable);
 
-    Optional<ProQ_ProductMetadata> findFirstById(long id);
+    Optional<ProQ_ProductItemLight> findFirstById(long id);
 
-
-    Slice<ProductItem> findAllByProductIdEquals(long productId, org.springframework.data.domain.Pageable pageable);
-
-    Slice<ProductItem> findAllByProductSlug(String productSlug, Pageable pageable);
-
-
-    List<ProQ_ProductMetadata> findAllByProductIdEquals(long productId);
+    List<ProQ_ProductItemLight> findAllByProductIdEquals(long productId);
 
     //    @EntityGraph(attributePaths = {"product"})
-    Optional<ProQ_ProductMetadata> findFirstByProductKey(String productKey);
+    Optional<ProQ_ProductItemLight> findFirstByProductKey(String productKey);
 
 
     @Modifying
     @Query("""
             UPDATE ProductItem pi set pi.productKey = :#{#productItem.productKey},
             pi.productId = :#{#productItem.productId},
-            pi.region = :#{#productItem.region}
+            pi.region = :#{#productItem.region},
+            pi.account = :#{#productItem.account}
             WHERE pi.id = :#{#productItem.id}
             """)
     int updateProductItemById(@Param("productItem") ProductItem productItem);
 
 
     @Query(value = """
-            INSERT INTO product_items (product_id, product_key, region)
-            (SELECT id, key, region
-            FROM unnest(:productIds, :productKeys, :regions) as t(id, key, region))
+            INSERT INTO product_items (product_id, product_key, region, account)
+            (SELECT id, key, region, account::jsonb
+            FROM unnest(:productIds, :productKeys, :regions, :accounts) as t(id, key, region,account))
             ON CONFLICT (product_id,product_key) DO NOTHING
             RETURNING id, product_key AS accepted_key, product_id
             """, nativeQuery = true)
     List<ProQ_Id_ProductId_AcceptedKey> insertProductItems(
             @Param("productIds") long[] productIds,
             @Param("productKeys") String[] productKeys,
-            @Param("regions") String[] regions);
+            @Param("accounts") String[] accounts,
+            @Param("regions") String[] regions
+            );
 
 
     @Query(value = """

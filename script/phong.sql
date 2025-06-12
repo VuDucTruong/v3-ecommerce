@@ -131,12 +131,16 @@ select *
 from product_items
 order by id desc;
 
-select *from categories;
+select *
+from categories;
 select *
 from products_categories
 where product_id = 20;
 
-select * from coupons;
-select * from orders;
-select * from blogs;
+select *
+from coupons;
+select *
+from orders;
+select *
+from blogs;
 

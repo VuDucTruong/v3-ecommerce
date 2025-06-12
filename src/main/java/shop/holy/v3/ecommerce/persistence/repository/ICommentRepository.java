@@ -16,24 +16,24 @@ public interface ICommentRepository extends JpaRepository<Comment, Long>, JpaSpe
 
     @Nonnull
     @Override
-    @EntityGraph(attributePaths = {"author",  "product", "replies"})
+    @EntityGraph(attributePaths = {"author", "product", "replies","author.account"})
     Page<Comment> findAll(Specification<Comment> spec, @Nonnull Pageable pageable);
 
     @Nonnull
     @Override
-    @EntityGraph(attributePaths = {"author", "replies", "product"})
+    @EntityGraph(attributePaths = {"author", "replies", "product", "author.account"})
     Optional<Comment> findById(@Nonnull Long aLong);
 
-    @EntityGraph(attributePaths = {"author", "replies", "product"})
+    @EntityGraph(attributePaths = {"author", "replies", "product","author.account"})
     Optional<Comment> findByIdAndDeletedAtIsNull(Long aLong);
 
-    @EntityGraph(attributePaths = {"author", "replies"})
+    @EntityGraph(attributePaths = {"author", "replies","author.account"})
     Page<Comment> findAllByProductIdAndParentCommentIdIsNull(long productId, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "replies"})
+    @EntityGraph(attributePaths = {"author", "replies","author.account"})
     Page<Comment> findAllByAuthorIdAndParentCommentIdIsNullAndDeletedAtIsNull(long authorId, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "replies"})
+    @EntityGraph(attributePaths = {"author", "replies","author.account"})
     Page<Comment> findAllByAuthorIdAndParentCommentIdIsNull(long authorId, Pageable pageable);
 
 

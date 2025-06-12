@@ -27,16 +27,19 @@ public abstract class CommentMapper {
     @Mapping(source = "content", target = "content")
     @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies")
     @Mapping(source = "author", target = "author")
+    @Mapping(source = "author.account.role", target = "role")
     public abstract ResponseComment fromEntityToResponse(Comment comment);
 
     @Mapping(source = "content", target = "content")
     @Mapping(source = "author", target = "author")
+    @Mapping(source = "author.account.role", target = "role")
     public abstract ResponseComment.Flattened fromEntityToResponseFlattened(Comment comment);
 
 
     @Mapping(source = "content", target = "content")
     @Mapping(source = "replies", target = "replies", qualifiedByName = "mapReplies")
     @Mapping(source = "author", target = "author")
+    @Mapping(source = "author.account.role", target = "role")
     public abstract ResponseComment.Light fromEntityToResponseLight(Comment comment);
 
     @IterableMapping(elementTargetType = ResponseReply.class, qualifiedByName = "toReply")
@@ -44,6 +47,7 @@ public abstract class CommentMapper {
     public abstract ResponseReply[] mapReplies(Set<Comment> replies);
 
     @Named("toReply")
+    @Mapping(source = "author.account.role", target = "role")
     public abstract ResponseReply toResponseReply(Comment reply);
 
     public abstract ResponseProfile fromProfileToResponseProfile(Profile profile);

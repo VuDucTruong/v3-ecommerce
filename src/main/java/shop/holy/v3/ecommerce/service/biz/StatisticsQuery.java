@@ -1,6 +1,9 @@
 package shop.holy.v3.ecommerce.service.biz;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import shop.holy.v3.ecommerce.api.dto.statistic.*;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
@@ -73,11 +76,11 @@ public class StatisticsQuery {
         return items.values();
     }
 
-    public Collection<ResponseStatsProductTrend> getProductTrends(RequestFromTo fromTo) {
+    public Collection<ResponseStatsProductTrend> getProductTrends(RequestFromTo fromTo, int size) {
         Date from = AppDateUtils.toStartOfDay(fromTo.from());
         Date to = AppDateUtils.toEndOfDay(fromTo.to());
-
-        List<ProQ_Sold_ProdId_ProdName> quantitiesWithMeta = orderDetailRepository.findSumQuantityByRecentTime(from, to);
+        Pageable pageable = PageRequest.of(0, size, Sort.unsorted());
+        List<ProQ_Sold_ProdId_ProdName> quantitiesWithMeta = orderDetailRepository.findSumQuantityByRecentTime(from, to, pageable);
         var result = quantitiesWithMeta.stream().map(q ->
                         new ResponseStatsProductTrend(q.getTotalSold(), new ResponseStatsProductTrend.ProductTrend(q.getProdId(), q.getProdName())))
                 .toList();

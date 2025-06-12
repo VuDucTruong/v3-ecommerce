@@ -30,6 +30,16 @@ public class TestApp {
 //        System.out.println(date);
 //    }
     public static void main(String[] args) {
+        Map<String,String> temp = new HashMap<>();
+        temp.put("username","admin");
+        temp.put("password","admin");
+        var temps = new Map[2];
+        temps[0] = temp;
+        temps[1] = temp;
+        System.out.println(Arrays.toString(temps));
+    }
+
+    public static void main123123(String[] args) {
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         yaml.setResources(new ClassPathResource("secret/cloudinary.yaml"));
         Properties props = yaml.getObject();

@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import shop.holy.v3.ecommerce.persistence.entity.OrderDetail;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 @Getter
@@ -28,6 +31,10 @@ public class ProductItemUsed {
 
     @Column(name = "product_key")
     private String productKey;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "account")
+    private Map<String,String> account;
 
     private String region;
 

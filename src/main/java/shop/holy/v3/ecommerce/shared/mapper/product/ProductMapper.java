@@ -1,6 +1,5 @@
 package shop.holy.v3.ecommerce.shared.mapper.product;
 
-import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -13,15 +12,11 @@ import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescript
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 import shop.holy.v3.ecommerce.persistence.entity.product.Product;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductDescription;
-import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
-import shop.holy.v3.ecommerce.persistence.entity.product.ProductTag;
 import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
 import shop.holy.v3.ecommerce.shared.mapper.CommonMapper;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
-
-import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         uses = {ProductItemMapper.class, CommonMapper.class, CommentMapper.class, ProductTagMapper.class,})
@@ -31,7 +26,6 @@ public abstract class ProductMapper {
     @Mappings({
             @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL),
             @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus"),
-            @Mapping(source = "product.productItems", target = "productItems", ignore = true),
             @Mapping(source = "product.represent", target = "represent"),
             @Mapping(source = "favorite", target = "favorite"),
             @Mapping(target = "tags", source = "tags"),
@@ -42,11 +36,10 @@ public abstract class ProductMapper {
             @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = MapFuncs.GEN_URL),
             @Mapping(source = "product.group.variants", target = "variants"),
             @Mapping(source = "product.quantity", target = "status", qualifiedByName = "fromCntToStatus"),
-            @Mapping(source = "productItems", target = "productItems"),
             @Mapping(source = "favorite", target = "favorite"),
             @Mapping(target = "tags", source = "tags"),
     })
-    public abstract ResponseProduct fromEntity_Items_ToResponse_Detailed(Product product, String[] tags, List<ProductItem> productItems, Boolean favorite);
+    public abstract ResponseProduct fromEntity_ToResponse_Detailed(Product product, String[] tags, Boolean favorite);
 
     public abstract ResponseProductMetadata productToResponseProductMetadata(Product product);
 

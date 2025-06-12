@@ -11,7 +11,7 @@ import shop.holy.v3.ecommerce.api.dto.product.item.RequestProductItemSearch;
 import shop.holy.v3.ecommerce.api.dto.product.item.ResponseProductItems_Indetails;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductItemUsed;
-import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductMetadata;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_ProductItemLight;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemUsedRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
@@ -34,13 +34,13 @@ public class ProductItemQuery {
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
         if (used) {
             Specification<ProductItemUsed> specs = mapper.fromRequestSearchToSpec(searchReq);
-            var usedProdItems = usedRepository.findBy(specs, q -> q.as(ProQ_ProductMetadata.class).page(pageable));
+            var usedProdItems = usedRepository.findBy(specs, q -> q.as(ProQ_ProductItemLight.class).page(pageable));
             var responses = usedProdItems.map(item ->
                     mapper.fromProjection_InDetail_ToResponse(item, used));
             return ResponsePagination.fromPage(responses);
         }
         Specification<ProductItem> specs = mapper.fromRequestSearchToSpec(searchReq);
-        var productItems = productItemRepository.findBy(specs, q -> q.as(ProQ_ProductMetadata.class).page(pageable));
+        var productItems = productItemRepository.findBy(specs, q -> q.as(ProQ_ProductItemLight.class).page(pageable));
 
         var responses = productItems.map(item ->
                 mapper.fromProjection_InDetail_ToResponse(item, used));
@@ -48,9 +48,9 @@ public class ProductItemQuery {
     }
 
     public ResponseProductItems_Indetails[] getByIdentifier(Long id, Long productId, Long orderDetailId, String productKey, boolean used) {
-//        List<ProQ_ProductMetadata> results;
+//        List<ProQ_ProductItemLight> results;
         if (id != null) {
-            Optional<ProQ_ProductMetadata> optItem;
+            Optional<ProQ_ProductItemLight> optItem;
             if (used)
                 optItem = usedRepository.findFirstById(id);
             else
@@ -62,7 +62,7 @@ public class ProductItemQuery {
 
         }
         if (StringUtils.hasLength(productKey)) {
-            Optional<ProQ_ProductMetadata> optItem;
+            Optional<ProQ_ProductItemLight> optItem;
             if (used)
                 optItem = usedRepository.findFirstByProductKey(productKey);
             else
@@ -72,7 +72,7 @@ public class ProductItemQuery {
                     .map(item -> mapper.fromProjection_InDetail_ToResponse(item, finalUsed2))
                     .orElseThrow(BizErrors.RESOURCE_NOT_FOUND::exception)};
         }
-        List<ProQ_ProductMetadata> results;
+        List<ProQ_ProductItemLight> results;
         if (orderDetailId != null) {
             results = usedRepository.findAllByOrderDetailIdEquals(orderDetailId);
             used = true;

@@ -4,6 +4,5 @@ public record ResponseStatsProductTrend(
         long saleCount,
         ProductTrend product
 ) {
-    public record ProductTrend(long id, String name) {
-    }
+    public record ProductTrend(long id, String name) {}
 }

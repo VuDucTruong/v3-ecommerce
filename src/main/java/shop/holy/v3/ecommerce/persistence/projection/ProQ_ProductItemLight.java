@@ -2,13 +2,16 @@ package shop.holy.v3.ecommerce.persistence.projection;
 
 
 import java.util.Date;
+import java.util.Map;
 
-public interface ProQ_ProductMetadata {
+public interface ProQ_ProductItemLight {
     long getId();
 
     long getProductId();
 
     String getProductKey();
+
+    Map<String, String> getAccount();
 
     String getRegion();
 

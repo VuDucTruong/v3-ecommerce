@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 @Getter
@@ -30,6 +33,10 @@ public class ProductItem {
 
     @Column(name = "product_key", nullable = false)
     private String productKey;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "account")
+    private Map<String,String> account;
 
     private String region;
 

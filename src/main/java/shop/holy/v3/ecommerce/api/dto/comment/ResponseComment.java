@@ -11,6 +11,7 @@ public record ResponseComment(
         ResponseProductMetadata product,
         Long parentCommentId,
         ResponseProfile author,
+        String role,
         Date createdAt,
         Date deletedAt,
         String content,
@@ -19,6 +20,7 @@ public record ResponseComment(
     public record Light(
             long id,
             ResponseProfile author,
+            String role,
             Date createdAt,
             Date deletedAt,
             String content,
@@ -30,6 +32,7 @@ public record ResponseComment(
             long id,
             ResponseProductMetadata product,
             Long parentCommentId,
+            String role,
             @JsonProperty("parentComment") Parent parent,
             ResponseProfile author,
             Date createdAt,
@@ -39,6 +42,7 @@ public record ResponseComment(
         public record Parent(
                 long id,
                 ResponseProfile author,
+                String role,
                 Date createdAt,
                 Date deletedAt,
                 String content

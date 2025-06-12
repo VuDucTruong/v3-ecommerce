@@ -13,12 +13,10 @@ import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatTotal;
 import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsOrders;
 import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsProductTrend;
 import shop.holy.v3.ecommerce.service.biz.StatisticsQuery;
-import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.IntStream;
@@ -61,17 +59,6 @@ public class ControllerStatistics {
         return ResponseEntity.ok(rs);
     }
 
-    @GetMapping("product-trends")
-    public ResponseEntity<Collection<ResponseStatsProductTrend>> getTrends(@ParameterObject RequestFromTo fromTo) {
-        if (true) {
-            var temp = IntStream.range(0, 10).mapToObj(i -> new ResponseStatsProductTrend(r.nextInt(50),
-                    new ResponseStatsProductTrend.ProductTrend(i, "product " + i))).toList();
-            return ResponseEntity.ok(temp);
-        }
 
-        var rs = statisticsQuery.getProductTrends(fromTo);
-
-        return ResponseEntity.ok(rs);
-    }
 
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 public record ResponseProductItems_Indetails(
         long id,
@@ -13,6 +14,7 @@ public record ResponseProductItems_Indetails(
         boolean represent,
         BigDecimal price,
         BigDecimal originalPrice,
+        Map<String, String> account,
         @Schema(example = "1234") long productId,
         @Schema(example = "SPOTIFYKEY123") String productKey,
         Date createdAt,

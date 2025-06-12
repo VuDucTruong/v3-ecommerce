@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,9 +32,9 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
     @Query("""
             SELECT SUM(od.quantity) as totalSold, od.product.id as prodId, od.product.name as prodName from
                         OrderDetail od join Order o
-                    where o.createdAt >= :lowerBound 
+                    where o.createdAt >= :lowerBound
                     AND o.createdAt <= :upperBound
                     group by od.product.id, od.product.name
             """)
-    List<ProQ_Sold_ProdId_ProdName> findSumQuantityByRecentTime(Date lowerBound, Date upperBound);
+    List<ProQ_Sold_ProdId_ProdName> findSumQuantityByRecentTime(Date lowerBound, Date upperBound, Pageable pageable);
 }

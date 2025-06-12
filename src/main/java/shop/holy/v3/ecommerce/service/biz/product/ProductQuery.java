@@ -4,7 +4,8 @@ package shop.holy.v3.ecommerce.service.biz.product;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -14,9 +15,7 @@ import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.product.Product;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductGroup;
-import shop.holy.v3.ecommerce.persistence.entity.product.ProductItem;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductFavoriteRepository;
-import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductMapper;
@@ -24,7 +23,6 @@ import shop.holy.v3.ecommerce.shared.mapper.product.ProductTagMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -38,7 +36,7 @@ public class ProductQuery {
     private final ProductTagMapper productTagMapper;
 
     private final IProductRepository productRepository;
-    private final IProductItemRepository itemRepository;
+    //    private final IProductItemRepository itemRepository;
     private final IProductFavoriteRepository favoriteRepository;
 
     @SneakyThrows
@@ -101,28 +99,11 @@ public class ProductQuery {
         } else isFav = CompletableFuture.completedFuture(false);
 
         /// NO ADMIN HANDLING ==> no productItems revealed
-        if (authAccount == null || !authAccount.isAdmin()) /// already null check fisrt then -> check NOT ADMIN
-            return CompletableFuture.allOf(prod, isFav).thenApply(v -> {
-                var p = prod.join();
-                return productMapper.fromEntityToResponse_Light(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), isFav.join());
-            });
 
-        ///  WHEN ADMIN, CAN SEE first 10 items orderedBy created at
-        Pageable pageableItems = PageRequest.of(0, 10, Sort.by("createdAt").descending());
-        CompletableFuture<Slice<ProductItem>> itemsSlice =
-                CompletableFuture.supplyAsync(() ->
-                {
-                    if (productId != null)
-                        return itemRepository.findAllByProductIdEquals(productId, pageableItems);
-                    else
-                        return itemRepository.findAllByProductSlug(slug, pageableItems);
-                });
-
-        return CompletableFuture.allOf(prod, itemsSlice, isFav)
+        return CompletableFuture.allOf(prod, isFav)
                 .thenApply(v -> {
-                    List<ProductItem> items = itemsSlice.join().getContent();
                     Product p = prod.join();
-                    return productMapper.fromEntity_Items_ToResponse_Detailed(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), items, isFav.join());
+                    return productMapper.fromEntity_ToResponse_Detailed(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), isFav.join());
                 });
     }
 

@@ -43,7 +43,6 @@ public class CommentService {
         return ResponsePagination.fromPage(pageRes);
     }
 
-
     public ResponseComment getById(long id, boolean deleted) {
         Optional<Comment> queryRs;
         if (deleted)
