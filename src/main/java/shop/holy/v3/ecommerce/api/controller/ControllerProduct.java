@@ -3,28 +3,20 @@ package shop.holy.v3.ecommerce.api.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductCreate;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
-import shop.holy.v3.ecommerce.api.dto.product.RequestProductUpdate;
-import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
-import shop.holy.v3.ecommerce.api.dto.statistic.RequestFromTo;
-import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsProductTrend;
+import shop.holy.v3.ecommerce.api.dto.product.*;
+import shop.holy.v3.ecommerce.api.dto.statistic.ResponseTopProductSold;
 import shop.holy.v3.ecommerce.service.biz.StatisticsQuery;
 import shop.holy.v3.ecommerce.service.biz.product.ProductCommand;
 import shop.holy.v3.ecommerce.service.biz.product.ProductQuery;
 import shop.holy.v3.ecommerce.service.biz.product.tag.ProductTagQuery;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,7 +27,6 @@ public class ControllerProduct {
     private final ProductCommand productCommand;
     private final ProductQuery productQuery;
     private final ProductTagQuery tagQuery;
-    private final StatisticsQuery statisticsQuery;
 
     @Operation
     @PostMapping("/searches")
@@ -84,18 +75,12 @@ public class ControllerProduct {
         return ResponseEntity.ok(productCommand.update(request));
     }
 
+
     @GetMapping("trends")
-    public ResponseEntity<Collection<ResponseStatsProductTrend>> getTrends(@ParameterObject RequestFromTo fromTo, @RequestParam(required = false, defaultValue = "10") int size) {
-        Random r = new Random();
-        if (true) {
-            var temp = IntStream.range(0, 10).mapToObj(i -> new ResponseStatsProductTrend(r.nextInt(50),
-                    new ResponseStatsProductTrend.ProductTrend(i, "product " + i))).toList();
-            return ResponseEntity.ok(temp);
-        }
-        var rs = statisticsQuery.getProductTrends(fromTo, size);
+    public ResponseEntity<List<ResponseTopProductSold>> get(@RequestParam(required = false) Integer size) {
+        var rs = productQuery.getProductsTrend(size);
         return ResponseEntity.ok(rs);
     }
-
 
     @GetMapping("tags")
     @Tag(name = "Tags")

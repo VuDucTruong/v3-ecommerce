@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
+import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.product.Product;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_TotalSold_Product;
 
 import java.util.*;
 
@@ -15,7 +17,7 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     // Add this method to override the default findAll
     @Override
     @Nonnull
-    @EntityGraph(attributePaths = {"productDescription", "categories","tags"})
+    @EntityGraph(attributePaths = {"productDescription", "categories", "tags"})
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
     @Query(value = "select id from products where id IN (:ids)", nativeQuery = true)
@@ -39,7 +41,6 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     List<Product> findProductsByIdIn(Collection<Long> id);
 
 
-
     @Modifying
     @Query(value = """
             UPDATE products p set 
@@ -54,7 +55,6 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             where p.id = :#{#product.id}
             """, nativeQuery = true)
     int updateProductById(Product product);
-
 
 
     @Query(value = """
@@ -111,7 +111,7 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
 
     Set<Product> findByGroupId(Long groupId);
 
-    Set<Product> findByGroupIdAndDeletedAtIsNull( Long groupId);
+    Set<Product> findByGroupIdAndDeletedAtIsNull(Long groupId);
 
 
     @Query(value = "select category_id from products_categories where product_id = ?1", nativeQuery = true)
@@ -122,4 +122,15 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @Query("UPDATE Product p set p.quantity = p.quantity + :subTract where p.id = :productId")
     void updateAddProductItemCountsByProductIdEquals(long productId, long subTract);
 
+    @Query(value = """
+            SELECT p.*, totalSold FROM (SELECT od.product_id, SUM(od.quantity) AS totalSold
+                FROM order_details od
+                GROUP BY od.product_id
+                ORDER BY totalSold DESC
+                LIMIT :limit) t
+                RIGHT JOIN products p ON t.product_id = p.id
+            ORDER BY t.totalSold IS NULL, t.totalSold DESC
+            LIMIT :limit;
+            """, nativeQuery = true)
+    List<ProQ_TotalSold_Product> findProductSortBySumQuantity(int limit);
 }

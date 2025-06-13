@@ -13,16 +13,20 @@ import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.product.RequestProductSearch;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
+import shop.holy.v3.ecommerce.api.dto.statistic.ResponseTopProductSold;
 import shop.holy.v3.ecommerce.persistence.entity.product.Product;
 import shop.holy.v3.ecommerce.persistence.entity.product.ProductGroup;
+import shop.holy.v3.ecommerce.persistence.projection.ProQ_TotalSold_Product;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductFavoriteRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.mapper.CommonMapper;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductMapper;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductTagMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -34,8 +38,8 @@ public class ProductQuery {
 
     private final ProductMapper productMapper;
     private final ProductTagMapper productTagMapper;
-
     private final IProductRepository productRepository;
+    private final CommonMapper commonMapper;
     //    private final IProductItemRepository itemRepository;
     private final IProductFavoriteRepository favoriteRepository;
 
@@ -105,6 +109,27 @@ public class ProductQuery {
                     Product p = prod.join();
                     return productMapper.fromEntity_ToResponse_Detailed(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), isFav.join());
                 });
+    }
+
+    public List<ResponseTopProductSold> getProductsTrend(Integer limit) {
+        if (limit == null || limit > 40 || limit < 1)
+            limit = 10;
+        List<ProQ_TotalSold_Product> totalSoldAndProducts = productRepository.findProductSortBySumQuantity(limit);
+        return totalSoldAndProducts.stream().map(s -> {
+            var topProduct = new ResponseTopProductSold();
+            topProduct.setId(s.getId());
+            topProduct.setSlug(s.getSlug());
+            topProduct.setName(s.getName());
+            topProduct.setImageUrl(commonMapper.genUrl(s.getImageUrlId()));
+            topProduct.setQuantity(s.getQuantity());
+
+            topProduct.setRepresent(s.isRepresent());
+
+            topProduct.setOriginalPrice(s.getOriginalPrice());
+            topProduct.setPrice(s.getPrice());
+            topProduct.setTotalSold(s.getTotalSold() == null ? 0 : s.getTotalSold());
+            return topProduct;
+        }).toList();
     }
 
 }

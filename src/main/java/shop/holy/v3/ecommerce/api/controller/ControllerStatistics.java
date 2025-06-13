@@ -7,6 +7,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.holy.v3.ecommerce.api.dto.statistic.RequestFromTo;
 import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatTotal;
@@ -56,6 +57,18 @@ public class ControllerStatistics {
         }
 
         var rs = statisticsQuery.getStatsOrders(fromTo);
+        return ResponseEntity.ok(rs);
+    }
+
+    @GetMapping("trends")
+    public ResponseEntity<Collection<ResponseStatsProductTrend>> getTrends(@ParameterObject RequestFromTo fromTo, @RequestParam(required = false, defaultValue = "10") int size) {
+        Random r = new Random();
+        if (true) {
+            var temp = IntStream.range(0, 10).mapToObj(i -> new ResponseStatsProductTrend(r.nextInt(50),
+                    new ResponseStatsProductTrend.ProductTrend(i, "product " + i))).toList();
+            return ResponseEntity.ok(temp);
+        }
+        var rs = statisticsQuery.getProductTrends(fromTo, size);
         return ResponseEntity.ok(rs);
     }
 

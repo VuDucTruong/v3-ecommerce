@@ -5,11 +5,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import shop.holy.v3.ecommerce.api.dto.statistic.*;
+import shop.holy.v3.ecommerce.api.dto.statistic.RequestFromTo;
+import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatTotal;
+import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsOrders;
+import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsProductTrend;
 import shop.holy.v3.ecommerce.persistence.entity.Order;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Date_Revenue;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Sold_ProdId_ProdName;
-import shop.holy.v3.ecommerce.persistence.repository.*;
+import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
+import shop.holy.v3.ecommerce.persistence.repository.IOrderDetailRepository;
+import shop.holy.v3.ecommerce.persistence.repository.IOrderRepository;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
@@ -17,11 +22,14 @@ import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatistics.*;
+import static shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatistics.ResponseStatRevenues;
 
 @RequiredArgsConstructor
 @Service

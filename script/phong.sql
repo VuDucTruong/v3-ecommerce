@@ -144,3 +144,20 @@ from orders;
 select *
 from blogs;
 
+SELECT * FROM products p
+                  LEFT JOIN product_tags pt on pt.product_id = p.id
+WHERE p.id IN (select od.product_id from order_details od
+               group by od.product_id
+               ORDER BY SUM(od.quantity) desc)
+
+SELECT * FROM (
+                  SELECT od.product_id, SUM(od.quantity) AS totalSold
+                  FROM order_details od
+                  GROUP BY od.product_id
+                  ORDER BY totalSold DESC
+                  LIMIT 10
+              ) t
+                  RIGHT JOIN products p ON t.product_id = p.id
+                  LEFT JOIN product_tags pt ON pt.product_id = p.id
+ORDER BY t.totalSold IS NULL, t.totalSold DESC
+LIMIT 10;

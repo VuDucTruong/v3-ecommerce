@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import shop.holy.v3.ecommerce.api.dto.product.ResponseProduct;
 import shop.holy.v3.ecommerce.persistence.entity.OrderDetail;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_OrderDetails;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_Sold_ProdId_ProdName;
@@ -37,4 +38,7 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
                     group by od.product.id, od.product.name
             """)
     List<ProQ_Sold_ProdId_ProdName> findSumQuantityByRecentTime(Date lowerBound, Date upperBound, Pageable pageable);
+
+
+
 }
