@@ -21,9 +21,10 @@ public record ResponseOrder(
         MailProductKeys sentMail
 ) {
     public record ResponseOrderDetail(
+            Long id,
             BigDecimal price,
             BigDecimal originalPrice,
-             ResponseOrderItem product,
+            ResponseOrderItem product,
             long quantity
     ) {
     }
@@ -36,6 +37,6 @@ public record ResponseOrder(
             String slug,
             long quantity,
             String[] tags
-            ) {
+    ) {
     }
 }

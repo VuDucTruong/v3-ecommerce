@@ -20,8 +20,8 @@ import shop.holy.v3.ecommerce.shared.mapper.OrderMapper;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -34,27 +34,27 @@ public class OrderCommand {
 
     @Transactional
     public ResponseOrder insert(RequestOrderCreate request) {
-        Map<Long, OrderDetail> prodId_by_OrderDetail = orderMapper.fromRequestToOrderDetails(request.orderDetails());
-        List<Product> products = productRepository.findProductsByIdIn(prodId_by_OrderDetail.keySet());
-        if (products.size() != prodId_by_OrderDetail.size())
+        Map<Long, OrderDetail> prodId_to_OrderDetail = orderMapper.fromRequestToOrderDetails(request.orderDetails());
+        Set<Product> products = productRepository.findProductsByIdIn(prodId_to_OrderDetail.keySet());
+        if (products.size() != prodId_to_OrderDetail.size())
             throw BizErrors.PRODUCT_NOT_FOUND.exception();
         ///  SUM(Price X quantities,...)
-        BigDecimal originalAmount = evalProducts_And_caculate_OriginalPrice(products);
+        BigDecimal originalAmount = evalProducts_And_caculate_OriginalPrice(products, prodId_to_OrderDetail);
         Order order = this.calculateOrder(request, originalAmount);
 
         ///  SAVE ORDER FIRST
         Order result = orderRepository.save(order);
 
         ///  NOW SAVE Order details
-        Collection<OrderDetail> details = save_Details(result, products, prodId_by_OrderDetail);
+        Collection<OrderDetail> details = save_Details(result, products, prodId_to_OrderDetail);
 
         return orderMapper.fromEntityToResponse_InDetail(result, null, details);
     }
 
-    private BigDecimal evalProducts_And_caculate_OriginalPrice(List<Product> products) {
+    private BigDecimal evalProducts_And_caculate_OriginalPrice(Collection<Product> products, Map<Long, OrderDetail> prodId_to_OrderDetail) {
         return products.stream()
                 .map(product -> product.getPrice()
-                        .multiply(BigDecimal.valueOf(product.getQuantity()))
+                        .multiply(BigDecimal.valueOf(prodId_to_OrderDetail.get(product.getId()).getQuantity()))
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -72,7 +72,7 @@ public class OrderCommand {
         return order;
     }
 
-    private Collection<OrderDetail> save_Details(Order order, List<Product> products, Map<Long, OrderDetail> prodId_by_OrderDetail) {
+    private Collection<OrderDetail> save_Details(Order order, Collection<Product> products, Map<Long, OrderDetail> prodId_by_OrderDetail) {
         for (Product product : products) {
             OrderDetail detail = prodId_by_OrderDetail.get(product.getId());
             detail.setOriginalPrice(product.getOriginalPrice());

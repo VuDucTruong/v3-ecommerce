@@ -35,7 +35,7 @@ public class Payment extends EntityBase {
     private String cardType;
     @Size(max = 65)
     private String transRef;
-    @Size(max = 256)
+    @Size(max = 600)
     private String secureHash;
 
     @OneToOne(fetch = FetchType.LAZY)

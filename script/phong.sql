@@ -161,3 +161,16 @@ SELECT * FROM (
                   LEFT JOIN product_tags pt ON pt.product_id = p.id
 ORDER BY t.totalSold IS NULL, t.totalSold DESC
 LIMIT 10;
+
+SELECT * from orders o
+join order_details od
+on o.id = od.order_id
+where order_id = 9;
+
+select * from order_details;
+SELECT * from orders;
+
+SELECT * FROM products p
+where p.slug in ('a', 'a-very-long-product');
+
+SELECT * from payments;

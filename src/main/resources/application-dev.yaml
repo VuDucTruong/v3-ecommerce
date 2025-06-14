@@ -13,7 +13,7 @@ spring:
     sql-migration-suffixes: .sql
     out-of-order: false
     default-schema: public
-    enabled: ${SPRING_FLYWAY_ENABLED:true}
+    enabled: ${SPRING_FLYWAY_ENABLED:false}
 
   jpa:
     properties:

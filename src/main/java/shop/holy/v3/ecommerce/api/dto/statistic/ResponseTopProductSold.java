@@ -1,11 +1,9 @@
 package shop.holy.v3.ecommerce.api.dto.statistic;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shop.holy.v3.ecommerce.api.dto.product.ResponseProductMetadata;
 
 import java.math.BigDecimal;
 

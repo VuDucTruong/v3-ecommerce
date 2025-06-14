@@ -93,11 +93,11 @@ public class PaymentCommand {
         }
         vnpParamsMap.put("vnp_IpAddr", ip);
         //build query url
-        String queryUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);
+        String queryUrl = vnpPayProperties.getVnp_PayUrl() + VNPayUtil.getPaymentURL(vnpParamsMap, true);
         String hashData = VNPayUtil.getPaymentURL(vnpParamsMap, false);
         String vnpSecureHash = VNPayUtil.hmacSHA512(vnpPayProperties.getSecretKey(), hashData);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
-        return Pair.of(queryUrl, hashData);
+        return Pair.of(queryUrl, vnpSecureHash);
     }
 
 }
