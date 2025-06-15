@@ -5,6 +5,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -26,11 +27,24 @@ public class CacheService {
 //        cache.put(key, value);
 //    }
 
+    public <T> T getSafe(String cacheName, Object key, Class<T> tClass) {
+        try {
+            if (optionalCacheManager.isEmpty())
+                return null;
+            Cache cache = optionalCacheManager.get().getCache(cacheName);
+            if (cache != null)
+                return cache.get(key, tClass);
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public <T> void cacheSafe(String cacheName, Object key, Object value) {
         try {
             optionalCacheManager.ifPresent(cacheManager -> {
                 Cache cache = cacheManager.getCache(cacheName);
-                if (cache == null) {
+                if (cache != null) {
                     cache.put(key, value);
                 }
             });
@@ -56,4 +70,17 @@ public class CacheService {
         }
     }
 
+    public <T> void evictIn(String cacheName, Collection<T> keys) {
+        try {
+            optionalCacheManager.ifPresent(cacheManager -> {
+                Cache cache = cacheManager.getCache(cacheName);
+                if (cache != null) {
+                    for (Object key : keys) {
+                        cache.evict(key);
+                    }
+                }
+            });
+        } catch (Exception _) {
+        }
+    }
 }

@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.service.biz.user;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,11 +15,15 @@ import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProfileRepository;
+import shop.holy.v3.ecommerce.service.CacheService;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryFacadeService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.constant.CacheKeys;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
+
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Service
@@ -28,10 +33,10 @@ public class UserCommand {
     private final IProfileRepository profileRepository;
     private final AccountMapper accountMapper;
     private final CloudinaryFacadeService cloudinaryFacadeService;
+    private final CacheService cacheService;
 
 
     @Transactional
-    @CachePut()
     public ResponseUser createUser(RequestUserCreate request) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         if (authAccount.getRole() != RoleEnum.ADMIN) {
@@ -54,6 +59,7 @@ public class UserCommand {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheKeys.AUTH, key = "#securityUtil.authAccountId")
     public ResponseProfile updateProfile(RequestProfileUpdate request) {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         Profile profile = accountMapper.fromProfileUpdateRequestToEntity(request);
@@ -75,6 +81,7 @@ public class UserCommand {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheKeys.AUTH, key = "#securityUtil.authAccountId")
     public int deleteAccount() {
         AuthAccount authAccount = SecurityUtil.getAuthNonNull();
         long id = authAccount.getId();
@@ -82,6 +89,7 @@ public class UserCommand {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheKeys.AUTH, key = "#securityUtil.authAccountId")
     public int deleteAccountById(long id) {
         int deletedPros = profileRepository.updateDeletedAtByAccountId(id);
         int deletedAccs = accountRepository.updateDeletedAtById(id);
@@ -102,11 +110,13 @@ public class UserCommand {
                 throw BizErrors.FORBIDDEN_ACTION.exception();
         }
 
+
         int deletedPros = profileRepository.updateDeletedAtByAccountIdIn(ids);
         int deletedAccs = accountRepository.updateDeletedAtByIdIn(ids);
         if (deletedAccs == 0 && deletedPros == 0) {
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
         }
+        cacheService.evictIn(CacheKeys.AUTH, Arrays.stream(ids).boxed().toList());
         return deletedAccs;
     }
 

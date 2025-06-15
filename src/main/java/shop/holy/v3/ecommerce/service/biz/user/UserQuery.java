@@ -1,7 +1,6 @@
 package shop.holy.v3.ecommerce.service.biz.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,7 +12,6 @@ import shop.holy.v3.ecommerce.api.dto.user.RequestUserSearch;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
 import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
-import shop.holy.v3.ecommerce.shared.constant.CacheKeys;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
