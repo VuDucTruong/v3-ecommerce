@@ -3,6 +3,7 @@ package shop.holy.v3.ecommerce.api.dto.order;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
 import shop.holy.v3.ecommerce.api.dto.payment.ResponsePayment;
+import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public record ResponseOrder(
         Date createdAt,
         Date deletedAt,
         OrderStatus status,
+        ResponseProfile profile,
         ResponseCoupon coupon,
         ResponsePayment payment,
         BigDecimal originalAmount,

@@ -38,7 +38,7 @@ public class ControllerOrder {
             2. concatenated queries with AND condition!!
             """)
     public ResponseEntity<ResponsePagination<ResponseOrder>> search(
-            RequestOrderSearch searchReq
+            @RequestBody RequestOrderSearch searchReq
     ) {
         ResponsePagination<ResponseOrder> categories = orderQuery.search(searchReq);
         return ResponseEntity.ok(categories);
