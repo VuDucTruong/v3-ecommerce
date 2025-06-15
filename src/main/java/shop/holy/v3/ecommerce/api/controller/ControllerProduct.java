@@ -89,4 +89,9 @@ public class ControllerProduct {
         return ResponseEntity.ok(rs);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ResponseProduct>> getAllProducts() {
+        return ResponseEntity.ok(productQuery.getAllProducts());
+    }
+
 }

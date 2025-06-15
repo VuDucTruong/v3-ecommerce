@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.service.biz.product;
 
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -110,11 +111,12 @@ public class ProductQuery {
                     return productMapper.fromEntity_ToResponse_Detailed(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), isFav.join());
                 });
     }
-
+    
     public List<ResponseTopProductSold> getProductsTrend(Integer limit) {
         if (limit == null || limit > 40 || limit < 1)
             limit = 10;
-        List<ProQ_TotalSold_Product> totalSoldAndProducts = productRepository.findProductSortBySumQuantity(limit);
+        List<ProQ_TotalSold_Product> totalSoldAndProducts = productRepository.findProductSortBySumQuantity(
+            limit);
         return totalSoldAndProducts.stream().map(s -> {
             var topProduct = new ResponseTopProductSold();
             topProduct.setId(s.getId());
@@ -130,6 +132,14 @@ public class ProductQuery {
             topProduct.setTotalSold(s.getTotalSold() == null ? 0 : s.getTotalSold());
             return topProduct;
         }).toList();
+    }
+
+    public List<ResponseProduct> getAllProducts() {
+        return productRepository.findAll()
+            .stream()
+            .map(product -> productMapper.fromEntityToResponse_Light(product ,
+                productTagMapper.fromTagEntitiesToStringTags(product.getTags()) ,
+                false)).toList();
     }
 
 }
