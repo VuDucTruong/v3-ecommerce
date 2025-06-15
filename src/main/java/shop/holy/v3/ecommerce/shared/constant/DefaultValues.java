@@ -4,8 +4,8 @@ public class DefaultValues {
 //    public static final long ID = Long.MIN_VALUE;
 
     public static class ClaimKeys {
-
         public static final String ID = "id";
+        public static final String FULL_NAME = "full_name";
         public static final String PROFILE_ID = "profileId";
         public static final String ROLE = "role";
         public static final String ENABLE_DATE = "enableDate";

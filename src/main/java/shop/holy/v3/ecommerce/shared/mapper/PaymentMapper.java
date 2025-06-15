@@ -43,7 +43,7 @@ public interface PaymentMapper {
         payment.setNote(callback.vnp_OrderInfo());
         payment.setCardType(callback.vnp_CardType());
         payment.setTransRef(callback.vnp_TxnRef());
-        payment.setSecureHash(callback.vnp_SecureHash());
+//        payment.setSecureHash(callback.vnp_SecureHash());
         return payment;
     }
 

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CacheKeys {
+    public static final String AUTH = "auth";
     public static final String PRODUCTS = "products";
     public static final String MOST_LIKE_PRODUCTS = "MOST_LIKE_PRODUCTS";
 

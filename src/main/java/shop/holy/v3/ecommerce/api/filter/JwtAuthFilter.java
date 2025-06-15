@@ -1,6 +1,5 @@
 package shop.holy.v3.ecommerce.api.filter;
 
-import io.jsonwebtoken.Claims;
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,9 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
-import shop.holy.v3.ecommerce.service.security.AuthAccountService;
+import shop.holy.v3.ecommerce.service.security.AuthService;
 import shop.holy.v3.ecommerce.service.security.JwtService;
 import shop.holy.v3.ecommerce.shared.property.JwtProperties;
+
 import java.io.IOException;
 
 @Component
@@ -24,7 +24,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
 
     private final JwtService jwtUtil;
     private final JwtProperties jwtProperties;
-    private final AuthAccountService authAccountService;
+    private final AuthService authAccountService;
 //    private final String[] whiteListedEndpoints = {"/accounts/tokens", "/accounts"};
 
     @Override
@@ -33,6 +33,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
             @NonNull HttpServletResponse response,
             @NonNull FilterChain chain)
             throws ServletException, IOException {
+
         Cookie[] cookies = request.getCookies();
         String accessToken = null;
         String refreshToken = null;
@@ -52,14 +53,12 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         // Validate and Trust access token at first
         if (accessToken != null && !jwtUtil.isTokenExpired(accessToken, true)) {
             long userId = Long.parseLong(jwtUtil.extractId(accessToken, true));
-            Claims claims = jwtUtil.extractClaims(accessToken, true);
-            authAccount = new AuthAccount(userId);
-            authAccount.fromClaims(claims);
+            authAccount = authAccountService.findAccountById(userId);
         }
         /// If access token is expired, try to trust refresh token
         else {
             if (refreshToken != null && !jwtUtil.isTokenExpired(refreshToken, false)) {
-                long userId = Long.parseLong(jwtUtil.extractId(accessToken, true));
+                long userId = Long.parseLong(jwtUtil.extractId(refreshToken, true));
                 authAccount = authAccountService.findAccountById(userId);
             }
         }
@@ -76,7 +75,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         grantNewTokensOnResponse(response, authAccount);
     }
 
-    private void grantAuthorisationBeforeNextChain(HttpServletRequest request,  AuthAccount authAccount) {
+    private void grantAuthorisationBeforeNextChain(HttpServletRequest request, AuthAccount authAccount) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 authAccount, null, authAccount.getAuthorities());
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

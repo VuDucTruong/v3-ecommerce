@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -28,6 +29,8 @@ public class Payment extends EntityBase {
     @Size(max = 2048)
     private String paymentUrl;
 
+    private Date expiry;
+
 
     @Size(max = 255)
     private String note;
@@ -35,7 +38,7 @@ public class Payment extends EntityBase {
     private String cardType;
     @Size(max = 65)
     private String transRef;
-    @Size(max = 256)
+    @Size(max = 600)
     private String secureHash;
 
     @OneToOne(fetch = FetchType.LAZY)

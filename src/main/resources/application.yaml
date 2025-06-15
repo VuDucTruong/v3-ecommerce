@@ -21,6 +21,10 @@ spring:
       thread-name-prefix: sched-phong
       simple:
         concurrency-limit: -1
+  web:
+    resources:
+      cache:
+        period: 0
 
   jpa:
     properties:
@@ -67,4 +71,5 @@ server:
     include-binding-errors: never
     include-message: always
     include-path: always
+
 

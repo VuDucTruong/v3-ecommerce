@@ -4,7 +4,10 @@ logging:
       ttddyy:
         dsproxy:
           listener: debug
+
     org:
+      springframework:
+        cache: debug
       flywaydb.core.internal.sqlscript.DefaultSqlScriptExecutor: debug
       flywaydb.core.FlywayExecutor: debug
     shop.holy.v3.ecommerce:
@@ -12,7 +15,7 @@ logging:
         config:
           openapi:
             OpenApiConfig: INFO
-    root: ERROR
+    root: error
     sql: INFO
 
 openapi:
@@ -20,4 +23,10 @@ openapi:
     title: "KLTN Ecommerce"
     server: 'http://localhost:8080'
     version: "1.0.0"
-    group: "ECOMMERCE API Holy Shop"
+    group: "ecommerce-api-holy-shop"
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    url: /v3/api-docs/ecommerce-api-holy-shop
+#  cache:
+#    disabled: true

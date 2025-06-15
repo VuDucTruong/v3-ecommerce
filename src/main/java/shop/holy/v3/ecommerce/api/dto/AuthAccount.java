@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.jsonwebtoken.Claims;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,7 @@ public class AuthAccount implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.stream(role.getRoles())
                 .map(role -> (GrantedAuthority) () -> role)

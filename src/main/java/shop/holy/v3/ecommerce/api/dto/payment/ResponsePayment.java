@@ -9,12 +9,14 @@ public record ResponsePayment(
         long profileId,
         PaymentStatus status,
         PaymentMethod paymentMethod,
+        String bankCode,
         String detailCode,
         String detailMessage,
         String note,
         String cardType,
         String transRef,
         String secureHash
+
 
 ) {
 }

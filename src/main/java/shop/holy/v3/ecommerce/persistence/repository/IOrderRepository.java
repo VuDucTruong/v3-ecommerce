@@ -25,8 +25,15 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
             """)
     int updateOrderDeletedAtByIdIn(long[] ids);
 
+    @NonNull
+    @Override
+    @EntityGraph(attributePaths = {"payment", "coupon"})
+    Optional<Order> findById(@NonNull Long aLong);
+
+    @EntityGraph(attributePaths = {"payment", "coupon"})
     Optional<Order> findFirstByIdEqualsAndDeletedAtIsNull(long id);
 
+    @EntityGraph(attributePaths = {"payment", "coupon"})
     Optional<Order> findFirstByIdEqualsAndProfileIdEqualsAndDeletedAtIsNull(long id, long profileId);
 
     @Query("SELECT o.amount from Order o where o.id = :orderId")

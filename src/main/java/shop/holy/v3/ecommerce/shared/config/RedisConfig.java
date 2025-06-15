@@ -1,8 +1,11 @@
 package shop.holy.v3.ecommerce.shared.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -15,38 +18,47 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import shop.holy.v3.ecommerce.shared.constant.CacheKeys;
 
+import java.time.Duration;
+import java.util.Set;
+
+
 @Configuration
-@EnableCaching
 @Profile({"cacheredis", "!cachenone"})
+@RequiredArgsConstructor
+@EnableCaching
 public class RedisConfig {
 
     @Value("${app.cache.test.enable}")
     private boolean testEnabled;
 
-    private final ObjectMapper objectMapper;
+    private final Jackson2ObjectMapperBuilder builder;
 
-    public RedisConfig() {
-        objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
-//        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-//                .allowIfSubType("com.yourapp.model") // restrict to your packages
-//                .build();
-        /// INCLUDE TYPE NAME WHEN SERIALIZE
-//        objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
-        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
+//    public RedisConfig(Jackson2ObjectMapperBuilderCustomizer customizer) {
+//        objectMapper = new ObjectMapper();
+//        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+////        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
+////                .allowIfSubType("com.yourapp.model") // restrict to your packages
+////                .build();
+//        /// INCLUDE TYPE NAME WHEN SERIALIZE
 
-
+    /// /        objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
+//        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+//        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//    }
     @Bean
-    @Profile("cacheredis")
-    public RedisSerializer<Object> redisSerializer() {
-        if (testEnabled) {
-            return new Jackson2JsonRedisSerializer<Object>(objectMapper.getTypeFactory().constructType(Object.class));
-        }
-        return new JdkSerializationRedisSerializer();
+    public RedisSerializer<Object> defaultRedisSerializer() {
+        ObjectMapper mapper = builder.build();
+
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        mapper.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY
+        );
+        return new GenericJackson2JsonRedisSerializer(mapper);
     }
 
     @Bean
@@ -69,12 +81,14 @@ public class RedisConfig {
     @Profile("cacheredis")
     public CacheManager redisCacheManager(RedisConnectionFactory factory, RedisSerializer<Object> defaultSerializer) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(defaultSerializer));
-        return RedisCacheManager.builder(factory).cacheDefaults(config).build();
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(defaultSerializer))
+                .entryTtl(Duration.ofMinutes(1));
+        return RedisCacheManager.builder(factory)
+                .cacheDefaults(config).build();
     }
 
     @Bean
-    @Profile("!cachenone")
+    @Profile("!cachenone & !cacheredis")
     public CacheManager memoryCacheManager() {
 //        CaffeineCacheManager caffe = new CaffeineCacheManager();
         return new ConcurrentMapCacheManager(CacheKeys.values());

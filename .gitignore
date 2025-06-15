@@ -35,3 +35,4 @@ build/
 ### VS Code ###
 .vscode/
 container/c-tempo-data/
+sample-request/

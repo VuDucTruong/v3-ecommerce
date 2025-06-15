@@ -13,6 +13,7 @@ import org.springframework.core.env.StandardEnvironment;
 import org.springframework.core.io.ClassPathResource;
 import shop.holy.v3.ecommerce.service.cloud.CloudinaryService;
 import shop.holy.v3.ecommerce.shared.property.CloudinaryProperties;
+import shop.holy.v3.ecommerce.shared.util.VNPayUtil;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,6 +31,13 @@ public class TestApp {
 //        System.out.println(date);
 //    }
     public static void main(String[] args) {
+        String str = "vnp_Amount=500000000&vnp_Command=pay&vnp_CreateDate=20250614230945&vnp_CurrCode=VND&vnp_ExpireDate=20250614232445&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderInfo=ok+this+is+good&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=173e9257-9621-4874-a81e-58323580bb13&vnp_Version=2.1.0";
+        String secret = "U3Z57PNITUDWZU85HA03S1NNMY1NOFUV";
+        String vnpSecureHash = VNPayUtil.hmacSHA512(secret, str);
+        System.out.println( vnpSecureHash);
+
+    }
+    public static void main1231323223(String[] args) {
         Map<String,String> temp = new HashMap<>();
         temp.put("username","admin");
         temp.put("password","admin");
@@ -122,11 +130,11 @@ public class TestApp {
 //        vnpParamsMap.put("vnp_IpAddr", ip);
 //
 //        //build query url
-//        String queryUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);
+//        String payUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);
 //        String hashData = VNPayUtil.getPaymentURL(vnpParamsMap, false);
 //        String vnpSecureHash = VNPayUtil.hmacSHA512(vnpPayProperties.getSecretKey(), hashData);
-//        queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
-//        return vnpPayProperties.getVnp_PayUrl() + "?" + queryUrl;
+//        payUrl += "&vnp_SecureHash=" + vnpSecureHash;
+//        return vnpPayProperties.getVnp_PayUrl() + "?" + payUrl;
 //    }
     public static void main1(String[] args) throws JsonProcessingException {
 //        String[] strs = {"abc,", "def,'efg'"};

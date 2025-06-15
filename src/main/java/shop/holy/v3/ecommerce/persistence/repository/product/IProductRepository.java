@@ -38,7 +38,7 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             """)
     int updateProductDeletedAtByIdIn(long[] ids);
 
-    List<Product> findProductsByIdIn(Collection<Long> id);
+    Set<Product> findProductsByIdIn(Collection<Long> id);
 
 
     @Modifying

@@ -13,7 +13,7 @@ spring:
     sql-migration-suffixes: .sql
     out-of-order: false
     default-schema: public
-    enabled: ${SPRING_FLYWAY_ENABLED:true}
+    enabled: ${SPRING_FLYWAY_ENABLED:false}
 
   jpa:
     properties:
@@ -27,7 +27,7 @@ spring:
           schema_validation: false
         default_schema: public
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
 app:
   cache:
     test:
