@@ -173,4 +173,8 @@ SELECT * from orders;
 SELECT * FROM products p
 where p.slug in ('a', 'a-very-long-product');
 
+select * from orders;
 SELECT * from payments;
+select * from notification_prod_keys;
+select *from notification_prod_keys_fail;
+select *from notification_prod_keys_success;

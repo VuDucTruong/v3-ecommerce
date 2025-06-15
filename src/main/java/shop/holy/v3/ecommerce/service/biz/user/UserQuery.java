@@ -33,7 +33,6 @@ public class UserQuery {
     }
 
 
-    @Cacheable(cacheNames = CacheKeys.ACCOUNTS, key = "#email", condition = "notNullValidator(result)")
     public Account findByEmail(String email) {
         return accountRepository.findByEmail(email);
     }

@@ -1,13 +1,12 @@
 package shop.holy.v3.ecommerce.api.dto.order;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
+import shop.holy.v3.ecommerce.api.dto.payment.ResponsePayment;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 public record ResponseOrder(
         long id,
@@ -15,6 +14,7 @@ public record ResponseOrder(
         Date deletedAt,
         OrderStatus status,
         ResponseCoupon coupon,
+        ResponsePayment payment,
         BigDecimal originalAmount,
         BigDecimal amount,
         ResponseOrderDetail[] details,

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -27,6 +28,8 @@ public class Payment extends EntityBase {
 
     @Size(max = 2048)
     private String paymentUrl;
+
+    private Date expiry;
 
 
     @Size(max = 255)

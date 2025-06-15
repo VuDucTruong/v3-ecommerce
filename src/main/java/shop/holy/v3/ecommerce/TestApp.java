@@ -130,11 +130,11 @@ public class TestApp {
 //        vnpParamsMap.put("vnp_IpAddr", ip);
 //
 //        //build query url
-//        String queryUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);
+//        String payUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);
 //        String hashData = VNPayUtil.getPaymentURL(vnpParamsMap, false);
 //        String vnpSecureHash = VNPayUtil.hmacSHA512(vnpPayProperties.getSecretKey(), hashData);
-//        queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
-//        return vnpPayProperties.getVnp_PayUrl() + "?" + queryUrl;
+//        payUrl += "&vnp_SecureHash=" + vnpSecureHash;
+//        return vnpPayProperties.getVnp_PayUrl() + "?" + payUrl;
 //    }
     public static void main1(String[] args) throws JsonProcessingException {
 //        String[] strs = {"abc,", "def,'efg'"};

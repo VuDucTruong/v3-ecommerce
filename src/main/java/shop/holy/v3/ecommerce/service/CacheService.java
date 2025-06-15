@@ -1,34 +1,59 @@
 package shop.holy.v3.ecommerce.service;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
 public class CacheService {
     private final Optional<CacheManager> optionalCacheManager;
 
-    public void cache(String key, @NotNull Object value, int seconds) {
-        if (optionalCacheManager.isEmpty())
-            return;
+//    public void cache(String key, @NotNull Object value, int seconds) {
+//        if (optionalCacheManager.isEmpty())
+//            return;
+//
+//        CacheManager cacheManager = optionalCacheManager.get();
+//
+//        Cache cache = cacheManager.getCache("shop");
+//        if (cache == null) {
+//            return;
+//        }
+//        cache.put(key, value);
+//    }
 
-        CacheManager cacheManager = optionalCacheManager.get();
+    public <T> void cacheSafe(String cacheName, Object key, Object value) {
+        try {
+            optionalCacheManager.ifPresent(cacheManager -> {
+                Cache cache = cacheManager.getCache(cacheName);
+                if (cache == null) {
+                    cache.put(key, value);
+                }
+            });
+        } catch (Exception _) {
 
-        Cache cache = cacheManager.getCache("shop");
-        if (cache == null) {
-            return;
         }
-        cache.put(key, value);
     }
 
-    public <T> void get(String cacheName, String key) {
+    public <T> void partialUpdate(String cacheName, Object key, Class<T> clazz, Function<T, T> updater) {
+        try {
+            optionalCacheManager.ifPresent(cacheManager -> {
+                Cache cache = cacheManager.getCache(cacheName);
+                if (cache == null) {
+                    T value = cache.get(key, clazz);
+                    if (value != null) {
+                        T newValue = updater.apply(value);
+                        cache.put(key, newValue);
+                    }
+                }
+            });
+        } catch (Exception _) {
 
+        }
     }
-
 
 }
