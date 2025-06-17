@@ -1,7 +1,6 @@
 package shop.holy.v3.ecommerce.api.dto.order;
 
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
-import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
 import shop.holy.v3.ecommerce.api.dto.payment.ResponsePayment;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
@@ -14,13 +13,13 @@ public record ResponseOrder(
         Date createdAt,
         Date deletedAt,
         OrderStatus status,
-        ResponseProfile profile,
+        ResponseProfile.Detailed profile,
         ResponseCoupon coupon,
         ResponsePayment payment,
         BigDecimal originalAmount,
         BigDecimal amount,
         ResponseOrderDetail[] details,
-        MailProductKeys sentMail
+        String sentMail
 ) {
     public record ResponseOrderDetail(
             Long id,
@@ -31,14 +30,15 @@ public record ResponseOrder(
     ) {
     }
 
-
     public record ResponseOrderItem(
             long id,
             String name,
             String imageUrl,
             String slug,
             long quantity,
-            String[] tags
+            String[] tags,
+            String key
     ) {
     }
+
 }

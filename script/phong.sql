@@ -144,37 +144,52 @@ from orders;
 select *
 from blogs;
 
-SELECT * FROM products p
-                  LEFT JOIN product_tags pt on pt.product_id = p.id
-WHERE p.id IN (select od.product_id from order_details od
+SELECT *
+FROM products p
+         LEFT JOIN product_tags pt on pt.product_id = p.id
+WHERE p.id IN (select od.product_id
+               from order_details od
                group by od.product_id
                ORDER BY SUM(od.quantity) desc)
 
-SELECT * FROM (
-                  SELECT od.product_id, SUM(od.quantity) AS totalSold
-                  FROM order_details od
-                  GROUP BY od.product_id
-                  ORDER BY totalSold DESC
-                  LIMIT 10
-              ) t
-                  RIGHT JOIN products p ON t.product_id = p.id
-                  LEFT JOIN product_tags pt ON pt.product_id = p.id
+SELECT *
+FROM (SELECT od.product_id, SUM(od.quantity) AS totalSold
+      FROM order_details od
+      GROUP BY od.product_id
+      ORDER BY totalSold DESC
+      LIMIT 10) t
+         RIGHT JOIN products p ON t.product_id = p.id
+         LEFT JOIN product_tags pt ON pt.product_id = p.id
 ORDER BY t.totalSold IS NULL, t.totalSold DESC
 LIMIT 10;
 
-SELECT * from orders o
-join order_details od
-on o.id = od.order_id
+SELECT *
+from orders o
+         join order_details od
+              on o.id = od.order_id
 where order_id = 9;
 
-select * from order_details;
-SELECT * from orders;
+select *
+from order_details;
+SELECT *
+from orders;
 
-SELECT * FROM products p
+SELECT *
+FROM products p
 where p.slug in ('a', 'a-very-long-product');
 
+-- DELETE FROM or
+
+select *
+from orders;
+SELECT *
+from payments;
+select *
+from notification_prod_keys;
+select *
+from notification_prod_keys_fail;
+select *
+from notification_prod_keys_success;
+select * from profiles;
+
 select * from orders;
-SELECT * from payments;
-select * from notification_prod_keys;
-select *from notification_prod_keys_fail;
-select *from notification_prod_keys_success;

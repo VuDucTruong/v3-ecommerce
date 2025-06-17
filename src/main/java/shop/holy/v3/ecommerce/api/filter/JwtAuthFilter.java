@@ -37,6 +37,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         Cookie[] cookies = request.getCookies();
         String accessToken = null;
         String refreshToken = null;
+        boolean hitRefreshToken = false;
 
         if (cookies != null) {
 
@@ -58,6 +59,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         /// If access token is expired, try to trust refresh token
         else {
             if (refreshToken != null && !jwtUtil.isTokenExpired(refreshToken, false)) {
+                hitRefreshToken = true;
                 long userId = Long.parseLong(jwtUtil.extractId(refreshToken, true));
                 authAccount = authAccountService.findAccountById(userId);
             }
@@ -72,7 +74,9 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
 
         grantAuthorisationBeforeNextChain(request, authAccount);
         chain.doFilter(request, response);
-        grantNewTokensOnResponse(response, authAccount);
+        if (hitRefreshToken) {
+            grantNewTokensOnResponse(response, authAccount);
+        }
     }
 
     private void grantAuthorisationBeforeNextChain(HttpServletRequest request, AuthAccount authAccount) {

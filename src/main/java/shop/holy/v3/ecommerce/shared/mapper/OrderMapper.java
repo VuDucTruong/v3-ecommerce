@@ -1,11 +1,13 @@
 package shop.holy.v3.ecommerce.shared.mapper;
 
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.mapstruct.Mapper;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
@@ -61,23 +63,36 @@ public abstract class OrderMapper {
 
     public Specification<Order> fromRequestSearchToSpec(RequestOrderSearch searchReq) {
         return ((root, query, criteriaBuilder) -> {
-            if (searchReq == null) return criteriaBuilder.conjunction();
+            if (query == null || searchReq == null)
+                return criteriaBuilder.conjunction();
             Predicate predicate = criteriaBuilder.conjunction();
+            if (!query.getResultType().equals(Long.class)) {
+                var profileJoin = root.fetch("profile", JoinType.LEFT);
+                profileJoin.fetch("account", JoinType.LEFT);
+
+                root.fetch("coupon", JoinType.LEFT);
+                root.fetch("payment", JoinType.LEFT);
+            }
+
             if (StringUtils.hasLength(searchReq.search())) {
-                predicate = criteriaBuilder.and(predicate,
-                        SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("id"), searchReq.search()));
+                var searchPedicate = criteriaBuilder.or(SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("profile").get("account").get("email"), searchReq.search()),
+                        SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("profile").get("fullName"), searchReq.search()));
+                predicate = criteriaBuilder.and(predicate, searchPedicate);
+            }
+            if (!CollectionUtils.isEmpty(searchReq.ids())) {
+                predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
             }
             if (searchReq.status() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("status"), searchReq.status()));
+                        criteriaBuilder.equal(root.get("status"), searchReq.status().name()));
             }
             if (searchReq.totalFrom() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("total"), searchReq.totalFrom()));
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("amount"), searchReq.totalFrom()));
             }
             if (searchReq.totalTo() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.lessThanOrEqualTo(root.get("total"), searchReq.totalTo()));
+                        criteriaBuilder.lessThanOrEqualTo(root.get("amount"), searchReq.totalTo()));
             }
             if (!searchReq.deleted()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));

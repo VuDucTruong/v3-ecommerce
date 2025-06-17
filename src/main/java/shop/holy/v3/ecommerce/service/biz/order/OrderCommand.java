@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderCreate;
 import shop.holy.v3.ecommerce.api.dto.order.ResponseOrder;
 import shop.holy.v3.ecommerce.persistence.entity.Coupon;
@@ -17,6 +18,7 @@ import shop.holy.v3.ecommerce.persistence.repository.product.IProductRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.CouponType;
 import shop.holy.v3.ecommerce.shared.mapper.OrderMapper;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -60,7 +62,12 @@ public class OrderCommand {
     }
 
     private Order calculateOrder(RequestOrderCreate request, BigDecimal originalAmount) {
+        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
+        long profileId = authAccount.getProfileId();
+
         Order order = orderMapper.fromCreateRequestToEntity(request);
+        order.setProfileId(profileId);
+
 
         if (request.couponCode() != null) {
             Pair<Coupon, BigDecimal> couponResult = this.evaluateDiscount(originalAmount, request.couponCode());

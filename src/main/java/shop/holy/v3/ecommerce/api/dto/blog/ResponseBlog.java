@@ -9,6 +9,7 @@ public record ResponseBlog(
         long id,
         String title,
         String subtitle,
+        Date deletedAt,
         ResponseProfile author,
         List<Long> genre2Ids,
         Date publishedAt,

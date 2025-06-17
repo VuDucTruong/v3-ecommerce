@@ -69,8 +69,8 @@ public class BlogCommand {
     @Transactional
     public int deleteBlogs(long[] ids) {
         if (ids == null || ids.length == 0)
-            return blogRepository.updateBlogDeletedAtByIdIn(ids);
-        return 0;
+            return 0;
+        return blogRepository.updateBlogDeletedAtByIdIn(ids);
     }
 
 

@@ -1,5 +1,8 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
@@ -13,6 +16,12 @@ import java.util.Optional;
 
 @Repository
 public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
+
+    @Override
+    @NonNull
+    @EntityGraph(attributePaths = {"profile", "coupon", "payment", "profile.account"})
+    Page<Order> findAll(Specification<Order> spec, @NonNull Pageable pageable);
+
     @Modifying
     @Query("""
             update Order o set o.deletedAt = current_timestamp where o.id = :id
@@ -27,13 +36,13 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
 
     @NonNull
     @Override
-    @EntityGraph(attributePaths = {"payment", "coupon"})
+    @EntityGraph(attributePaths = {"profile", "coupon", "payment", "profile.account"})
     Optional<Order> findById(@NonNull Long aLong);
 
-    @EntityGraph(attributePaths = {"payment", "coupon"})
+    @EntityGraph(attributePaths = {"profile", "coupon", "payment", "profile.account"})
     Optional<Order> findFirstByIdEqualsAndDeletedAtIsNull(long id);
 
-    @EntityGraph(attributePaths = {"payment", "coupon"})
+    @EntityGraph(attributePaths = {"profile", "coupon", "payment", "profile.account"})
     Optional<Order> findFirstByIdEqualsAndProfileIdEqualsAndDeletedAtIsNull(long id, long profileId);
 
     @Query("SELECT o.amount from Order o where o.id = :orderId")
