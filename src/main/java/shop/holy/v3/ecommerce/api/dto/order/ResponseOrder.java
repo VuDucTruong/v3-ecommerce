@@ -1,5 +1,7 @@
 package shop.holy.v3.ecommerce.api.dto.order;
 
+import lombok.Getter;
+import lombok.Setter;
 import shop.holy.v3.ecommerce.api.dto.coupon.ResponseCoupon;
 import shop.holy.v3.ecommerce.api.dto.payment.ResponsePayment;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
@@ -7,6 +9,7 @@ import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public record ResponseOrder(
         long id,
@@ -30,15 +33,16 @@ public record ResponseOrder(
     ) {
     }
 
-    public record ResponseOrderItem(
-            long id,
-            String name,
-            String imageUrl,
-            String slug,
-            long quantity,
-            String[] tags,
-            String key
-    ) {
+    @Getter
+    @Setter
+    public static class ResponseOrderItem {
+        long id;
+        String name;
+        String imageUrl;
+        String slug;
+        long quantity;
+        String[] tags;
+        List<String> keys;
     }
 
 }

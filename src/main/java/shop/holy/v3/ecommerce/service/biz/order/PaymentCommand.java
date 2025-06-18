@@ -105,7 +105,7 @@ public class PaymentCommand {
         vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
         ///  END RESOLVING TIME
         //build query url
-        String payUrl = vnpPayProperties.getVnp_PayUrl() + VNPayUtil.getPaymentURL(vnpParamsMap, true);
+        String payUrl = vnpPayProperties.getVnp_PayUrl() + "?" + VNPayUtil.getPaymentURL(vnpParamsMap, true);
         String hashData = VNPayUtil.getPaymentURL(vnpParamsMap, false);
         String vnpSecureHash = VNPayUtil.hmacSHA512(vnpPayProperties.getSecretKey(), hashData);
         payUrl += "&vnp_SecureHash=" + vnpSecureHash;

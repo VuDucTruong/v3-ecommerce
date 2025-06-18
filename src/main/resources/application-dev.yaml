@@ -28,6 +28,7 @@ spring:
         default_schema: public
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
+
 app:
   cache:
     test:

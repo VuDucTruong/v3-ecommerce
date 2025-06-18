@@ -2,7 +2,7 @@ spring:
   application:
     name: v3-ecommerce-holy-shop
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:log,security,dev,vnp,cacheredis,ops}
+    active: ${SPRING_PROFILES_ACTIVE:log,security,dev,vnp,cacheredis,ops,mail}
   datasource:
     driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
     url: ${SPRING_DATASOURCE_URL}
@@ -62,7 +62,7 @@ phong:
     enable-fallback: ${MAIL_ENABLE_FALLBACK:true}
     banner-url: ${BANNER_URL:https://blog.nebrass.fr/images/jetbrains-banner.webp}
     scheduled:
-      cron: "0 0/1 * * * *"
+      cron: "0/30 * * * * *"
 
 server:
   port: ${SERVER_PORT:8080}

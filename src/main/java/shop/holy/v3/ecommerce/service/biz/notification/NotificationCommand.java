@@ -16,10 +16,6 @@ import shop.holy.v3.ecommerce.persistence.repository.notification.INotificationP
 import shop.holy.v3.ecommerce.service.biz.product.item.ProductItemCommand;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class NotificationCommand {
@@ -36,11 +32,6 @@ public class NotificationCommand {
         orderRepository.updateStatusById(orderId, OrderStatus.RETRY_1.name());
     }
 
-    @Transactional
-    public void handleRetry2(long notiId, long orderId) {
-        notiRepository.updateRetry2ById(notiId);
-        orderRepository.updateStatusById(orderId, OrderStatus.RETRY_2.name());
-    }
 
     @Transactional
     public void handleFailed(NotificationProdKey key) {
@@ -50,6 +41,7 @@ public class NotificationCommand {
         keyFailed.setRetry1(key.getRetry1());
         keyFailed.setRetry2(key.getRetry2());
         long orderId = key.getOrderId();
+        notiRepository.deleteById(key.getId());
         orderRepository.updateStatusById(orderId, OrderStatus.FAILED_MAIL.name());
         failedNotiRepository.save(keyFailed);
     }
@@ -72,8 +64,9 @@ public class NotificationCommand {
                     .mapToLong(MailProductKeys.ProductKey::getId)
                     .toArray();
 
-            successNotiRepository.save(notiSuccess);
+            notiRepository.deleteById(key.getId());
             productItemCommand.markItemUsed(flattenedProductItem_Ids);
+            successNotiRepository.save(notiSuccess);
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -81,16 +74,16 @@ public class NotificationCommand {
 
     }
 
-    public void resendFailedNotification(Collection<Long> ids) {
-        List<NotificationProdKeyFail> fails = failedNotiRepository.findAllByIdIn(ids);
-        fails.forEach(f -> {
-            f.setCreatedAt(null);
-            f.setRetry1(null);
-            f.setRetry2(null);
-        });
-        List<NotificationProdKey> notis = new ArrayList<>(fails);
-        notiRepository.saveAll(notis);
-    }
+//    public void resendFailedNotification(Collection<Long> ids) {
+//        List<NotificationProdKeyFail> fails = failedNotiRepository.findAllByIdIn(ids);
+//        fails.forEach(f -> {
+//            f.setCreatedAt(null);
+//            f.setRetry1(null);
+//            f.setRetry2(null);
+//        });
+//        List<NotificationProdKey> notis = new ArrayList<>(fails);
+//        notiRepository.saveAll(notis);
+//    }
 
 
 }

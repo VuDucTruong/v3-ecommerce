@@ -39,7 +39,7 @@ public abstract class OrderMapper {
 
     @Mapping(source = "details", target = "details")
     @Mapping(source = "order.status", target = "status")
-    @Mapping(source = "mpk", target = "sentMail")
+    @Mapping(source = "mpk.email", target = "sentMail")
     public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, MailProductKeys mpk, Collection<OrderDetail> details);
 
     @Mapping(source = "orderDetails", target = "details", ignore = true)
@@ -56,6 +56,7 @@ public abstract class OrderMapper {
 
     @Mapping(source = "product.imageUrlId", target = "imageUrl", qualifiedByName = "genUrl")
     @Mapping(source = "tags", target = "tags", qualifiedByName = MapFuncs.FROM_TAG_ENTITY_TO_STRING_ARRAY)
+    @Mapping(target = "keys", ignore = true)
     protected abstract ResponseOrder.ResponseOrderItem productToResponseOrderItem(Product product);
 
 //    protected abstract ResponseOrder.ResponseOrderDetail orderDetailToResponseOrderDetail(OrderDetail orderDetail);

@@ -4,7 +4,6 @@ logging:
       ttddyy:
         dsproxy:
           listener: debug
-
     org:
       springframework:
         cache: debug

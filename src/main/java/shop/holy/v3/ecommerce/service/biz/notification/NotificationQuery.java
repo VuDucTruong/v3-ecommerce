@@ -19,6 +19,10 @@ public class NotificationQuery {
     private final INotificationProdKeyRepository notiRepository;
     private final ObjectMapper objectMapper;
 
+    public Iterable<NotificationProdKey> getNotificationProdKeys() {
+        return notiRepository.findAll();
+    }
+
     public MailProductKeys getSentMailMetaByOrderIdAndStatus(long orderId, String status) {
         if (!OrderStatus.COMPLETED.name().equals(status))
             return null;
@@ -34,8 +38,18 @@ public class NotificationQuery {
                 .orElse(null);
     }
 
-    public List<NotificationProdKey> findFirstAtEachMailPartition(int limit){
-        return notiRepository.findAllParititionByEmail(limit);
+    public List<NotificationProdKey> findFirstAtEachMailPartition(int limit) {
+        var entities = notiRepository.findAllParititionByEmail(limit).stream().map(row -> {
+            NotificationProdKey key = new NotificationProdKey();
+            key.setId(row.id());
+            key.setOrderId(row.orderId());
+            key.setEmail(row.email());
+            key.setRetry1(row.retry1());
+            key.setRetry2(row.retry2());
+            return key;
+        }).toList();
+
+        return entities;
     }
 
 }

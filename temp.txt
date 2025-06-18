@@ -1,0 +1,5 @@
+1eb9e15f02e9493580fc267be8d8596b1bb0dfb0f78776bb301aba0a04bb67b80e387f66d1727e90b2ca6c1178e20b1f3f6b72f9148d921122e42709c745fbfe
+
+
+
+https://sandbox.vnpayment.vn/paymentv2/Transaction/Error.html?aspxerrorpath=/paymentv2/vpcpay.htmlvnp_Amount=162540000&vnp_BankCode=NCB&vnp_Command=pay&vnp_CreateDate=20250618125257&vnp_CurrCode=VND&vnp_ExpireDate=20250618130757&vnp_IpAddr=0:0:0:0:0:0:0:1&vnp_Locale=en&vnp_OrderType=other&vnp_ReturnUrl=http:/localhost:3000/cart/payment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=de573a06-e69e-4d34-a85b-71fb84a86a99&vnp_Version=2.1.0&vnp_SecureHash=1eb9e15f02e9493580fc267be8d8596b1bb0dfb0f78776bb301aba0a04bb67b80e387f66d1727e90b2ca6c1178e20b1f3f6b72f9148d921122e42709c745fbfe

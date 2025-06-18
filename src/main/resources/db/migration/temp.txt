@@ -1,1 +1,1 @@
-pg_dump --column-inserts --file="/tmp/V1__init_records.sql" --data-only --exclude-table-data=flyway_schema_history --dbname="holy_shop" --schema='public'
+pg_dump --column-inserts --file="/tmp/asdfasdfasd.sql" --data-only --exclude-table-data=flyway_schema_history --dbname="holy_shop" --schema='public'

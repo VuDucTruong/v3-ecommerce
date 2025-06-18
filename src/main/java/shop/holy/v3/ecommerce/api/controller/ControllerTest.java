@@ -20,6 +20,8 @@ import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.account.token.ResponseLogin;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
 import shop.holy.v3.ecommerce.service.biz.TestService;
+import shop.holy.v3.ecommerce.service.biz.notification.NotificationQuery;
+import shop.holy.v3.ecommerce.service.smtp.ScheduledSmtp;
 import shop.holy.v3.ecommerce.service.smtp.SmtpService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.CookieKeys;
@@ -38,6 +40,22 @@ public class ControllerTest {
 
     private final SmtpService smtpService;
     private final TestService testService;
+    private final ScheduledSmtp scheduledSmtp;
+    private final NotificationQuery notificationQuery;
+
+    @GetMapping("testnoti")
+    public ResponseEntity<?> getnoti() {
+        var rs = notificationQuery.getNotificationProdKeys();
+        return ResponseEntity.ok().build();
+
+    }
+
+
+    @GetMapping("trigger")
+    public ResponseEntity<?> get() {
+        scheduledSmtp.runAsyncTask();
+        return ResponseEntity.ok("ok");
+    }
 
     @GetMapping("/biz-errors")
     public ResponseEntity<?> testBizErrors() {
@@ -81,12 +99,13 @@ public class ControllerTest {
         return ResponseEntity.ok(responseLogin);
     }
 
-    @GetMapping("abc")
+
+    @GetMapping("hello")
     public ResponseEntity<String> getString() {
-        return ResponseEntity.ok("asdlfjaslkdfjakj dlkajflkjalsdjf alksdjfklasd");
+        return ResponseEntity.ok("hello");
     }
 
-    @GetMapping("/hello")
+    @GetMapping("/test-trace-id-2-step")
     public String test() {
         log.info("---------Hello method started---------");
         log.error("---------Hello method started, id missing!---------");

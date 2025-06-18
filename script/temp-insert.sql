@@ -40,9 +40,6 @@ INSERT INTO order_details (order_id, original_price, price, product_id, quantity
 VALUES (currval('orders_id_seq'), 200123.00, 123456.00, 29, 1);
 COMMIT;
 
-
-
-select id, price, original_price
-from products where deleted_at is null;
-
-
+--
+-- INSERT INTO accounts (email,is_verified, otp, otp_expiry, password, role, verification_code)
+-- VALUES ('')

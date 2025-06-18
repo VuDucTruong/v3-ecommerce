@@ -20,9 +20,7 @@ import java.util.List;
 public class NotificationProdKey {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_prod_keys_id_seq")
-    @SequenceGenerator(name = "notification_prod_keys_id_seq", sequenceName = "notification_prod_keys_id_seq",
-            allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO) // ✅ Use AUTO for TABLE_PER_CLASS
     protected long id;
 
     @ColumnDefault("now()")
@@ -34,5 +32,4 @@ public class NotificationProdKey {
 
     protected Date retry1;
     protected Date retry2;
-
 }

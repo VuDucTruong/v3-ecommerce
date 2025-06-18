@@ -59,90 +59,23 @@ from accounts a
               on a.id = p.account_id
 where email = 'phong@gmail.com';
 
-select *
-from profiles;
-
-select *
-from payments;
-
-delete
-from payments
-where true;
-
-select *
-from products p
-         join product_description pd on p.prod_desc_id = pd.id;
-
-
-select *
-from product_items;
-
 
 select *
 from product_items_used;
 select *
 from payments
-where trans_ref = '09c4a7a6-e3b1-465b-a057-f8d0c3be18da'
+where trans_ref = '09c4a7a6-e3b1-465b-a057-f8d0c3be18da';
 select *
 from accounts;
 select *
 from product_favorites;
-
-select *
-from product_favorites
-where product_id = 8;
 
 
 select *
 from products;
 select *
 from comments;
-select *
-from public.blogs b1_0
-         join public.blogs_genres g1_0 on b1_0.id = g1_0.blog_id
-         join public.genre2 g1_1 on g1_1.id = g1_0.genre2_id
-         join public.genre1 g2_0 on g2_0.id = g1_1.genre1_id
-         join public.profiles p1_0 on p1_0.id = b1_0.profile_id
-where 1 = 1
-  and b1_0.deleted_at is null
-order by b1_0.id;
 
-select *
-from genre2;
-SELECT *
-FROM blogs_genres
-where blog_id = 6;
-select *
-from blogs;
-
-
-select *;
-select *
-from product_items_used
-where product_id = 8;
-
-
-select *
-from products
-order by id;
-
-
-select *
-from product_items
-order by id desc;
-
-select *
-from categories;
-select *
-from products_categories
-where product_id = 20;
-
-select *
-from coupons;
-select *
-from orders;
-select *
-from blogs;
 
 SELECT *
 FROM products p
@@ -190,6 +123,17 @@ select *
 from notification_prod_keys_fail;
 select *
 from notification_prod_keys_success;
-select * from profiles;
+select *
+from profiles;
 
-select * from orders;
+select *from order_details od where od.order_id = 9;
+select * from product_items pi where  pi.product_id = 23;
+
+select * from product_items_used;
+
+select od1_0.id, od1_0.product_id, od1_0.order_id, od1_0.quantity, p1_0.name, p1_0.image_url_id
+from public.order_details od1_0
+         left join public.products p1_0 on od1_0.product_id = p1_0.id
+where od1_0.order_id in (9);
+
+-- delete from orders

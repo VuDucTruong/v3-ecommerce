@@ -18,10 +18,13 @@ import java.util.List;
 public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
     @Query("""
-            select odd.id, odd.productId, odd.orderId, odd.quantity,
-                        p.name as productName, p.imageUrlId as imageUrlId
-                        from OrderDetail odd left join Product p on odd.productId = p.id
-                        where odd.orderId in (:orderId)""")
+                select new shop.holy.v3.ecommerce.persistence.projection.ProQ_OrderDetails(
+                    odd.id, odd.orderId, odd.productId, p.name, p.imageUrlId, odd.quantity
+                )
+                from OrderDetail odd
+                left join Product p on odd.productId = p.id
+                where odd.orderId in (:orderId)
+            """)
     List<ProQ_OrderDetails> findByOrderIdIn(Collection<Long> orderId);
 
     @EntityGraph(attributePaths = {"product", "product.tags"})

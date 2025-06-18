@@ -55,11 +55,11 @@ public class MailCommand {
     public void resolveNotificationProdKey(List<NotificationProdKey> notis) {
         Map<Long, UserPack> orderId_pack = queryFullnamesAndMapToNotifications(notis);
         var details = queryOrderDetails(notis);
-        Map<Long, Map<Long, MailProductKeys.ProductMeta>> orderId_By_metaMap = resolveOrderDetailsToMap(details);
+        Map<Long, Map<Long, MailProductKeys.ProductMeta>> orderId_To_metaMap = resolveOrderDetailsToMap(details);
 
 //        List<CompletableFuture<Void>> futures = new ArrayList<>();
 
-        for (var entry : orderId_By_metaMap.entrySet()) {
+        for (var entry : orderId_To_metaMap.entrySet()) {
             /// set metadata
             UserPack userPack = orderId_pack.get(entry.getKey());
             ///  WITH FIRM HOPE THAT IT WILL TRIGGER
@@ -67,7 +67,7 @@ public class MailCommand {
         }
     }
 
-    private CompletableFuture<Void> fetchAndResolveMail(UserPack userPack, Map.Entry<Long, Map<Long, MailProductKeys.ProductMeta>> orderId_By_MetaMap_Entry) {
+    private CompletableFuture<Void> fetchAndResolveMail(UserPack userPack, Map.Entry<Long, Map<Long, MailProductKeys.ProductMeta>> orderId_to_MetaMapEntry) {
         CompletableFuture<Pair<NotificationProdKey, MailProductKeys>> futurePair_Noti_Mail = CompletableFuture.supplyAsync(() -> {
             NotificationProdKey noti = userPack.getNotificationProdKey();
 
@@ -75,8 +75,8 @@ public class MailCommand {
             {
                 mpk.setEmail(noti.getEmail());
                 mpk.setFullName(userPack.getFullName());
-                mpk.setOrderId(orderId_By_MetaMap_Entry.getKey());
-                mpk.setMetas(orderId_By_MetaMap_Entry.getValue());
+                mpk.setOrderId(orderId_to_MetaMapEntry.getKey());
+                mpk.setMetas(orderId_to_MetaMapEntry.getValue());
             }
 
             for (var metaEntry : mpk.getMetas().entrySet()) {
@@ -94,6 +94,10 @@ public class MailCommand {
             var noti = pair.getLeft();
             var mpk = pair.getRight();
             try {
+                if(true) {
+                    notificationCommand.handleSuccess(noti, mpk);
+                    return;
+                }
                 smtpService.sendMailProductKeys(mpk);
                 notificationCommand.handleSuccess(noti, mpk);
             } catch (MessagingException e) {

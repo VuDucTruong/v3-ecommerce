@@ -59,9 +59,21 @@ public class OrderQuery {
         return CompletableFuture.allOf(futureOrderAndMail, futureDetails).thenApply(v -> {
             List<OrderDetail> details = futureDetails.join();
             var orderAndMail = futureOrderAndMail.join();
+
             Order order = orderAndMail.getLeft();
             MailProductKeys mailProductKeys = orderAndMail.getRight();
-            return orderMapper.fromEntityToResponse_InDetail(order, mailProductKeys, details);
+
+            var responseOrder = orderMapper.fromEntityToResponse_InDetail(order, mailProductKeys, details);
+            if (mailProductKeys == null)
+                return responseOrder;
+
+            for (ResponseOrder.ResponseOrderDetail detail : responseOrder.details()) {
+                var product = detail.product();
+                List<String> productItemKeys = mailProductKeys.getMetas().get(product.getId()).getKeys()
+                        .stream().map(MailProductKeys.ProductKey::getProductKey).toList();
+                detail.product().setKeys(productItemKeys);
+            }
+            return responseOrder;
         });
     }
 
