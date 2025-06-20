@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,8 +27,6 @@ import shop.holy.v3.ecommerce.shared.mapper.product.ProductMapper;
 import shop.holy.v3.ecommerce.shared.mapper.product.ProductTagMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
-
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -135,11 +134,28 @@ public class ProductQuery {
     }
 
     public List<ResponseProduct> getAllProducts() {
-        return productRepository.findAll()
-            .stream()
-            .map(product -> productMapper.fromEntityToResponse_Light(product ,
-                productTagMapper.fromTagEntitiesToStringTags(product.getTags()) ,
-                false)).toList();
+        return productRepository.findAll().stream()
+            .filter(product -> product.getDeletedAt() == null)
+            .peek(this::stripHtmlFromDescription)
+            .map(product -> productMapper.fromEntityToResponse_Light(
+                product,
+                productTagMapper.fromTagEntitiesToStringTags(product.getTags()),
+                false
+            ))
+            .toList();
+    }
+
+    private void stripHtmlFromDescription(Product product) {
+        var desc = product.getProductDescription();
+        desc.setDescription(stripHtml(desc.getDescription()));
+        desc.setInfo(stripHtml(desc.getInfo()));
+        desc.setPlatform(stripHtml(desc.getPlatform()));
+        desc.setPolicy(stripHtml(desc.getPolicy()));
+        desc.setTutorial(stripHtml(desc.getTutorial()));
+    }
+
+    private String stripHtml(String html) {
+        return html != null ? Jsoup.parse(html).text() : "";
     }
 
 }
