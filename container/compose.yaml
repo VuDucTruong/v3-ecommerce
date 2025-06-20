@@ -2,8 +2,11 @@
 # If you need more help, visit the Docker Compose reference guide at
 # https://docs.docker.com/go/compose-spec-reference/
 
-
-name: backend
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
 services:
   server:
     build:
@@ -11,14 +14,15 @@ services:
       context: ..
     env_file:
       - ../env/dev.env
+      - ../env/profile.env
     ports:
       - 8080:8080
     depends_on:
-      phoenix-db-service:
+      db:
         condition: service_healthy
 #    volumes:
 #      - ./mirroring:/BOOT-INF/
-  phoenix-db-service:
+  db:
     ports:
       - 5433:5432
     image: postgres:17.2
