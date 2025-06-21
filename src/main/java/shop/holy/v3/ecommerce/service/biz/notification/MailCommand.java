@@ -94,10 +94,6 @@ public class MailCommand {
             var noti = pair.getLeft();
             var mpk = pair.getRight();
             try {
-                if(true) {
-                    notificationCommand.handleSuccess(noti, mpk);
-                    return;
-                }
                 smtpService.sendMailProductKeys(mpk);
                 notificationCommand.handleSuccess(noti, mpk);
             } catch (MessagingException e) {

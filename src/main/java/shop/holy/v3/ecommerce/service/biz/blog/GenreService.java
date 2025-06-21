@@ -54,4 +54,5 @@ public class GenreService {
         return genres.stream().map(genreMapper::fromEntityToResponse).toArray(ResponseGenre1[]::new);
     }
 
+
 }

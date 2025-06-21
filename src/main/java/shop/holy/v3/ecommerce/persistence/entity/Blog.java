@@ -38,6 +38,4 @@ public class Blog extends EntityBase {
     @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Profile profile;
 
-
-
 }
