@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_AccountId_Role;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -48,7 +49,7 @@ public interface ICommentRepository extends JpaRepository<Comment, Long>, JpaSpe
 
     @Modifying
     @Query("UPDATE Comment c SET c.deletedAt = CURRENT_TIMESTAMP WHERE c.id IN (:ids)")
-    int updateDeletedAtByIdIn(long[] ids);
+    List<ProQ_AccountId_Role> updateDeletedAtByIdIn(long[] ids);
 
 
     @Query(value = "update comments c set content = :content where c.id = :id returning *", nativeQuery = true)

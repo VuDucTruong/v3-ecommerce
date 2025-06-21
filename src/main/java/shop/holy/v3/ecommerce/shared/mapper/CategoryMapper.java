@@ -11,6 +11,7 @@ import shop.holy.v3.ecommerce.api.dto.category.RequestCategoryUpdate;
 import shop.holy.v3.ecommerce.api.dto.category.ResponseCategory;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 @Mapper(componentModel = "spring",
 uses = CommonMapper.class)
@@ -37,7 +38,7 @@ public abstract class CategoryMapper {
                 predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
             }
 
-            if (!searchReq.deleted()) {
+            if (!searchReq.deleted() && SecurityUtil.nullSafeIsAdmin()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
             return predicate;

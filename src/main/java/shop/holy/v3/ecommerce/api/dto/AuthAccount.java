@@ -86,9 +86,7 @@ public class AuthAccount implements UserDetails {
         return role == RoleEnum.CUSTOMER;
     }
 
-    public boolean isNotSelf(long id) {
-        return this.id != id;
-    }
+    public boolean isSelf(Long profileId){ return profileId == this.id;}
 
     @Override
     public String getUsername() {

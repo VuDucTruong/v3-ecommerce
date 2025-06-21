@@ -80,7 +80,7 @@ public abstract class CommentMapper {
             }
 
             if (StringUtils.hasLength(searchReq.productName())) {
-                var searchParentProduct = criteriaBuilder.like(root.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
+                var searchParentProduct = criteriaBuilder.like(root.get("product").get("name"), STR."%\{searchReq.productName().toLowerCase()}%");
 //                var searchRepliesProduct = criteriaBuilder.like(parentGet.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
 //                var productSearch = criteriaBuilder.or(searchParentProduct, searchRepliesProduct);
                 predicate = criteriaBuilder.and(predicate, searchParentProduct);

@@ -11,9 +11,12 @@ import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderCreate;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderSearch;
 import shop.holy.v3.ecommerce.api.dto.order.ResponseOrder;
+import shop.holy.v3.ecommerce.service.biz.notification.NotificationCommand;
 import shop.holy.v3.ecommerce.service.biz.order.OrderCommand;
 import shop.holy.v3.ecommerce.service.biz.order.OrderQuery;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ import java.util.concurrent.CompletableFuture;
 public class ControllerOrder {
     private final OrderQuery orderQuery;
     private final OrderCommand orderCommand;
+    private final NotificationCommand notificationCommand;
 
     @Operation(summary = "get 1")
     @GetMapping("/{id}")
@@ -31,7 +35,14 @@ public class ControllerOrder {
         return orderQuery.findById(id, deleted).thenApply(ResponseEntity::ok);
     }
 
+    @PutMapping("/mails")
+    public ResponseEntity<?> putString(@RequestParam Set<Long> orderIds) {
+        notificationCommand.resendFailedNotification(orderIds);
 
+        return ResponseEntity.ok().build();
+
+    }
+    
     @PostMapping("/searches")
     @Operation(description = """
             1.automatically filter by Id when: user is not admin \n

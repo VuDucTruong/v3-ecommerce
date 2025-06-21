@@ -16,6 +16,7 @@ import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 import shop.holy.v3.ecommerce.shared.mapper.CommentMapper;
 import shop.holy.v3.ecommerce.shared.mapper.CommonMapper;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
@@ -103,7 +104,7 @@ public abstract class ProductMapper {
             }
 
             // Filter deleted products
-            if (!searchReq.deleted()) {
+            if ((SecurityUtil.nullSafeIsAdmin() && !searchReq.deleted())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
 

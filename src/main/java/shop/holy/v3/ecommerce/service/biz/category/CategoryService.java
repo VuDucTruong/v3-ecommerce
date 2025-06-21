@@ -17,6 +17,7 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
 import shop.holy.v3.ecommerce.shared.mapper.CategoryMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.util.Optional;
 
@@ -39,7 +40,7 @@ public class CategoryService {
     public ResponseCategory getCategoryByCode(long id, boolean deleted) {
         Optional<Category> optionalCategory;
 
-        if (deleted)
+        if (deleted && SecurityUtil.nullSafeIsAdmin())
             optionalCategory = categoryRepository.findById(id);
         else
             optionalCategory = categoryRepository.findFirstByIdAndDeletedAtIsNull(id);

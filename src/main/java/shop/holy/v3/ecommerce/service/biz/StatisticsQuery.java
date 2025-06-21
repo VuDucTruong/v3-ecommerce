@@ -71,14 +71,13 @@ public class StatisticsQuery {
         Date from = AppDateUtils.toStartOfDay(fromTo.from());
         Date to = AppDateUtils.toEndOfDay(fromTo.to());
 
-        List<Order> orders = orderRepository.findAllByCreatedAtBeforeAndCreatedAtAfter(from, to);
+        List<Order> orders = orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(from, to);
         Map<LocalDate, ResponseStatsOrders> items = orders.stream().collect(
                 Collectors.<Order, LocalDate, ResponseStatsOrders>toMap(o -> AppDateUtils.toLocalDate(o.getCreatedAt()),
                         o -> new ResponseStatsOrders(AppDateUtils.toLocalDate(o.getCreatedAt()), o.getStatus()),
                         (stat1, stat2) -> {
                             stat1.add(stat2);
-                            return stat1;
-                        }
+                            return stat1;}
                 )
         );
         return items.values();

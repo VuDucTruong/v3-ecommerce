@@ -54,8 +54,6 @@ spring:
           auth: true
           starttls:
             enable: true
-
-
 phong:
   mail:
     to: ${MAIL_TO:21522458@gm.uit.edu.vn}
@@ -63,6 +61,16 @@ phong:
     banner-url: ${BANNER_URL:https://blog.nebrass.fr/images/jetbrains-banner.webp}
     scheduled:
       cron: "0/30 * * * * *"
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+    account-dir: ${CLOUDINARY_ACCOUNT_DIR}
+    blog-dir: ${CLOUDINARY_BLOG_DIR}
+    category-dir: ${CLOUDINARY_CATEGORY_DIR}
+    coupon-dir: ${CLOUDINARY_COUPON_DIR}
+    product-dir: ${CLOUDINARY_PRODUCT_DIR}
+
 
 server:
   port: ${SERVER_PORT:8080}

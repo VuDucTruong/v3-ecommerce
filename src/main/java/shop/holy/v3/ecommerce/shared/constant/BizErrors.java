@@ -16,6 +16,7 @@ public enum BizErrors {
     OTP_EXPIRED(new BadRequestException("OTP is expired")),
 
     ACCOUNT_NOT_FOUND(new ResourceNotFoundException("Account not found")),
+    BLOG_NOT_FOUND(new ResourceNotFoundException("Blog not found")),
     PRODUCT_NOT_FOUND(new ResourceNotFoundException("Product not found")),
     ORDER_NOT_FOUND(new ResourceNotFoundException("Order not found")),
     CATEGORY_NOT_FOUND(new ResourceNotFoundException("Category not found")),

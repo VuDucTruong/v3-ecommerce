@@ -15,6 +15,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Blog;
 import shop.holy.v3.ecommerce.persistence.entity.Genre2;
 import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,23 +43,6 @@ public abstract class BlogMapper {
         }
         return genre2s.stream().map(Genre2::getId).collect(Collectors.toList());
     }
-
-    public List<String> fromGenreToStringArray(List<Genre2> genre2s) {
-        if (genre2s == null || genre2s.isEmpty())
-            return Collections.emptyList();
-
-        List<String> names = new ArrayList<>(genre2s.size() + 1);
-        Set<Long> existedG1 = new HashSet<>();
-        for (Genre2 genre2 : genre2s) {
-            long g1Id = genre2.getGenre1Id();
-            names.add(genre2.getName());
-            if (existedG1.add(g1Id)) {
-                names.add(genre2.getGenre1().getName());
-            }
-        }
-        return names;
-    }
-
 
     public Specification<Blog> fromSearchRequestToSpec(RequestBlogSearch searchReq) {
         return (root, query, criteriaBuilder) -> {
@@ -88,7 +72,7 @@ public abstract class BlogMapper {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("publishedAt"), AppDateUtils.toEndOfDay(searchReq.publishedTo())));
             }
 
-            if (!searchReq.deleted()) {
+            if (SecurityUtil.nullSafeIsAdmin() && !searchReq.deleted()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
             return predicate;

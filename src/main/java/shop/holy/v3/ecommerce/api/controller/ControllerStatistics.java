@@ -15,12 +15,9 @@ import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsOrders;
 import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsProductTrend;
 import shop.holy.v3.ecommerce.service.biz.StatisticsQuery;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.IntStream;
 
 @RestController
 @Tag(name = "Statistics", description = "=> for users home page")
@@ -33,11 +30,6 @@ public class ControllerStatistics {
 
     @GetMapping("totals")
     public CompletableFuture<ResponseEntity<ResponseStatTotal>> getResponseStatTotal(@ParameterObject RequestFromTo fromTo) {
-        if (true)
-            return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(new ResponseStatTotal(r.nextInt(100),
-                    BigDecimal.valueOf(Math.random()* 1_000_000),
-                    BigDecimal.valueOf(Math.random()* 1_000_000), r.nextInt(0, 100))));
-
         return statisticsQuery.getStatTotal(fromTo).thenApply(ResponseEntity::ok);
     }
 
@@ -47,31 +39,15 @@ public class ControllerStatistics {
             'to' is optional => default == now
             """)
     public ResponseEntity<Collection<ResponseStatsOrders>> getStatsOrders(@ParameterObject RequestFromTo fromTo) {
-        int gap = fromTo.to().getDayOfYear() - fromTo.from().getDayOfYear() + 1;
-        LocalDate to = fromTo.to();
-        if (true) {
-            var temp = IntStream.range(0, gap)
-                    .mapToObj(i -> new ResponseStatsOrders(to.minusDays(i), r.nextInt(50), r.nextInt(50), r.nextInt(50), r.nextInt(50)))
-                    .toList();
-            return ResponseEntity.ok(temp);
-        }
-
         var rs = statisticsQuery.getStatsOrders(fromTo);
         return ResponseEntity.ok(rs);
     }
 
     @GetMapping("trends")
     public ResponseEntity<Collection<ResponseStatsProductTrend>> getTrends(@ParameterObject RequestFromTo fromTo, @RequestParam(required = false, defaultValue = "10") int size) {
-        Random r = new Random();
-        if (true) {
-            var temp = IntStream.range(0, 10).mapToObj(i -> new ResponseStatsProductTrend(r.nextInt(50),
-                    new ResponseStatsProductTrend.ProductTrend(i, "product " + i))).toList();
-            return ResponseEntity.ok(temp);
-        }
         var rs = statisticsQuery.getProductTrends(fromTo, size);
         return ResponseEntity.ok(rs);
     }
-
 
 
 }

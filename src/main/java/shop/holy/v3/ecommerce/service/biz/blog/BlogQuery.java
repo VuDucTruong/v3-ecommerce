@@ -14,11 +14,12 @@ import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.persistence.entity.Blog;
 import shop.holy.v3.ecommerce.persistence.projection.ProQ_BlogRow_Genre1Id;
 import shop.holy.v3.ecommerce.persistence.repository.IBlogRepository;
-import shop.holy.v3.ecommerce.shared.exception.ResourceNotFoundException;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.BlogMapper;
 import shop.holy.v3.ecommerce.shared.mapper.CommonMapper;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,12 +34,12 @@ public class BlogQuery {
 
     public ResponseBlog getBlog(long id, boolean includeDeleted) {
         Optional<Blog> blogPost;
-        if (includeDeleted)
+        if (SecurityUtil.nullSafeIsAdmin() && includeDeleted)
             blogPost = blogRepository.findFirstByIdAndDeletedAtIsNull(id);
         else
             blogPost = blogRepository.findById(id);
         return blogPost.map(blogMapper::fromEntityToResponse)
-                .orElseThrow(() -> new ResourceNotFoundException("Blog post not found by id " + id));
+                .orElseThrow(BizErrors.BLOG_NOT_FOUND::exception);
     }
 
     public ResponsePagination<ResponseBlog> search(RequestBlogSearch searchReq) {
@@ -52,7 +53,7 @@ public class BlogQuery {
         List<ProQ_BlogRow_Genre1Id> rows = blogRepository.findBlogsLateral(genre1Ids.toArray(Long[]::new), size);
         Collection<ResponseGenre1Blogs> response = rows.stream().map(r -> {
             ResponseProfile responseProfile = new ResponseProfile(r.profileId(), r.fullName(), AppDateUtils.toLocalDate(r.profileCratedAt()), r.profileImageUrlId());
-            ResponseBlog responseBlog = new ResponseBlog(r.blogId(), r.title(), r.subtitle(), null, responseProfile, List.of(), r.publishedAt(), commonMapper.genUrl(r.blogImageUrlId()) , r.content());
+            ResponseBlog responseBlog = new ResponseBlog(r.blogId(), r.title(), r.subtitle(), null, responseProfile, List.of(), r.publishedAt(), commonMapper.genUrl(r.blogImageUrlId()), r.content());
             ArrayList<ResponseBlog> singleItemList = new ArrayList<>(1);
             singleItemList.add(responseBlog);
             return new ResponseGenre1Blogs(r.genre1Id(), singleItemList);

@@ -11,7 +11,6 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Predicate;
 
 @Component
 public class SecurityUtil {
@@ -41,8 +40,6 @@ public class SecurityUtil {
     public static AuthAccount getAuthNullable() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         switch (authentication) {
-            case null -> {
-            }
             case UsernamePasswordAuthenticationToken _ -> {
                 Object authAccount = authentication.getPrincipal();
                 if (authAccount == null) {
@@ -50,7 +47,7 @@ public class SecurityUtil {
                 }
                 return (AuthAccount) authAccount;
             }
-            default -> {
+            case null, default -> {
             }
         }
         return null;
@@ -69,7 +66,7 @@ public class SecurityUtil {
             return;
         if (requestRole.gt(resourceRole))
             throw BizErrors.RESOURCE_NOT_AUTHORISED_REQUIRE_HIGHER_POWER.exception();
-        if (requestRole.equals(resourceRole) && isOwned.getAsBoolean()) {
+        if (requestRole.equals(resourceRole) && !isOwned.getAsBoolean()) {
             throw BizErrors.RESOURCE_NOT_OWNED.exception();
         }
 
@@ -84,23 +81,12 @@ public class SecurityUtil {
         }
     }
 
-    public static AuthAccount getAuthMatchingRoleNullSafe(RoleEnum roleEnum) {
-        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
-        if (authAccount.getRole() == null) {
-            throw BizErrors.AUTHORISATION_INVALID.exception();
-        } else if (!authAccount.getRole().equals(roleEnum)) {
-            throw BizErrors.AUTHORISATION_INVALID.exception();
-        }
-        return authAccount;
+    public static boolean nullSafeIsAdmin(AuthAccount authAccount) {
+        return authAccount == null || !authAccount.isAdmin();
     }
 
-    public Long getAuthAccountId() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            AuthAccount authAccount = (AuthAccount) authentication.getPrincipal();
-            return authAccount.getId();
-        } catch (Exception e) {
-            return null;
-        }
+    public static boolean nullSafeIsAdmin() {
+        return SecurityUtil.nullSafeIsAdmin(SecurityUtil.getAuthNullable());
     }
+
 }

@@ -29,7 +29,6 @@ public class ControllerComment {
     private final CommentService commentService;
 
     @GetMapping("{id}")
-//    @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_LEVEL_0)")
     @Operation(summary = "Get 1 Comment-> Có thể là ko cần dùng, vì ai đi lấy 1 comment làm gì?")
     public ResponseEntity<ResponseComment> getResponseCommentById(@PathVariable Long id, @RequestParam(required = false) boolean deleted) {
         var rs = commentService.getById(id, deleted);

@@ -57,7 +57,7 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
     Optional<BigDecimal> findSumTotalByRecentTime(String status, Date lowerBound, Date upperBound);
 
     @EntityGraph(attributePaths = {"payment"})
-    List<Order> findAllByCreatedAtBeforeAndCreatedAtAfter(Date createdAtBefore, Date createdAtAfter);
+    List<Order> findAllByCreatedAtAfterAndCreatedAtBefore(Date createdAtBefore, Date createdAtAfter);
 
     long countByStatusAndCreatedAtLessThanAndCreatedAtGreaterThan(String status, Date lowerBound, Date upperBound);
 
