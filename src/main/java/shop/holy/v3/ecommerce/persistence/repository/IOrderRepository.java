@@ -75,4 +75,6 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
     @Modifying
     @Query("UPDATE Order o set o.status = :status where o.id = :id")
     int updateStatusById(long id, String status);
+
+    Optional<Order> findFirstByIdEqualsAndProfileIdEquals(long id, Long profileId);
 }

@@ -9,6 +9,7 @@ public enum BizErrors {
     LOGIN_FAILED(new UnAuthorisedException("Invalid username or password")),
     INVALID_TOKEN(new UnAuthorisedException("Invalid token")),
     PAYMENT_RESULT_FAILED(new BadRequestException("Payment update failed, please try again")),
+    SMTP_FAILED(new BadRequestException("Error sending email, please try again later")),
 
     EMAIL_ALREADY_EXISTS(new BadRequestException("Email already exists")),
     INVALID_EMAIL(new BadRequestException("Invalid email format")),
@@ -35,9 +36,9 @@ public enum BizErrors {
     RESOURCE_NOT_AUTHORISED_REQUIRE_HIGHER_POWER(new ForbiddenException("Không được phép thay đổi tài nguyên này, yêu cầu tài khoản có thẩm quyền cao hơn")),
     RESOURCE_NOT_OWNED(new ForbiddenException("You don't own this resource")),
 
+    INSUFFICIENT_PRODUCT_ITEMS(new BaseBizException("Insufficient product items")),
     INVALID_IMAGE_URL(new BadRequestException("Image upload not accepted")),
     INVALID_DATE_FORMAT(new BadRequestException("Invalid date format. Please use yyyy-MM-dd'T'HH:mm:ss.SSSX"));
-
 
     private final BaseBizException exception;
 

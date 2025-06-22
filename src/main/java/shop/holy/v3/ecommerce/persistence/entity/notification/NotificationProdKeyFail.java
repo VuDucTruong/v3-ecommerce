@@ -12,5 +12,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NotificationProdKeyFail extends NotificationProdKey {
-    // nothing extra
+    private String reason;
 }

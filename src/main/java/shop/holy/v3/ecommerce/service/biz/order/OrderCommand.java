@@ -49,8 +49,7 @@ public class OrderCommand {
 
         ///  NOW SAVE Order details
         Collection<OrderDetail> details = save_Details(result, products, prodId_to_OrderDetail);
-
-        return orderMapper.fromEntityToResponse_InDetail(result, null, details);
+        return orderMapper.fromEntityToResponse_InDetail(result, null, null, details);
     }
 
     private BigDecimal evalProducts_And_caculate_OriginalPrice(Collection<Product> products, Map<Long, OrderDetail> prodId_to_OrderDetail) {

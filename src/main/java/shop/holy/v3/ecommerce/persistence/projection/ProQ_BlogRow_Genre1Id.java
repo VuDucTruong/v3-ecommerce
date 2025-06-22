@@ -10,6 +10,7 @@ public record ProQ_BlogRow_Genre1Id(
         String content,
         Date createdAt,
         Date publishedAt,
+        Date approvedAt,
         String blogImageUrlId,
         Long profileId,
         String fullName,

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
@@ -36,7 +37,6 @@ public class ControllerBlog {
     @PreAuthorize("hasAnyRole(T(shop.holy.v3.ecommerce.shared.constant.RoleEnum.Roles).ROLE_STAFF)")
     @Operation(summary = "update 1")
     public ResponseBlog updateBlog(@ModelAttribute RequestBlogUpdate updateRequest) {
-
         ResponseBlog responseBlog = blogCommand.updateBlog(updateRequest);
         return responseBlog;
     }
@@ -50,6 +50,12 @@ public class ControllerBlog {
             @RequestBody RequestBlogSearch searchRequest) {
         ResponsePagination<ResponseBlog> responsePagination = blogQuery.search(searchRequest);
         return responsePagination;
+    }
+
+    @PutMapping("/approval/{id}")
+    public ResponseEntity<Integer> approve(@PathVariable Long id, @RequestParam boolean approved) {
+        var changes = blogCommand.updateApproval(id, approved);
+        return ResponseEntity.ok(changes);
     }
 
 

@@ -7,6 +7,7 @@ import org.mapstruct.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.product.*;
 import shop.holy.v3.ecommerce.api.dto.product.description.RequestProductDescription;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
@@ -104,7 +105,8 @@ public abstract class ProductMapper {
             }
 
             // Filter deleted products
-            if ((SecurityUtil.nullSafeIsAdmin() && !searchReq.deleted())) {
+            ///  GUESS OR CUSTOMER must search not-deleted only
+            if (SecurityUtil.guessOrCustomer() || !searchReq.deleted()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
 

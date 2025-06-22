@@ -6,10 +6,15 @@ import shop.holy.v3.ecommerce.persistence.entity.notification.NotificationProdKe
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface INotificationProdKeyFailedRepository extends CrudRepository<NotificationProdKeyFail, Long> {
 
     List<NotificationProdKeyFail> findAllByIdIn(Collection<Long> ids);
+
+    Optional<String> findFirstReasonByOrderId(long orderId);
+
+    boolean existsByOrderId(Long orderId);
 
 }

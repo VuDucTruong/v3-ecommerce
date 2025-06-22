@@ -9,14 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderCreate;
+import shop.holy.v3.ecommerce.api.dto.order.RequestOrderResend;
 import shop.holy.v3.ecommerce.api.dto.order.RequestOrderSearch;
 import shop.holy.v3.ecommerce.api.dto.order.ResponseOrder;
 import shop.holy.v3.ecommerce.service.biz.notification.NotificationCommand;
 import shop.holy.v3.ecommerce.service.biz.order.OrderCommand;
 import shop.holy.v3.ecommerce.service.biz.order.OrderQuery;
 
-import java.util.Collection;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
@@ -31,18 +30,19 @@ public class ControllerOrder {
     @Operation(summary = "get 1")
     @GetMapping("/{id}")
     public CompletableFuture<ResponseEntity<ResponseOrder>> getOrderById(@PathVariable long id,
-                                          @RequestParam(required = false) boolean deleted) {
+                                                                         @RequestParam(required = false) boolean deleted) {
         return orderQuery.findById(id, deleted).thenApply(ResponseEntity::ok);
     }
 
     @PutMapping("/mails")
-    public ResponseEntity<?> putString(@RequestParam Set<Long> orderIds) {
-        notificationCommand.resendFailedNotification(orderIds);
-
+    public ResponseEntity<?> putNoti(@RequestParam boolean isFail, @RequestBody RequestOrderResend requestOrderResend) {
+        if (isFail)
+            notificationCommand.resendFailedNotification(requestOrderResend);
+        else
+            notificationCommand.resendSuccessNotification(requestOrderResend);
         return ResponseEntity.ok().build();
-
     }
-    
+
     @PostMapping("/searches")
     @Operation(description = """
             1.automatically filter by Id when: user is not admin \n

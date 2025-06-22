@@ -8,9 +8,12 @@ import shop.holy.v3.ecommerce.persistence.entity.notification.NotificationProdKe
 import java.util.Optional;
 
 @Repository
-public interface INotificationProdKeySuccess extends CrudRepository<NotificationProdKey, Long>
-{
-    @Query("SELECT nps.mailProdKeyJson FROM NotificationProdKeySuccess nps where nps.orderId = :orderId")
+public interface INotificationProdKeySuccess extends CrudRepository<NotificationProdKey, Long> {
+
+    @Query(value = """
+            SELECT npk.mail_prod_key_json from notification_prod_keys_success npk where npk.order_id = :orderId
+                        order by created_at desc LIMIT 1
+            """, nativeQuery = true)
     Optional<String> findFirstMailProdKeyJsonById(long orderId);
 
 }

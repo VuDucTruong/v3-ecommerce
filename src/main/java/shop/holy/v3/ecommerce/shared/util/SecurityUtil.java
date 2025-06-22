@@ -82,11 +82,20 @@ public class SecurityUtil {
     }
 
     public static boolean nullSafeIsAdmin(AuthAccount authAccount) {
-        return authAccount == null || !authAccount.isAdmin();
+        return authAccount != null && authAccount.isAdmin();
     }
 
     public static boolean nullSafeIsAdmin() {
         return SecurityUtil.nullSafeIsAdmin(SecurityUtil.getAuthNullable());
     }
+    public static boolean guessOrCustomer(AuthAccount authAccount) {
+        return authAccount == null || authAccount.isCustomer();
+    }
+
+    public static boolean guessOrCustomer() {
+        return SecurityUtil.guessOrCustomer(SecurityUtil.getAuthNullable());
+    }
+
+
 
 }

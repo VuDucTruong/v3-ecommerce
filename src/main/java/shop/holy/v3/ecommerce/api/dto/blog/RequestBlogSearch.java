@@ -20,6 +20,8 @@ public record RequestBlogSearch(
         
         @Schema(description = "Filter by publication end date", format = "date", example = "2023-12-31")
         LocalDate publishedTo,
+
+        boolean approved,
         
         @Schema(description = "Include deleted blogs", example = "false", defaultValue = "false")
         boolean deleted) {

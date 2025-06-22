@@ -19,6 +19,7 @@ import shop.holy.v3.ecommerce.shared.mapper.BlogMapper;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -51,6 +52,12 @@ public class BlogCommand {
         var genre2s = insertAndFetchGenre2s(request.id(), request.genreIds(), true);
         rs.setGenre2s(genre2s);
         return blogMapper.fromEntityToResponse(rs);
+    }
+
+    @Transactional
+    public int updateApproval(long id, boolean approved) {
+        Date approvedAt = approved ? new Date() : null;
+        return blogRepository.updateApprovedAtById(id, approvedAt);
     }
 
     private List<Genre2> insertAndFetchGenre2s(long blogId, @Valid @NotEmpty(message = "genres must not be empty") Collection<Long> genre2Ids, boolean update) {

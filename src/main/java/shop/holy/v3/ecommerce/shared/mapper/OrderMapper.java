@@ -40,11 +40,13 @@ public abstract class OrderMapper {
     @Mapping(source = "details", target = "details")
     @Mapping(source = "order.status", target = "status")
     @Mapping(source = "mpk.email", target = "sentMail")
-    public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, MailProductKeys mpk, Collection<OrderDetail> details);
+    @Mapping(source = "reason", target = "reason")
+    public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, MailProductKeys mpk, String reason, Collection<OrderDetail> details);
 
     @Mapping(source = "orderDetails", target = "details", ignore = true)
     @Mapping(source = "status", target = "status")
     @Mapping(target = "sentMail", ignore = true)
+    @Mapping(target = "reason", ignore = true)
     public abstract ResponseOrder fromEntityToResponse_Light(Order order);
 
 

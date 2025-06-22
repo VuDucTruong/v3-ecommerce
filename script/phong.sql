@@ -76,24 +76,6 @@ select *
 from comments;
 
 
-SELECT *
-FROM products p
-         LEFT JOIN product_tags pt on pt.product_id = p.id
-WHERE p.id IN (select od.product_id
-               from order_details od
-               group by od.product_id
-               ORDER BY SUM(od.quantity) desc)
-
-SELECT *
-FROM (SELECT od.product_id, SUM(od.quantity) AS totalSold
-      FROM order_details od
-      GROUP BY od.product_id
-      ORDER BY totalSold DESC
-      LIMIT 10) t
-         RIGHT JOIN products p ON t.product_id = p.id
-         LEFT JOIN product_tags pt ON pt.product_id = p.id
-ORDER BY t.totalSold IS NULL, t.totalSold DESC
-LIMIT 10;
 
 SELECT *
 from orders o
@@ -146,6 +128,13 @@ from public.orders o1_0
 where o1_0.created_at<'2025-05-22 00:00:00.0'
   and o1_0.created_at>'2025-06-21 23:59:59.999';
 
-select * FROM orders;
+SELECT * FROM orders;
 
-SELECT * FROM blogs;
+SELECT * FROM notification_prod_keys_fail;
+INSERT INTO notification_prod_keys_fail(id,order_id, email)
+VALUES (0,1, '21522458@gm.uit.edu.vn');
+
+SELECT * FROM orders where id =1;
+SELECT * FROM order_details where order_id= 1;
+SELECT * FROM products where id = 8;
+SELECT * FROM notification_prod_keys_success;

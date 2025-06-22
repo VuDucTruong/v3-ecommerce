@@ -1,11 +1,13 @@
 package shop.holy.v3.ecommerce.service.biz.blog;
 
 
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.ResponsePagination;
 import shop.holy.v3.ecommerce.api.dto.blog.RequestBlogSearch;
 import shop.holy.v3.ecommerce.api.dto.blog.ResponseBlog;
@@ -32,12 +34,21 @@ public class BlogQuery {
     private final BlogMapper blogMapper;
     private final CommonMapper commonMapper;
 
-    public ResponseBlog getBlog(long id, boolean includeDeleted) {
-        Optional<Blog> blogPost;
-        if (SecurityUtil.nullSafeIsAdmin() && includeDeleted)
-            blogPost = blogRepository.findFirstByIdAndDeletedAtIsNull(id);
-        else
-            blogPost = blogRepository.findById(id);
+    public ResponseBlog getBlog(long id, boolean deleted) {
+
+        AuthAccount authAccount = SecurityUtil.getAuthNullable();
+        final boolean guessOrCustomer = SecurityUtil.guessOrCustomer(authAccount);
+        Specification<Blog> spec = (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.equal(root.get("id"), id);
+            if (guessOrCustomer || !deleted) {
+                predicate = criteriaBuilder.and(predicate, root.get("deletedAt").isNull());
+            }
+            if (guessOrCustomer) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNotNull(root.get("approvedAt")));
+            }
+            return predicate;
+        };
+        Optional<Blog> blogPost = blogRepository.findOne(spec);
         return blogPost.map(blogMapper::fromEntityToResponse)
                 .orElseThrow(BizErrors.BLOG_NOT_FOUND::exception);
     }
@@ -53,7 +64,7 @@ public class BlogQuery {
         List<ProQ_BlogRow_Genre1Id> rows = blogRepository.findBlogsLateral(genre1Ids.toArray(Long[]::new), size);
         Collection<ResponseGenre1Blogs> response = rows.stream().map(r -> {
             ResponseProfile responseProfile = new ResponseProfile(r.profileId(), r.fullName(), AppDateUtils.toLocalDate(r.profileCratedAt()), r.profileImageUrlId());
-            ResponseBlog responseBlog = new ResponseBlog(r.blogId(), r.title(), r.subtitle(), null, responseProfile, List.of(), r.publishedAt(), commonMapper.genUrl(r.blogImageUrlId()), r.content());
+            ResponseBlog responseBlog = new ResponseBlog(r.blogId(), r.title(), r.subtitle(), null, r.approvedAt(), responseProfile, List.of(), r.publishedAt(), commonMapper.genUrl(r.blogImageUrlId()), r.content());
             ArrayList<ResponseBlog> singleItemList = new ArrayList<>(1);
             singleItemList.add(responseBlog);
             return new ResponseGenre1Blogs(r.genre1Id(), singleItemList);

@@ -18,6 +18,8 @@ import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IOrderDetailRepository;
 import shop.holy.v3.ecommerce.persistence.repository.product.IProductItemRepository;
 import shop.holy.v3.ecommerce.service.smtp.SmtpService;
+import shop.holy.v3.ecommerce.shared.constant.BizErrors;
+import shop.holy.v3.ecommerce.shared.exception.BaseBizException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -57,8 +59,6 @@ public class MailCommand {
         var details = queryOrderDetails(notis);
         Map<Long, Map<Long, MailProductKeys.ProductMeta>> orderId_To_metaMap = resolveOrderDetailsToMap(details);
 
-//        List<CompletableFuture<Void>> futures = new ArrayList<>();
-
         for (var entry : orderId_To_metaMap.entrySet()) {
             /// set metadata
             UserPack userPack = orderId_pack.get(entry.getKey());
@@ -94,18 +94,25 @@ public class MailCommand {
             var noti = pair.getLeft();
             var mpk = pair.getRight();
             try {
+                for (MailProductKeys.ProductMeta productMeta : pair.getRight().getMetas().values()) {
+                    if (productMeta.getKeys().size() != productMeta.getQuantity())
+                        throw BizErrors.INSUFFICIENT_PRODUCT_ITEMS.exception();
+                }
                 smtpService.sendMailProductKeys(mpk);
                 notificationCommand.handleSuccess(noti, mpk);
+            } catch (BaseBizException bizException) {
+                notificationCommand.handleFailed(noti, bizException.getMessage());
             } catch (MessagingException e) {
                 if (noti.getRetry1() == null)
                     notificationCommand.handleRetry1(noti.getId(), noti.getOrderId());
-//                else if (noti.getRetry2() == null)
-//                    notificationCommand.handleRetry2(noti.getId(), noti.getOrderId());
                 else {
-                    notificationCommand.handleFailed(noti);
+                    notificationCommand.handleFailed(noti, "Error occurred while sending email");
                 }
                 /// NOT INSERT, SO THAT WE GONNA RESOLVE IN NEXT CYCLE
                 log.error("Scheduler smtp error ", e);
+            } catch (Exception e) {
+                notificationCommand.handleFailed(noti, "Unknown error");
+                log.error("Error occurred while sending email", e);
             }
         }, executor);
     }
@@ -139,7 +146,7 @@ public class MailCommand {
         var mail_fullName = accountRepository.findAllProQEmailFullname(emails).stream().collect(
                 Collectors.toMap(ProQ_Email_Fullname::getEmail, ProQ_Email_Fullname::getFullName));
         orderId_pack.forEach((_, value) -> {
-            String fullName = mail_fullName.getOrDefault(value.getNotificationProdKey().getEmail(), "Traveler ");
+            String fullName = mail_fullName.getOrDefault(value.getNotificationProdKey().getEmail(), "");
             value.setFullName(fullName);
         });
         return orderId_pack;

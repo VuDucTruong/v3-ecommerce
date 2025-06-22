@@ -17,7 +17,8 @@ import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
@@ -72,9 +73,16 @@ public abstract class BlogMapper {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("publishedAt"), AppDateUtils.toEndOfDay(searchReq.publishedTo())));
             }
 
-            if (SecurityUtil.nullSafeIsAdmin() && !searchReq.deleted()) {
+
+            boolean guessOrCustomer = SecurityUtil.guessOrCustomer();
+            if (guessOrCustomer || !searchReq.deleted()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
+
+            if (guessOrCustomer || searchReq.approved()) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNotNull(root.get("approvedAt")));
+            }
+
             return predicate;
         };
     }

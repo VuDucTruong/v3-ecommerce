@@ -26,6 +26,8 @@ public class Blog extends EntityBase {
     @Column(name = "profile_id")
     private long profileId;
 
+    private Date approvedAt;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "blogs_genres",

@@ -1,7 +1,10 @@
 package shop.holy.v3.ecommerce.shared.mapper;
 
 import jakarta.persistence.criteria.Predicate;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MapperConfig;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -14,13 +17,13 @@ import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 @Mapper(componentModel = "spring",
-uses = CommonMapper.class)
+        uses = CommonMapper.class)
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class CategoryMapper {
 
     public abstract Category fromCreateRequestToEntity(RequestCategoryCreate categoryCreateRequest);
 
-//    @Mapping(source = "imageUrl", target = "imageUrlId", qualifiedByName = MapFuncs.EXTRACT_CATEGORY_PUBLIC_ID)
+    //    @Mapping(source = "imageUrl", target = "imageUrlId", qualifiedByName = MapFuncs.EXTRACT_CATEGORY_PUBLIC_ID)
     public abstract Category fromUpdateRequestToEntity(RequestCategoryUpdate categoryUpdateRequest);
 
     @Mapping(target = "imageUrl", source = "imageUrlId", qualifiedByName = MapFuncs.GEN_URL)
@@ -34,13 +37,14 @@ public abstract class CategoryMapper {
             if (StringUtils.hasLength(searchReq.search())) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("name"), "%" + searchReq.search().toLowerCase() + "%"));
             }
-            if(!CollectionUtils.isEmpty(searchReq.ids())){
+            if (!CollectionUtils.isEmpty(searchReq.ids())) {
                 predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
             }
 
-            if (!searchReq.deleted() && SecurityUtil.nullSafeIsAdmin()) {
+            if (SecurityUtil.guessOrCustomer() || !searchReq.deleted()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.isNull(root.get("deletedAt")));
             }
+
             return predicate;
         });
     }
