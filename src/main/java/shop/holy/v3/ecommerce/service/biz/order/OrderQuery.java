@@ -57,7 +57,7 @@ public class OrderQuery {
                     MailProductKeys successProdKey = null;
                     String reason = null;
                     if (Objects.equals(o.getStatus(), OrderStatus.COMPLETED.name())) {
-                        notificationQuery.getSentMailMetaByOrderId(id);
+                        successProdKey = notificationQuery.getSentMailMetaByOrderId(id);
                     }
                     if (Objects.equals(o.getStatus(), OrderStatus.FAILED_MAIL.name())) {
                         reason = notificationQuery.getFailureReasonByOrderId(o.getId());

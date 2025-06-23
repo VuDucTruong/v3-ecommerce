@@ -87,8 +87,12 @@ public abstract class OrderMapper {
             }
             if (searchReq.status() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("status"), searchReq.status().name()));
+                        criteriaBuilder.equal(root.get("status"), searchReq.status()));
+            } else if (!CollectionUtils.isEmpty(searchReq.statuses())) {
+                predicate = criteriaBuilder.and(predicate, root.get("status").in(searchReq.statuses()));
             }
+
+
             if (searchReq.totalFrom() != null) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.greaterThanOrEqualTo(root.get("amount"), searchReq.totalFrom()));

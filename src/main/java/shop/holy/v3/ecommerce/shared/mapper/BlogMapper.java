@@ -16,6 +16,7 @@ import shop.holy.v3.ecommerce.persistence.entity.Genre2;
 import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.util.AppDateUtils;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
+import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +59,7 @@ public abstract class BlogMapper {
             }
 
             if (searchReq.search() != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("title"), "%" + searchReq.search() + "%"));
+                predicate = criteriaBuilder.and(predicate, SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("title"), searchReq.search()));
             }
 
             ///  TODO: IGNORING GENRES????

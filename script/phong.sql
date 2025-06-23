@@ -125,16 +125,50 @@ where od1_0.order_id in (9);
 select *
 from public.orders o1_0
          left join public.payments p1_0 on o1_0.id = p1_0.order_id
-where o1_0.created_at<'2025-05-22 00:00:00.0'
-  and o1_0.created_at>'2025-06-21 23:59:59.999';
+where o1_0.created_at < '2025-05-22 00:00:00.0'
+  and o1_0.created_at > '2025-06-21 23:59:59.999';
 
-SELECT * FROM orders;
+SELECT *
+FROM orders;
 
-SELECT * FROM notification_prod_keys_fail;
-INSERT INTO notification_prod_keys_fail(id,order_id, email)
-VALUES (0,1, '21522458@gm.uit.edu.vn');
+SELECT *
+FROM notification_prod_keys_fail;
+INSERT INTO notification_prod_keys_fail(id, order_id, email)
+VALUES (0, 1, '21522458@gm.uit.edu.vn');
 
-SELECT * FROM orders where id =1;
-SELECT * FROM order_details where order_id= 1;
-SELECT * FROM products where id = 8;
-SELECT * FROM notification_prod_keys_success;
+SELECT *
+FROM orders
+where id = 1;
+SELECT *
+FROM order_details
+where order_id = 1;
+SELECT *
+FROM products
+where id = 8;
+SELECT *
+FROM notification_prod_keys_success;
+
+UPDATE blogs
+SET deleted_at = now()
+where id = 3;
+
+
+select *
+from public.orders o1_0
+         left join public.profiles p1_0 on p1_0.id = o1_0.profile_id
+         left join public.accounts a1_0 on a1_0.id = p1_0.account_id
+         left join public.coupons c1_0 on c1_0.id = o1_0.coupon_id
+         left join public.payments p2_0 on o1_0.id = p2_0.order_id
+where 1 = 1
+  and o1_0.deleted_at is null
+order by o1_0.created_at desc
+offset ? rows fetch first ? rows only;
+
+SELECT * FROM accounts;
+
+SELECT * FROM orders o
+join notification_prod_keys_success npk
+ON o.id = npk.order_id;
+
+SELECT * FROM notification_prod_keys_success npks
+where order_id = 6

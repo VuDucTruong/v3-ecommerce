@@ -15,6 +15,7 @@ import shop.holy.v3.ecommerce.api.dto.category.ResponseCategory;
 import shop.holy.v3.ecommerce.persistence.entity.Category;
 import shop.holy.v3.ecommerce.shared.constant.MapFuncs;
 import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
+import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 @Mapper(componentModel = "spring",
         uses = CommonMapper.class)
@@ -35,7 +36,7 @@ public abstract class CategoryMapper {
             if (searchReq == null) return criteriaBuilder.conjunction();
             Predicate predicate = criteriaBuilder.conjunction();
             if (StringUtils.hasLength(searchReq.search())) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("name"), "%" + searchReq.search().toLowerCase() + "%"));
+                predicate = criteriaBuilder.and(predicate, SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("name"), searchReq.search()));
             }
             if (!CollectionUtils.isEmpty(searchReq.ids())) {
                 predicate = criteriaBuilder.and(predicate, root.get("id").in(searchReq.ids()));
