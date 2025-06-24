@@ -43,7 +43,7 @@ management:
     logging:
       export:
         enabled: true
-      endpoint: ${SPRING_OTEL_LOG_URL:http://localhost:4318}
+      endpoint: ${SPRING_OTEL_LOG_URL:http://localhost:4318/v1/logs}
 spring:
   logging:
-#    config: classpath:logback-spring.xml
+    config: classpath:logback-spring.xml

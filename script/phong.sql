@@ -153,17 +153,6 @@ SET deleted_at = now()
 where id = 3;
 
 
-select *
-from public.orders o1_0
-         left join public.profiles p1_0 on p1_0.id = o1_0.profile_id
-         left join public.accounts a1_0 on a1_0.id = p1_0.account_id
-         left join public.coupons c1_0 on c1_0.id = o1_0.coupon_id
-         left join public.payments p2_0 on o1_0.id = p2_0.order_id
-where 1 = 1
-  and o1_0.deleted_at is null
-order by o1_0.created_at desc
-offset ? rows fetch first ? rows only;
-
 SELECT * FROM accounts;
 
 SELECT * FROM orders o
@@ -171,4 +160,4 @@ join notification_prod_keys_success npk
 ON o.id = npk.order_id;
 
 SELECT * FROM notification_prod_keys_success npks
-where order_id = 6
+where order_id = 6;
