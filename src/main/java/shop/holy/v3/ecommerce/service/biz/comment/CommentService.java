@@ -114,7 +114,13 @@ public class CommentService {
         if (ids == null || ids.length == 0)
             return 0;
         ///  TODO: VALIDATE HERE AS WELL
-        return commentRepository.updateDeletedAtByIdIn(ids);
+        AuthAccount authAccount = SecurityUtil.getAuthNonNull();
+        var deletedItems = commentRepository.updateDeletedAtByIdIn(ids);
+        deletedItems.stream().forEach(item -> {
+            BooleanSupplier isOwned = () -> item.getId() == authAccount.getId();
+            SecurityUtil.validateBizResources(authAccount.getRole(), item.getRole(), isOwned);
+        });
+        return deletedItems.size();
     }
 
 

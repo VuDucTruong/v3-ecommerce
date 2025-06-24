@@ -291,6 +291,8 @@ INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id,
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (136, '2025-06-17 14:02:00.152198', NULL, 5, 'ecommerce/product/169146d9-2f67-42d4-8799-b8e2eb172d5d.png', 'Random Code Steam', 10000.00, 8000.00, 135, 7, true, 'radom-code-steam');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (137, '2025-06-17 14:12:23.674458', NULL, 26, 'ecommerce/product/b4619e58-ad35-4336-a649-c8520081d5d0.png', 'Steam Wallet Code 150 TWD (~132.450 VNĐ)', 132000.00, 132000.00, 136, 7, true, 'steam-wallet-code-150-twd');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (138, '2025-06-17 14:14:44.702103', NULL, 26, 'ecommerce/product/bf50deea-4757-442d-80aa-ab9906349477.jpg', 'Steam Wallet Code 50 PHP (~21.593 VNĐ)', 28000.00, 28000.00, 137, 7, true, 'steam-wallet-code-50-php');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (139, '2025-06-17 14:15:59.845322', NULL, 26, 'ecommerce/product/a0f8b76a-c04d-4ff2-87f4-3a7b21be7138.png', 'Steam Wallet Code 100 HKD (~331.900 VNĐ)', 345000.00, 345000.00, 138, 7, true, 'steam-wallet-code-100-hkd');
+INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (140, '2025-06-17 14:17:24.943282', NULL, 26, 'ecommerce/product/9b4efa1c-ca05-4d91-b322-ca362538c69b.png', 'Steam Wallet Code 300 TWD (~264.900 VNĐ)', 258000.00, 258000.00, 139, 7, true, 'steam-wallet-code-300-twd');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (39, '2025-06-17 07:18:20.283033', NULL, 6, 'ecommerce/product/3807e653-f888-48d6-b44b-26389c969a97.png', 'Oracle Linux Premier Support', 5200000.00, 5199900.00, 38, 7, true, 'oracle-linux-premier-support');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (40, '2025-06-17 07:29:34.748782', NULL, 6, 'ecommerce/product/8bdff0c8-144b-4a02-a666-1a38b12540e0.jpg', 'Zorin OS Pro', 499000.00, 499000.00, 39, 7, true, 'zorin-os-pro');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (41, '2025-06-17 07:31:48.581077', NULL, 6, 'ecommerce/product/e5616358-dd2e-4b43-a42f-c4a1d9b9a983.png', 'NixOS Enterprise Edition', 1190000.00, 1190000.00, 40, 7, true, 'nixos-enterprise-edition');
@@ -325,8 +327,6 @@ INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id,
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (76, '2025-06-17 10:33:11.002108', NULL, 14, 'ecommerce/product/d5409133-79d6-4898-866d-3aa518ecb183.jpg', 'PyCharm Professional 2024', 399000.00, 399000.00, 75, 7, true, 'pycharm-professional-2024');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (77, '2025-06-17 10:35:41.317884', NULL, 16, 'ecommerce/product/4a56b336-3a13-4b6e-a29e-b403a56c897c.jpg', 'Kaspersky Plus 2024', 120000.00, 120000.00, 76, 7, true, 'kaspersky-plus-2024');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (78, '2025-06-17 10:37:24.111944', NULL, 16, 'ecommerce/product/763f9b6b-17d1-4bfd-b11a-10c981f17342.jpg', 'ESET Internet Security 2024', 120000.00, 120000.00, 77, 7, true, 'eset-internet-security-2024');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (140, '2025-06-17 14:17:24.943282', NULL, 26, 'ecommerce/product/9b4efa1c-ca05-4d91-b322-ca362538c69b.png', 'Steam Wallet Code 300 TWD (~264.900 VNĐ)', 258000.00, 258000.00, 139, 6, true, 'steam-wallet-code-300-twd');
-INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (139, '2025-06-17 14:15:59.845322', NULL, 26, 'ecommerce/product/a0f8b76a-c04d-4ff2-87f4-3a7b21be7138.png', 'Steam Wallet Code 100 HKD (~331.900 VNĐ)', 345000.00, 345000.00, 138, 5, true, 'steam-wallet-code-100-hkd');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (79, '2025-06-17 10:38:46.70789', NULL, 16, 'ecommerce/product/0c883b8c-ea5d-4a6f-8a30-b070e5b21296.jpg', 'Bitdefender Total Security 2024', 299000.00, 299000.00, 78, 7, true, 'bitdefender-total-security-2024');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (80, '2025-06-17 10:40:13.674499', NULL, 16, 'ecommerce/product/248d1094-dc9e-4efb-af6b-31345673f7d8.jpg', 'McAfee Total Protection 2024', 299000.00, 299000.00, 79, 7, true, 'mcafee-total-protection-2024');
 INSERT INTO public.products (id, created_at, deleted_at, group_id, image_url_id, name, original_price, price, prod_desc_id, quantity, represent, slug) VALUES (81, '2025-06-17 10:42:12.769996', NULL, 16, 'ecommerce/product/31534ec1-3ebc-4e1e-b3e1-061af02d04ab.jpg', 'AVG Ultimate 2024', 149000.00, 149000.00, 80, 7, true, 'avg-ultimate-2024');
@@ -367,8 +367,8 @@ INSERT INTO public.comments (id, created_at, deleted_at, author_id, content, par
 --
 
 INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description, max_applied_amount, min_amount, type, usage_limit, value) VALUES (1, '2025-04-17 22:25:17.232006', NULL, '2025-04-17', '2025-04-17', 'PHONG', 0, 'string', 20000.00, 156000.00, 'PERCENTAGE', 1, 12.00);
+INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description, max_applied_amount, min_amount, type, usage_limit, value) VALUES (2, '2025-06-17 14:21:08.083451', NULL, '2025-06-17', '2029-01-01', 'WERESORRY', 0, 'Mã dành để xin lỗi', 100000.00, 0.00, 'PERCENTAGE', 2000, 10.00);
 INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description, max_applied_amount, min_amount, type, usage_limit, value) VALUES (3, '2025-06-17 14:21:55.89538', NULL, '2025-06-17', '2029-01-01', 'PSTHANKU', 1, 'Mã dành để cảm ơn', 100000.00, 0.00, 'PERCENTAGE', 2000, 10.00);
-INSERT INTO public.coupons (id, created_at, deleted_at, available_from, available_to, code, current_usage, description, max_applied_amount, min_amount, type, usage_limit, value) VALUES (2, '2025-06-17 14:21:08.083451', NULL, '2025-06-17', '2029-01-01', 'WERESORRY', 1, 'Mã dành để xin lỗi', 100000.00, 0.00, 'PERCENTAGE', 2000, 10.00);
 
 
 --
@@ -397,8 +397,6 @@ INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_
 INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (52, '2025-06-18 13:17:05.624665', 'phong@gmail.com', 3, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":3,"metas":{"141":{"productName":"Steam Wallet Code 240 HKD (~796.560 VNĐ)","quantity":1,"keys":[{"id":560,"productKey":"9T5B-X4EP-TU02-DXQ5-GURA-XZJK","duration":"1 month"}]}}}');
 INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (102, '2025-06-18 13:21:30.213847', 'phong@gmail.com', 3, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":3,"metas":{"141":{"productName":"Steam Wallet Code 240 HKD (~796.560 VNĐ)","quantity":1,"keys":[{"id":561,"productKey":"DVPQ-CVSL-5ZYS-4HIM-D7NE-1VFO","duration":"1 month"}]}}}');
 INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (152, '2025-06-18 13:25:30.232258', 'phong@gmail.com', 3, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":3,"metas":{"141":{"productName":"Steam Wallet Code 240 HKD (~796.560 VNĐ)","quantity":1,"keys":[{"id":562,"productKey":"HMDS-K7QU-UB5O-HQW4-DW4F-B0L8","duration":"1 month"}]}}}');
-INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (203, '2025-06-19 19:22:00.073396', 'phong@gmail.com', 5, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":5,"metas":{"140":{"productName":"Steam Wallet Code 300 TWD (~264.900 VNĐ)","quantity":1,"keys":[{"id":552,"productKey":"O22Y-L70E-WDGO-5LNN-HK7B-W5GF","duration":"1 month"}]}}}');
-INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (253, '2025-06-20 17:32:30.137381', 'phong@gmail.com', 6, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":6,"metas":{"139":{"productName":"Steam Wallet Code 100 HKD (~331.900 VNĐ)","quantity":2,"keys":[{"id":566,"productKey":"SLWQ-5LHV-76H9-DWSQ-1BHG-KJSP","duration":"1 month"},{"id":567,"productKey":"XP93-7PIV-W1YT-O93P-38BQ-DXT7","duration":"1 month"}]}}}');
 
 
 --
@@ -408,9 +406,6 @@ INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (1, '2025-05-07 20:08:05.216177', NULL, 100000.00, NULL, 100000.00, NULL, '{"email": "string", "additionalProp2": "string", "additionalProp3": "string"}', 'PROCESSING');
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (2, '2025-06-18 12:26:28.878952', NULL, 1625400.00, 3, 1806000.00, 4, '{}', 'PROCESSING');
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (3, '2025-06-18 13:05:25.165694', NULL, 822000.00, NULL, 822000.00, 4, '{}', 'COMPLETED');
-INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (4, '2025-06-19 19:19:45.506687', NULL, 258000.00, NULL, 258000.00, 4, '{}', 'PROCESSING');
-INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (5, '2025-06-19 19:20:47.189688', NULL, 258000.00, NULL, 258000.00, 4, '{}', 'COMPLETED');
-INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (6, '2025-06-20 17:30:51.155465', NULL, 621000.00, 2, 690000.00, 4, '{}', 'COMPLETED');
 
 
 --
@@ -421,9 +416,6 @@ INSERT INTO public.order_details (id, order_id, original_price, price, product_i
 INSERT INTO public.order_details (id, order_id, original_price, price, product_id, quantity) VALUES (2, 2, 1290000.00, 1290000.00, 135, 1);
 INSERT INTO public.order_details (id, order_id, original_price, price, product_id, quantity) VALUES (3, 2, 258000.00, 258000.00, 140, 2);
 INSERT INTO public.order_details (id, order_id, original_price, price, product_id, quantity) VALUES (4, 3, 822000.00, 822000.00, 141, 1);
-INSERT INTO public.order_details (id, order_id, original_price, price, product_id, quantity) VALUES (5, 4, 258000.00, 258000.00, 140, 1);
-INSERT INTO public.order_details (id, order_id, original_price, price, product_id, quantity) VALUES (6, 5, 258000.00, 258000.00, 140, 1);
-INSERT INTO public.order_details (id, order_id, original_price, price, product_id, quantity) VALUES (7, 6, 345000.00, 345000.00, 139, 2);
 
 
 --
@@ -433,9 +425,6 @@ INSERT INTO public.order_details (id, order_id, original_price, price, product_i
 INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, expiry, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (2, '2025-05-09 09:13:38.952906', NULL, NULL, NULL, NULL, NULL, NULL, 'hello', 1, 'VNPAY', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=10000&vnp_Command=pay&vnp_CreateDate=20250509091348&vnp_CurrCode=VND&vnp_ExpireDate=20250509092848&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderInfo=hello&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3007%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=09c4a7a6-e3b1-465b-a057-f8d0c3be18da&vnp_Version=2.1.0&vnp_SecureHash=b1e3b4ac5db577bda68e5ed3fdede448a542f4b2fd0a275c0676a7390cb795bd8a798bafc607606ba0a76c0d370ac203aef38399863af20c0cd99c07d24b7e80', 3, NULL, NULL, '09c4a7a6-e3b1-465b-a057-f8d0c3be18da');
 INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, expiry, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (3, '2025-06-18 12:52:57.488186', NULL, 'NCB', NULL, NULL, NULL, '2025-06-18 13:07:57.509', '', 2, 'VNPAY', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.htmlvnp_Amount=162540000&vnp_BankCode=NCB&vnp_Command=pay&vnp_CreateDate=20250618125257&vnp_CurrCode=VND&vnp_ExpireDate=20250618130757&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=de573a06-e69e-4d34-a85b-71fb84a86a99&vnp_Version=2.1.0&vnp_SecureHash=1eb9e15f02e9493580fc267be8d8596b1bb0dfb0f78776bb301aba0a04bb67b80e387f66d1727e90b2ca6c1178e20b1f3f6b72f9148d921122e42709c745fbfe', 4, '1eb9e15f02e9493580fc267be8d8596b1bb0dfb0f78776bb301aba0a04bb67b80e387f66d1727e90b2ca6c1178e20b1f3f6b72f9148d921122e42709c745fbfe', 'PENDING', 'de573a06-e69e-4d34-a85b-71fb84a86a99');
 INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, expiry, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (4, '2025-06-18 13:05:35.54254', NULL, 'NCB', 'ATM', '00', 'Giao dịch thành công', '2025-06-18 13:20:35.545', 'ok 800 k', 3, 'VNPAY', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=82200000&vnp_Command=pay&vnp_CreateDate=20250618130535&vnp_CurrCode=VND&vnp_ExpireDate=20250618132035&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderInfo=ok+800+k&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=2fa59ae3-3a5d-4eee-bc8c-9e646e0eb280&vnp_Version=2.1.0&vnp_SecureHash=8e01cda0b271e140052a441535d6eaed43ac3fccb5a00d81e90f3ce8a3bd5c27ef95802b4ee51e96f756e74cc8a8bdc522d1000a4052e9fe112dfd0e6d6863c4', 4, '8e01cda0b271e140052a441535d6eaed43ac3fccb5a00d81e90f3ce8a3bd5c27ef95802b4ee51e96f756e74cc8a8bdc522d1000a4052e9fe112dfd0e6d6863c4', 'SUCCESS', '2fa59ae3-3a5d-4eee-bc8c-9e646e0eb280');
-INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, expiry, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (5, '2025-06-19 19:20:06.532703', NULL, '', NULL, NULL, NULL, '2025-06-19 19:35:06.535', '', 4, 'VNPAY', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=25800000&vnp_Command=pay&vnp_CreateDate=20250619192006&vnp_CurrCode=VND&vnp_ExpireDate=20250619193506&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=9dff1740-0b10-45cf-958c-00236e0321ac&vnp_Version=2.1.0&vnp_SecureHash=428c51db421edc227ef7d7167aedb19c94273a4ff751213bc548817156dda97ba3d7f74560e92376e89e6697e0ea5449d178eaa625f099cb344a971436b22caf', 4, '428c51db421edc227ef7d7167aedb19c94273a4ff751213bc548817156dda97ba3d7f74560e92376e89e6697e0ea5449d178eaa625f099cb344a971436b22caf', 'PENDING', '9dff1740-0b10-45cf-958c-00236e0321ac');
-INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, expiry, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (6, '2025-06-19 19:20:52.941706', NULL, 'NCB', 'ATM', '00', 'Giao dịch thành công', '2025-06-19 19:35:52.943', 'asdfasdf', 5, 'VNPAY', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=25800000&vnp_Command=pay&vnp_CreateDate=20250619192052&vnp_CurrCode=VND&vnp_ExpireDate=20250619193552&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderInfo=asdfasdf&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=5ba9ca79-90fd-45df-b530-0faa7b0c2ae3&vnp_Version=2.1.0&vnp_SecureHash=6b2a6416499356a5e4f348ad0f261b3861c0701f3e7a5c11fea23aee98a843441cd159debaa96a89d2d31e2fb996b1694d33547280b185f31ad0de18faffbf59', 4, '6b2a6416499356a5e4f348ad0f261b3861c0701f3e7a5c11fea23aee98a843441cd159debaa96a89d2d31e2fb996b1694d33547280b185f31ad0de18faffbf59', 'SUCCESS', '5ba9ca79-90fd-45df-b530-0faa7b0c2ae3');
-INSERT INTO public.payments (id, created_at, deleted_at, bank_code, card_type, detail_code, detail_message, expiry, note, order_id, payment_method, payment_url, profile_id, secure_hash, status, trans_ref) VALUES (7, '2025-06-20 17:31:10.618996', NULL, 'NCB', 'ATM', '00', 'Giao dịch thành công', '2025-06-20 17:46:10.621', 'asdfasdfasdf', 6, 'VNPAY', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=62100000&vnp_Command=pay&vnp_CreateDate=20250620173110&vnp_CurrCode=VND&vnp_ExpireDate=20250620174610&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=en&vnp_OrderInfo=asdfasdfasdf&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcart%2Fpayment&vnp_TmnCode=ETGKRGNL&vnp_TxnRef=1ae3fd95-fabf-4185-8613-316902230c56&vnp_Version=2.1.0&vnp_SecureHash=d18cba8f07e16b3e8efe039f31ae680a67bd5f03c6decc77fbde49bb5e83b09b8ec54baa5942faee1050c4f69401f48dd27e9532dc95896e67ee4e2d989c02a2', 4, 'd18cba8f07e16b3e8efe039f31ae680a67bd5f03c6decc77fbde49bb5e83b09b8ec54baa5942faee1050c4f69401f48dd27e9532dc95896e67ee4e2d989c02a2', 'SUCCESS', '1ae3fd95-fabf-4185-8613-316902230c56');
 
 
 --
@@ -919,6 +908,7 @@ INSERT INTO public.product_items (id, account, created_at, product_id, product_k
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (549, 'null', '2025-06-17 15:01:09.818136', 138, 'T987-2OWO-4NG2-JFBE-I0EZ-G870', 'Global');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (550, 'null', '2025-06-17 15:01:09.818136', 138, '8TFQ-OLFY-2DFS-RHC5-9WJQ-60QG', 'SEA');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (551, 'null', '2025-06-17 15:01:09.818136', 138, '1G26-ATW7-21VP-6YR9-9HBU-1PTF', 'Global');
+INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (552, 'null', '2025-06-17 15:01:09.818136', 140, 'O22Y-L70E-WDGO-5LNN-HK7B-W5GF', 'NA/US');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (553, 'null', '2025-06-17 15:01:09.818136', 140, 'BFY1-311M-LEQD-61ZO-HZK0-YH4Y', 'CN');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (554, 'null', '2025-06-17 15:01:09.818136', 140, 'UHMK-STPK-OZYJ-V2ZU-ARB5-X5LD', 'ROW');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (555, 'null', '2025-06-17 15:01:09.818136', 140, 'JZH2-6MMB-A5K8-R0DY-L7OG-FCJW', 'SEA');
@@ -928,6 +918,8 @@ INSERT INTO public.product_items (id, account, created_at, product_id, product_k
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (563, 'null', '2025-06-17 15:01:09.818136', 141, '5HPU-RZD8-O8K8-798I-C004-MVJM', 'Global');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (564, 'null', '2025-06-17 15:01:09.818136', 141, 'BVAF-R1K1-U8NL-EK0Z-QXVK-QAYE', 'NA/US');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (565, 'null', '2025-06-17 15:01:09.818136', 141, 'WN7M-7WU6-QDE6-7DAT-DGX5-GHE2', 'NA/US');
+INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (566, 'null', '2025-06-17 15:01:09.818136', 139, 'SLWQ-5LHV-76H9-DWSQ-1BHG-KJSP', 'ROW');
+INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (567, 'null', '2025-06-17 15:01:09.818136', 139, 'XP93-7PIV-W1YT-O93P-38BQ-DXT7', 'ROW');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (568, 'null', '2025-06-17 15:01:09.818136', 139, 'VG2D-LLGL-RVX4-L44O-YD8E-0ZMY', 'NA/US');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (569, 'null', '2025-06-17 15:01:09.818136', 139, '48FF-TRBS-M7TT-97F6-30OE-JJHV', 'ROW');
 INSERT INTO public.product_items (id, account, created_at, product_id, product_key, region) VALUES (570, 'null', '2025-06-17 15:01:09.818136', 139, 'XH8D-4QS2-4H6E-13RA-7KEN-OHJO', 'ROW');
@@ -955,9 +947,6 @@ INSERT INTO public.product_items_used (id, account, created_at, order_detail_id,
 INSERT INTO public.product_items_used (id, account, created_at, order_detail_id, product_id, product_key, region) VALUES (14, NULL, '2025-06-18 13:17:05.624665', NULL, 141, '9T5B-X4EP-TU02-DXQ5-GURA-XZJK', 'CN');
 INSERT INTO public.product_items_used (id, account, created_at, order_detail_id, product_id, product_key, region) VALUES (15, NULL, '2025-06-18 13:21:30.213847', NULL, 141, 'DVPQ-CVSL-5ZYS-4HIM-D7NE-1VFO', 'ROW');
 INSERT INTO public.product_items_used (id, account, created_at, order_detail_id, product_id, product_key, region) VALUES (16, NULL, '2025-06-18 13:25:30.232258', NULL, 141, 'HMDS-K7QU-UB5O-HQW4-DW4F-B0L8', 'CN');
-INSERT INTO public.product_items_used (id, account, created_at, order_detail_id, product_id, product_key, region) VALUES (17, NULL, '2025-06-19 19:22:00.073396', NULL, 140, 'O22Y-L70E-WDGO-5LNN-HK7B-W5GF', 'NA/US');
-INSERT INTO public.product_items_used (id, account, created_at, order_detail_id, product_id, product_key, region) VALUES (18, NULL, '2025-06-20 17:32:30.137381', NULL, 139, 'SLWQ-5LHV-76H9-DWSQ-1BHG-KJSP', 'ROW');
-INSERT INTO public.product_items_used (id, account, created_at, order_detail_id, product_id, product_key, region) VALUES (19, NULL, '2025-06-20 17:32:30.137381', NULL, 139, 'XP93-7PIV-W1YT-O93P-38BQ-DXT7', 'ROW');
 
 
 --
@@ -1459,28 +1448,28 @@ SELECT pg_catalog.setval('public.keywords_id_seq', 1, false);
 -- Name: notification_prod_keys_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.notification_prod_keys_seq', 301, true);
+SELECT pg_catalog.setval('public.notification_prod_keys_seq', 201, true);
 
 
 --
 -- Name: order_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.order_details_id_seq', 7, true);
+SELECT pg_catalog.setval('public.order_details_id_seq', 4, true);
 
 
 --
 -- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.orders_id_seq', 6, true);
+SELECT pg_catalog.setval('public.orders_id_seq', 3, true);
 
 
 --
 -- Name: payments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.payments_id_seq', 7, true);
+SELECT pg_catalog.setval('public.payments_id_seq', 4, true);
 
 
 --
@@ -1508,7 +1497,7 @@ SELECT pg_catalog.setval('public.product_items_id_seq', 572, true);
 -- Name: product_items_used_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.product_items_used_id_seq', 19, true);
+SELECT pg_catalog.setval('public.product_items_used_id_seq', 16, true);
 
 
 --

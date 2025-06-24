@@ -13,6 +13,7 @@ import shop.holy.v3.ecommerce.persistence.repository.ICouponRepository;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.mapper.CouponMapper;
 import shop.holy.v3.ecommerce.shared.util.MappingUtils;
+import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 
 
 @RequiredArgsConstructor
@@ -32,13 +33,14 @@ public class CouponQuery {
 
     public ResponseCoupon findByIdentitfier(Long id, String code, boolean deleted) {
         Coupon c;
+        boolean isAdmin = SecurityUtil.nullSafeIsAdmin();
         if (id != null)
-            if (deleted)
+            if (deleted && isAdmin)
                 c = couponRepository.findById(id).orElseThrow(BizErrors.INVALID_COUPON::exception);
             else
                 c = couponRepository.findFirstByIdAndDeletedAtIsNull(id).orElseThrow(BizErrors.INVALID_COUPON::exception);
         else {
-            if (deleted)
+            if (deleted && isAdmin)
                 c = couponRepository.findFirstByCode(code).orElseThrow(BizErrors.INVALID_COUPON::exception);
             else
                 c = couponRepository.findFirstByCodeAndDeletedAtIsNull(code).orElseThrow(BizErrors.INVALID_COUPON::exception);

@@ -22,7 +22,8 @@ public record ResponseOrder(
         BigDecimal originalAmount,
         BigDecimal amount,
         ResponseOrderDetail[] details,
-        String sentMail
+        String sentMail,
+        String reason
 ) {
     public record ResponseOrderDetail(
             Long id,

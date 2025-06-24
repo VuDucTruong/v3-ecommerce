@@ -5,12 +5,14 @@ import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public record RequestOrderSearch(
         RequestPageable pageRequest,
         ArrayList<Long> ids,
         String search,
-        OrderStatus status,
+        String status,
+        List<String> statuses,
         BigDecimal totalFrom,
         BigDecimal totalTo,
         boolean deleted

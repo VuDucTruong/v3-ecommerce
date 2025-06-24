@@ -1,0 +1,5 @@
+query metrics:
+
+http_server_requests_milliseconds_count{error="none", exception="none", exported_job="v3-ecommerce-holy-shop", instance="otel-collector:8889", job="otel-collector", label1="value1", method="GET", outcome="SUCCESS", status="20a0", uri!="/swagger-ui*/**", uri!="/swagger-ui*/**", uri!="/swagger-ui*/*swagger-initializer.js", uri!="/v3/api-docs/{group}", uri!="/v3/api-docs/swagger-config"}
+
+

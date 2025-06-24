@@ -13,7 +13,6 @@ import shop.holy.v3.ecommerce.persistence.entity.notification.NotificationProdKe
 import shop.holy.v3.ecommerce.service.biz.notification.MailCommand;
 import shop.holy.v3.ecommerce.service.biz.notification.NotificationQuery;
 
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j

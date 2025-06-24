@@ -1,15 +1,15 @@
 package shop.holy.v3.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @Entity
@@ -26,6 +26,8 @@ public class Blog extends EntityBase {
     @Column(name = "profile_id")
     private long profileId;
 
+    private Date approvedAt;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "blogs_genres",
@@ -38,6 +40,19 @@ public class Blog extends EntityBase {
     @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Profile profile;
 
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Blog blog = (Blog) o;
+        return Objects.equals(getId(), blog.getId());
+    }
 
-
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

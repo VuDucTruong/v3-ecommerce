@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 @Hidden
 public class GlobalExceptionHandler {
 
-
     private static final String COMMON_ERROR_MESSAGE_TEMPLATE = "Got error: [%s], with Message: [%s]";
 
     private String buildErrorMessage(Exception ex) {

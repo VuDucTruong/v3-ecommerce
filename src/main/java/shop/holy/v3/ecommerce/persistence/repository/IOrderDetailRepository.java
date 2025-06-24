@@ -35,7 +35,7 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
 
     @Query("""
             SELECT SUM(od.quantity) as totalSold, od.product.id as prodId, od.product.name as prodName from
-                        OrderDetail od join Order o
+                        OrderDetail od join Order o on od.orderId = o.id
                     where o.createdAt >= :lowerBound
                     AND o.createdAt <= :upperBound
                     group by od.product.id, od.product.name

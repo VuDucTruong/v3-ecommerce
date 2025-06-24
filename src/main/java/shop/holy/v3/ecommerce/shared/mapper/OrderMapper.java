@@ -40,11 +40,13 @@ public abstract class OrderMapper {
     @Mapping(source = "details", target = "details")
     @Mapping(source = "order.status", target = "status")
     @Mapping(source = "mpk.email", target = "sentMail")
-    public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, MailProductKeys mpk, Collection<OrderDetail> details);
+    @Mapping(source = "reason", target = "reason")
+    public abstract ResponseOrder fromEntityToResponse_InDetail(Order order, MailProductKeys mpk, String reason, Collection<OrderDetail> details);
 
     @Mapping(source = "orderDetails", target = "details", ignore = true)
     @Mapping(source = "status", target = "status")
     @Mapping(target = "sentMail", ignore = true)
+    @Mapping(target = "reason", ignore = true)
     public abstract ResponseOrder fromEntityToResponse_Light(Order order);
 
 
@@ -85,8 +87,12 @@ public abstract class OrderMapper {
             }
             if (searchReq.status() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("status"), searchReq.status().name()));
+                        criteriaBuilder.equal(root.get("status"), searchReq.status()));
+            } else if (!CollectionUtils.isEmpty(searchReq.statuses())) {
+                predicate = criteriaBuilder.and(predicate, root.get("status").in(searchReq.statuses()));
             }
+
+
             if (searchReq.totalFrom() != null) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.greaterThanOrEqualTo(root.get("amount"), searchReq.totalFrom()));

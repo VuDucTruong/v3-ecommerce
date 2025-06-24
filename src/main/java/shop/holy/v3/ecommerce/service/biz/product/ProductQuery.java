@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.service.biz.product;
 
 
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -47,9 +48,11 @@ public class ProductQuery {
     @SneakyThrows
     public ResponsePagination<ResponseProduct> search(RequestProductSearch searchReq) {
         Pageable pageable = MappingUtils.fromRequestPageableToPageable(searchReq.pageRequest());
+
+        AuthAccount authAccount = SecurityUtil.getAuthNullable();
         Specification<Product> spec = productMapper.fromRequestSearchToSpec(searchReq);
         Page<Product> products = productRepository.findAll(spec, pageable);
-        AuthAccount authAccount = SecurityUtil.getAuthNullable();
+
         Page<ResponseProduct> resultsPage;
         if (authAccount != null && authAccount.getProfileId() != null) {
             Set<Long> productIds = products.getContent().stream().map(Product::getId).collect(Collectors.toSet());
@@ -64,16 +67,17 @@ public class ProductQuery {
     public CompletableFuture<ResponseProduct> getByIdentifier(Long productId, String slug, boolean deleted) {
         if (productId == null && !StringUtils.hasLength(slug))
             return CompletableFuture.completedFuture(null);
+        AuthAccount authAccount = SecurityUtil.getAuthNullable();
+        boolean viewAll = deleted && SecurityUtil.nullSafeIsAdmin(authAccount);
 
         CompletableFuture<Product> prod = CompletableFuture.supplyAsync(() -> {
                     if (productId != null) {
-                        if (deleted)
+                        if (viewAll)
                             return productRepository.findByIdWithJoinFetch(productId);
                         else
                             return productRepository.findFirstByIdEqualsAndDeletedAtIsNull(productId);
                     } else {
-                        return deleted
-                                ? productRepository.findFirstBySlug(slug)
+                        return viewAll ? productRepository.findFirstBySlug(slug)
                                 : productRepository.findFirstBySlugEqualsAndDeletedAtIsNull(slug);
                     }
                 })
@@ -93,7 +97,6 @@ public class ProductQuery {
                     return p;
                 });
 
-        AuthAccount authAccount = SecurityUtil.getAuthNullable();
         CompletableFuture<Boolean> isFav;
         if (authAccount != null && authAccount.getProfileId() != null) {
             long profileId = authAccount.getProfileId();
@@ -104,19 +107,18 @@ public class ProductQuery {
         } else isFav = CompletableFuture.completedFuture(false);
 
         /// NO ADMIN HANDLING ==> no productItems revealed
-
         return CompletableFuture.allOf(prod, isFav)
                 .thenApply(v -> {
                     Product p = prod.join();
                     return productMapper.fromEntity_ToResponse_Detailed(p, productTagMapper.fromTagEntitiesToStringTags(p.getTags()), isFav.join());
                 });
     }
-    
+
     public List<ResponseTopProductSold> getProductsTrend(Integer limit) {
         if (limit == null || limit > 40 || limit < 1)
             limit = 10;
         List<ProQ_TotalSold_Product> totalSoldAndProducts = productRepository.findProductSortBySumQuantity(
-            limit);
+                limit);
         return totalSoldAndProducts.stream().map(s -> {
             var topProduct = new ResponseTopProductSold();
             topProduct.setId(s.getId());
@@ -126,7 +128,6 @@ public class ProductQuery {
             topProduct.setQuantity(s.getQuantity());
 
             topProduct.setRepresent(s.isRepresent());
-
             topProduct.setOriginalPrice(s.getOriginalPrice());
             topProduct.setPrice(s.getPrice());
             topProduct.setTotalSold(s.getTotalSold() == null ? 0 : s.getTotalSold());
@@ -136,10 +137,10 @@ public class ProductQuery {
 
     public List<ResponseProduct> getAllProducts() {
         return productRepository.findAll()
-            .stream()
-            .map(product -> productMapper.fromEntityToResponse_Light(product ,
-                productTagMapper.fromTagEntitiesToStringTags(product.getTags()) ,
-                false)).toList();
+                .stream()
+                .map(product -> productMapper.fromEntityToResponse_Light(product,
+                        productTagMapper.fromTagEntitiesToStringTags(product.getTags()),
+                        false)).toList();
     }
 
 }

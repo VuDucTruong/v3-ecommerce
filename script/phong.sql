@@ -14,7 +14,6 @@ select *
 from product_description pd;
 
 
-
 select product_id, count(1) as cnt
 from product_items
 where product_id IN (9)
@@ -77,24 +76,6 @@ select *
 from comments;
 
 
-SELECT *
-FROM products p
-         LEFT JOIN product_tags pt on pt.product_id = p.id
-WHERE p.id IN (select od.product_id
-               from order_details od
-               group by od.product_id
-               ORDER BY SUM(od.quantity) desc)
-
-SELECT *
-FROM (SELECT od.product_id, SUM(od.quantity) AS totalSold
-      FROM order_details od
-      GROUP BY od.product_id
-      ORDER BY totalSold DESC
-      LIMIT 10) t
-         RIGHT JOIN products p ON t.product_id = p.id
-         LEFT JOIN product_tags pt ON pt.product_id = p.id
-ORDER BY t.totalSold IS NULL, t.totalSold DESC
-LIMIT 10;
 
 SELECT *
 from orders o
@@ -126,14 +107,57 @@ from notification_prod_keys_success;
 select *
 from profiles;
 
-select *from order_details od where od.order_id = 9;
-select * from product_items pi where  pi.product_id = 23;
+select *
+from order_details od
+where od.order_id = 9;
+select *
+from product_items pi
+where pi.product_id = 23;
 
-select * from product_items_used;
+select *
+from product_items_used;
 
 select od1_0.id, od1_0.product_id, od1_0.order_id, od1_0.quantity, p1_0.name, p1_0.image_url_id
 from public.order_details od1_0
          left join public.products p1_0 on od1_0.product_id = p1_0.id
 where od1_0.order_id in (9);
 
--- delete from orders
+select *
+from public.orders o1_0
+         left join public.payments p1_0 on o1_0.id = p1_0.order_id
+where o1_0.created_at < '2025-05-22 00:00:00.0'
+  and o1_0.created_at > '2025-06-21 23:59:59.999';
+
+SELECT *
+FROM orders;
+
+SELECT *
+FROM notification_prod_keys_fail;
+INSERT INTO notification_prod_keys_fail(id, order_id, email)
+VALUES (0, 1, '21522458@gm.uit.edu.vn');
+
+SELECT *
+FROM orders
+where id = 1;
+SELECT *
+FROM order_details
+where order_id = 1;
+SELECT *
+FROM products
+where id = 8;
+SELECT *
+FROM notification_prod_keys_success;
+
+UPDATE blogs
+SET deleted_at = now()
+where id = 3;
+
+
+SELECT * FROM accounts;
+
+SELECT * FROM orders o
+join notification_prod_keys_success npk
+ON o.id = npk.order_id;
+
+SELECT * FROM notification_prod_keys_success npks
+where order_id = 6;

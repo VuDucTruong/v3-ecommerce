@@ -14,6 +14,7 @@ import shop.holy.v3.ecommerce.api.dto.comment.ResponseReply;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.persistence.entity.Comment;
 import shop.holy.v3.ecommerce.persistence.entity.Profile;
+import shop.holy.v3.ecommerce.shared.util.SqlUtils;
 
 import java.util.Set;
 
@@ -73,14 +74,14 @@ public abstract class CommentMapper {
             }
 
             if (StringUtils.hasLength(searchReq.search())) {
-                var searchParentContent = criteriaBuilder.like(root.get("content"), "%" + searchReq.search().toLowerCase() + "%");
+                var searchParentContent = SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("content"), searchReq.search());
 //                var searchRepliesContent = criteriaBuilder.like(parentGet.get("content"), "%" + searchReq.search().toLowerCase() + "%");
 //                var contentSearch = criteriaBuilder.or(searchParentContent, searchRepliesContent);
                 predicate = criteriaBuilder.and(predicate, searchParentContent);
             }
 
             if (StringUtils.hasLength(searchReq.productName())) {
-                var searchParentProduct = criteriaBuilder.like(root.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
+                var searchParentProduct = SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("product").get("name"), searchReq.productName());
 //                var searchRepliesProduct = criteriaBuilder.like(parentGet.get("product").get("name"), "%" + searchReq.productName().toLowerCase() + "%");
 //                var productSearch = criteriaBuilder.or(searchParentProduct, searchRepliesProduct);
                 predicate = criteriaBuilder.and(predicate, searchParentProduct);

@@ -8,41 +8,39 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-#  server:
-#    build:
-#      dockerfile: container/Dockerfile
-#      context: ..
-#    env_file:
-#      - ../env/dev.env
-#      - ../env/profile.env
-#    ports:
-#      - 8080:8080
-#    depends_on:
-#      db:
-#        condition: service_healthy
-
+  server:
+    build:
+      dockerfile: container/Dockerfile
+      context: ..
+    env_file:
+      - ../env/dev.env
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
   #    volumes:
   #      - ./mirroring:/BOOT-INF/
-#  db:
-#    ports:
-#      - 5433:5432
-#    image: postgres:17.2
-#    restart: on-failure
-#    user: postgres
-#    secrets:
-#      - db-password
-#    volumes:
-#      - ./init-scripts:/docker-entrypoint-initdb.d/
-#    #      - db-data:/var/lib/postgresql/data
-#    env_file:
-#      - ../env/db.env
-#    expose:
-#      - 5432
-#    healthcheck:
-#      test: [ "CMD", "pg_isready" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
+  db:
+    ports:
+      - 5433:5432
+    image: postgres:17.2
+    restart: on-failure
+    user: postgres
+    secrets:
+      - db-password
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d/
+    #      - db-data:/var/lib/postgresql/data
+    env_file:
+      - ../env/db.env
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   prometheus:
     container_name: prometheus
@@ -71,14 +69,12 @@ services:
       - 4317:4317 # OTLP gRPC receiver
       - 4318:4318 # OTLP http receiver
       - 55679:55679 # zpages extension
-    depends_on:
-      - zipkin
 
   grafana:
     container_name: grafana
     image: grafana/grafana
     ports:
-      - "3000:3000"
+      - "3999:3000"
 
   tempo:
     image: grafana/tempo:latest
@@ -91,11 +87,11 @@ services:
       - "4317" # otlp grpc
 
 
-  zipkin:
-    image: openzipkin/zipkin:latest
-    restart: always
-    ports:
-      - 9411:9411
+#  zipkin:
+#    image: openzipkin/zipkin:latest
+#    restart: always
+#    ports:
+#      - 9411:9411
 
   loki:
     image: grafana/loki:latest

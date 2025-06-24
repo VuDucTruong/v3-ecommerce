@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
 import shop.holy.v3.ecommerce.persistence.entity.notification.NotificationProdKey;
+import shop.holy.v3.ecommerce.persistence.repository.notification.INotificationProdKeyFailedRepository;
 import shop.holy.v3.ecommerce.persistence.repository.notification.INotificationProdKeyRepository;
 import shop.holy.v3.ecommerce.persistence.repository.notification.INotificationProdKeySuccess;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
@@ -17,15 +18,14 @@ import java.util.List;
 public class NotificationQuery {
     private final INotificationProdKeySuccess successNotiRepository;
     private final INotificationProdKeyRepository notiRepository;
+    private final INotificationProdKeyFailedRepository failedNotiRepository;
     private final ObjectMapper objectMapper;
 
     public Iterable<NotificationProdKey> getNotificationProdKeys() {
         return notiRepository.findAll();
     }
 
-    public MailProductKeys getSentMailMetaByOrderIdAndStatus(long orderId, String status) {
-        if (!OrderStatus.COMPLETED.name().equals(status))
-            return null;
+    public MailProductKeys getSentMailMetaByOrderId(long orderId) {
 
         return successNotiRepository.findFirstMailProdKeyJsonById(orderId)
                 .map(json -> {
@@ -50,6 +50,10 @@ public class NotificationQuery {
         }).toList();
 
         return entities;
+    }
+
+    public String getFailureReasonByOrderId(long orderId) {
+        return failedNotiRepository.findFirstReasonByOrderId(orderId).orElse(null);
     }
 
 }

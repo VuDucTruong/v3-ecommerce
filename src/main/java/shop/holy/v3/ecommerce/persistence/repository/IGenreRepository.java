@@ -1,5 +1,6 @@
 package shop.holy.v3.ecommerce.persistence.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.holy.v3.ecommerce.persistence.entity.Genre1;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +29,6 @@ public interface IGenreRepository extends JpaRepository<Genre1, Long> {
 
     Optional<Genre1> findFirstByName(String name);
 
+    @EntityGraph(attributePaths = {""})
+    List<Genre1> findAllByIdIn(Collection<Long> ids, Pageable pageable);
 }
