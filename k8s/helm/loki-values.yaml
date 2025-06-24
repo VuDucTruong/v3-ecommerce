@@ -1,0 +1,7 @@
+loki:
+  isDefault: true
+
+promtail:
+  enabled: true
+  serviceMonitor:
+    enabled: false

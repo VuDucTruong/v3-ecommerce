@@ -1,0 +1,46 @@
+name: Build and Scan Source Code Security/Quality
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'  
+
+      - name: Build with Maven
+        run: mvn -B verify --file pom.xml
+
+      - name: Trivy FS Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: .
+          format: 'template'
+          template: "@$HOME/.local/bin/trivy-bin/contrib/html.tpl"
+          output: 'fs.html'
+
+      - name: Upload FS Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: fs-scan-report
+          path: fs.html
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v5.2.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

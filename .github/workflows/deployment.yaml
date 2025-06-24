@@ -1,0 +1,47 @@
+name: Deploy Spring Boot to AKS
+
+on:
+  workflow_run:
+    workflows: ["Docker Push and Scan For Production"]
+    types:
+      - completed
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ vars.ENV == 'prod' }}
+    environment: prod
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure CLI Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS Context
+        run: |
+          az aks get-credentials --resource-group ${{ secrets.RESOURCE_NAME }} --name ${{ secrets.CLUSTER_NAME }} --overwrite-existing
+
+
+      - name: Download secrets.yaml from Azure Key Vault
+        run: |
+          az keyvault secret download \
+          --vault-name ${{ secrets.VAULT_NAME }} \
+          --name secrets-file \
+          --file secrets.yaml
+
+      - name: Deploy to AKS
+        run: |
+          kubectl apply -f secrets.yaml
+          kubectl apply -f k8s/deployment.yaml
+
+      - name: Delete secrets.yaml
+        run: |
+          rm -f secrets.yaml
+      
+      - name: verify deployment
+        run: |
+          kubectl rollout status deployment/phoenix-backend
+          kubectl get pods,svc

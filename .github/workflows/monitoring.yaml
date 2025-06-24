@@ -1,0 +1,78 @@
+name: Deploy Monitoring Stack
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-monitoring:
+    runs-on: ubuntu-latest
+    if: ${{ vars.ENV == 'prod' }}
+    environment: prod
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set AKS Context
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: ${{ secrets.RESOURCE_NAME }}
+        cluster-name: ${{ secrets.CLUSTER_NAME }}
+
+    - name: Add Helm Repos
+      run: |
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo add grafana https://grafana.github.io/helm-charts
+        helm repo update
+
+    - name: Create Namespace
+      run: |
+        kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Create Grafana Secret
+      shell: bash
+      run: |
+        kubectl create secret generic grafana-admin-credentials \
+        --from-literal=admin-user=admin \
+        --from-literal=admin-password=${{ secrets.GRAFANA_PASSWORD }} \
+        -n monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Create Dashboard ConfigMap
+      run: |
+        kubectl create configmap spring-boot-dashboard \
+          --from-file=k8s/helm/dashboards/ \
+          -n monitoring \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Label ConfigMap
+      run: |
+        kubectl label configmap spring-boot-dashboard grafana_dashboard=true -n monitoring --overwrite
+    
+    
+    
+
+    - name: Deploy Prometheus
+      shell: bash
+      run: |
+        helm upgrade --install prometheus prometheus-community/prometheus \
+          --namespace monitoring \
+          -f k8s/helm/prometheus-values.yaml
+
+    - name: Deploy Loki
+      shell: bash
+      run: |
+        helm upgrade --install loki grafana/loki-stack \
+          --namespace monitoring \
+          -f k8s/helm/loki-values.yaml
+
+    - name: Deploy Grafana
+      shell: bash
+      run: |
+        helm upgrade --install grafana grafana/grafana \
+          --namespace monitoring \
+          -f k8s/helm/grafana-values.yaml

@@ -1,0 +1,66 @@
+name: Expose Services via Ingress
+
+on:
+  workflow_run:
+    workflows: ["Setup Nginx Ingress"]
+    types:
+      - completed
+
+jobs:
+  check-ingress-controller:
+    name: Check Ingress Controller Status
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set AKS context
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: ${{ secrets.RESOURCE_NAME }}
+        cluster-name: ${{ secrets.CLUSTER_NAME }}
+
+    - name: Check Ingress Controller Pod status
+      run: |
+        echo "Checking ingress-nginx-controller pod status..."
+        kubectl get pods -n ingress-nginx
+
+        echo "Checking External IP..."
+        IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}' || true)
+
+        if [ -z "$IP" ]; then
+          echo "❌ Ingress Controller has no External IP yet."
+          kubectl get svc ingress-nginx-controller -n ingress-nginx -o wide || true
+          exit 1
+        fi
+
+        echo "✅ Ingress Controller External IP: $IP"
+
+  deploy-ingress:
+    name: Deploy Ingress Resources
+    runs-on: ubuntu-latest
+    needs: check-ingress-controller
+    environment: dev
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set AKS context
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: ${{ secrets.RESOURCE_NAME }}
+        cluster-name: ${{ secrets.CLUSTER_NAME }}
+
+    - name: Apply ingress.yaml
+      run: |
+        kubectl apply -f k8s/ingress/backend-ingress.yaml
+        kubectl apply -f k8s/ingress/grafana-ingress.yaml

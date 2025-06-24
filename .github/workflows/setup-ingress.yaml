@@ -1,0 +1,48 @@
+name: Setup Nginx Ingress
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-monitoring:
+    runs-on: ubuntu-latest
+    if: ${{ vars.ENV == 'prod' }}
+    environment: prod
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set AKS Context
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: ${{ secrets.RESOURCE_NAME }}
+        cluster-name: ${{ secrets.CLUSTER_NAME }}
+
+    - name: Add ingress-nginx repo
+      run: |
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+        helm repo update
+
+    - name: Deploy ingress-nginx
+      run: |
+        helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+          --namespace ingress-nginx \
+          --create-namespace \
+          --set controller.replicaCount=2 \
+          --set controller.nodeSelector."kubernetes\.io/os"=linux \
+          --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux \
+          --set controller.service.externalTrafficPolicy=Local \
+          --set controller.publishService.enabled=true \
+          --set controller.defaultBackend.enabled=true
+      
+    - name: Verify deployment
+      run: |
+        kubectl get pods -n ingress-nginx
+        kubectl get svc -n ingress-nginx
+  
