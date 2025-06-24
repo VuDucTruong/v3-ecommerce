@@ -1,0 +1,140 @@
+# --- ConfigMap: Non-sensitive environment variables ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: phoenix-config
+data:
+  SPRING_MAIL_HOST: smtp.gmail.com
+  SPRING_MAIL_PORT: "587"
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+  SPRING_DATASOURCE_URL: jdbc:postgresql://phoenix-db-service:5432/holy_shop
+  SPRING_DATASOURCE_USERNAME: phong
+  SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  SPRING_FLYWAY_ENABLED: "true"
+  VNP_PAY_URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  VNP_TMN_CODE: ETGKRGNL
+  VNP_RETURN_URL: http://localhost:3007/cart/payment
+  VNP_VERSION: "2.1.0"
+  VNP_COMMAND: pay
+  VNP_ORDER_TYPE: other
+  VNP_QUERY_URL: https://sandbox.vnpayment.vn/merchant_webapi/api/transaction
+  SERVER_PORT: "8080"
+  APP_STRICT_ENABLED: "false"
+  MAIL_ENABLE_FALLBACK: "true"
+  MAIL_TO: lmhtusa523@gmail.com
+  SPRING_PROFILES_ACTIVE: log,security,dev,vnp,cachenone,mail,ops
+
+  CLOUDINARY_CLOUD_NAME: dm45tt6nt
+  CLOUDINARY_ACCOUNT_DIR: "true"
+  CLOUDINARY_BLOG_DIR: ecommerce/account
+  CLOUDINARY_CATEGORY_DIR: ecommerce/product
+  CLOUDINARY_COUPON_DIR: ecommerce/category
+  CLOUDINARY_PRODUCT_DIR: ecommerce/brand
+
+  SPRING_OTEL_EXPORT_URL: http://otel-collector:4318/v1/metrics
+  SPRING_OTEL_TRACE_URL: http://otel-collector:4318/v1/traces
+  SPRING_OTEL_LOG_URL: http://otel-collector:4318
+---
+# --- ConfigMap: Postgres Initialization Scripts ---
+apiVersion: v1
+data:
+  rules.sql: "ALTER SYSTEM SET log_destination = 'stderr';\r\nALTER SYSTEM SET logging_collector
+    = on;\r\nALTER SYSTEM SET log_directory = '/var/log/postgresql';\r\nALTER SYSTEM
+    SET log_filename = '%d_%m_%Y.log';\r\nALTER SYSTEM SET log_rotation_age = '1d';\r\nALTER
+    SYSTEM SET log_rotation_size = '15MB';\r\nALTER SYSTEM SET log_statement = 'all';\r\nALTER
+    SYSTEM SET log_line_prefix = '%t [%p]: db=%d,user=%u,app=%a';\r\n"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: postgres-init-scripts
+
+---
+# --- Postgres Deployment ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phoenix-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phoenix-db
+  template:
+    metadata:
+      labels:
+        app: phoenix-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17.2
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: holy_shop
+            - name: POSTGRES_USER
+              value: phong
+            - name: TZ
+              value: Asia/Ho_Chi_Minh
+          envFrom:
+            - secretRef:
+                name: db-secret
+          volumeMounts:
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: init-scripts
+          configMap:
+            name: postgres-init-scripts # optional if you want to put .sql files here
+---
+# --- Postgres Service ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phoenix-db-service
+spec:
+  selector:
+    app: phoenix-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+# --- Phoenix Backend Deployment ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phoenix-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: phoenix-backend
+  template:
+    metadata:
+      labels:
+        app: phoenix-backend
+    spec:
+      containers:
+        - name: phoenix-backend
+          image: truong642003/phoenix-backend-prod:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: phoenix-config
+            - secretRef:
+                name: phoenix-secret
+---
+# --- Phoenix Backend Service (LoadBalancer) ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phoenix-backend-service
+spec:
+  selector:
+    app: phoenix-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
