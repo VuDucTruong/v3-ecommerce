@@ -23,4 +23,14 @@ public record ProQ_ProductItemsBatchInsert(
     public int hashCode() {
         return Objects.hash(Arrays.hashCode(productIds), Arrays.hashCode(productKeys), Arrays.hashCode(accounts), Arrays.hashCode(regions));
     }
+
+    @Override
+    public String toString() {
+        return "ProQ_ProductItemsBatchInsert{" +
+                "productIds=" + Arrays.toString(productIds) +
+                ", productKeys=" + Arrays.toString(productKeys) +
+                ", accounts=" + Arrays.toString(accounts) +
+                ", regions=" + Arrays.toString(regions) +
+                '}';
+    }
 }

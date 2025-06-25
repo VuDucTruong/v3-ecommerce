@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import shop.holy.v3.ecommerce.api.dto.product.ResponseProductMetadata;
 import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -29,6 +30,21 @@ public record ResponseComment(
         return Objects.hashCode(id);
     }
 
+    @Override
+    public String toString() {
+        return "ResponseComment{" +
+                "id=" + id +
+                ", product=" + product +
+                ", parentCommentId=" + parentCommentId +
+                ", author=" + author +
+                ", role='" + role + '\'' +
+                ", createdAt=" + createdAt +
+                ", deletedAt=" + deletedAt +
+                ", content='" + content + '\'' +
+                ", replies=" + Arrays.toString(replies) +
+                '}';
+    }
+
     public record Light(
             long id,
             ResponseProfile author,
@@ -48,7 +64,21 @@ public record ResponseComment(
         public int hashCode() {
             return Objects.hashCode(id);
         }
+
+        @Override
+        public String toString() {
+            return "Light{" +
+                    "id=" + id +
+                    ", author=" + author +
+                    ", role='" + role + '\'' +
+                    ", createdAt=" + createdAt +
+                    ", deletedAt=" + deletedAt +
+                    ", content='" + content + '\'' +
+                    ", replies=" + Arrays.toString(replies) +
+                    '}';
+        }
     }
+
 
     public record Flattened(
             long id,

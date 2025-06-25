@@ -6,6 +6,7 @@ import shop.holy.v3.ecommerce.api.dto.product.description.ResponseDescription;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Objects;
 
 public record ResponseProduct(
@@ -38,5 +39,26 @@ public record ResponseProduct(
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseProduct{" +
+                "id=" + id +
+                ", productDescription=" + productDescription +
+                ", slug='" + slug + '\'' +
+                ", name='" + name + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", tags=" + Arrays.toString(tags) +
+                ", represent=" + represent +
+                ", favorite=" + favorite +
+                ", groupId=" + groupId +
+                ", price=" + price +
+                ", originalPrice=" + originalPrice +
+                ", quantity=" + quantity +
+                ", categories=" + Arrays.toString(categories) +
+                ", status=" + status +
+                ", variants=" + Arrays.toString(variants) +
+                '}';
     }
 }

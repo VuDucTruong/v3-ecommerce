@@ -122,12 +122,6 @@ from public.order_details od1_0
          left join public.products p1_0 on od1_0.product_id = p1_0.id
 where od1_0.order_id in (9);
 
-select *
-from public.orders o1_0
-         left join public.payments p1_0 on o1_0.id = p1_0.order_id
-where o1_0.created_at < '2025-05-22 00:00:00.0'
-  and o1_0.created_at > '2025-06-21 23:59:59.999';
-
 SELECT *
 FROM orders;
 

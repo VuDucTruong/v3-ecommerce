@@ -8,6 +8,7 @@ import shop.holy.v3.ecommerce.api.dto.user.profile.ResponseProfile;
 import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +36,24 @@ public record ResponseOrder(
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseOrder{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", deletedAt=" + deletedAt +
+                ", status=" + status +
+                ", profile=" + profile +
+                ", coupon=" + coupon +
+                ", payment=" + payment +
+                ", originalAmount=" + originalAmount +
+                ", amount=" + amount +
+                ", details=" + Arrays.toString(details) +
+                ", sentMail='" + sentMail + '\'' +
+                ", reason='" + reason + '\'' +
+                '}';
     }
 
     public record ResponseOrderDetail(
