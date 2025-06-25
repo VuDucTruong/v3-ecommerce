@@ -16,7 +16,6 @@ import shop.holy.v3.ecommerce.api.dto.statistic.ResponseStatsProductTrend;
 import shop.holy.v3.ecommerce.service.biz.StatisticsQuery;
 
 import java.util.Collection;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -25,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("statistics")
 public class ControllerStatistics {
     private final StatisticsQuery statisticsQuery;
-    private final Random r = new Random();
 
 
     @GetMapping("totals")

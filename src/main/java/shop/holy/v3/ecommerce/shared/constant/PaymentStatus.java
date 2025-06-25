@@ -10,7 +10,4 @@ public enum PaymentStatus {
 
     private final int value;
     public int value(){return value;}
-
-    public boolean equals(int value){return this.value == value;}
-    public boolean equals(PaymentStatus status){return this.value == status.value;}
 }

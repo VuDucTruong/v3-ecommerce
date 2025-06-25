@@ -33,6 +33,7 @@ public class AccountCommand {
     private final AuthService authService;
     private final AccountMapper accountMapper;
     private final SmtpService smtpService;
+    private final Random random = new Random();
 
     @Value("${app.strict.enable}")
     private boolean enableStrict;
@@ -42,7 +43,7 @@ public class AccountCommand {
 
     @Transactional
     public void saveOtp(RequestOTP otpRequest) throws MessagingException {
-        int ran = new Random().nextInt(999999);
+        int ran = random.nextInt(999999);
         String otp = String.format("%06d", ran);
 
         int changes = accountRepository.saveOtp(otpRequest.email(), otp);

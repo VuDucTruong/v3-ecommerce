@@ -6,6 +6,7 @@
 </head>
 <body style="margin:0; padding:0; font-family:'Segoe UI', sans-serif; background-color:#0e0e10; color:#ffffff;">
 <table align="center" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px; margin:auto; background-color:#1b1b1d; border-radius:8px; overflow:hidden;">
+    <thead><tr><th style="display: none;"></th></tr></thead>
     <tr>
         <td style="text-align:center;">
             <img th:src="${bannerUrl}" alt="Product Banner" style="width:100%; height:auto;">
@@ -24,6 +25,7 @@
                     Product Name: 0 items
                 </h3>
                 <table th:each="key : ${meta.keys}" width="100%" style="margin-top:10px;">
+                    <thead><tr><th style="display: none;"></th></tr></thead>
                     <tr th:if="${key.productKey != null}">
                         <td style="padding:6px; color:#888;">Product Key: </td>
                         <td style="padding:6px;" th:text="${key.productKey}">XXXX-XXXX-XXXX</td>

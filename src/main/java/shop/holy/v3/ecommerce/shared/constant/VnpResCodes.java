@@ -24,7 +24,6 @@ public enum VnpResCodes {
     private final String message;
     public String code(){return code;}
     public String message(){return message;}
-    public boolean equals(String code){return this.code.equals(code);}
     public static VnpResCodes fromCode(String code) {
         var enums = VnpResCodes.values();
         for (VnpResCodes v : enums) {

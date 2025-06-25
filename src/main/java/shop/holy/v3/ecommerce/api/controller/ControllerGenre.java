@@ -27,8 +27,8 @@ public class ControllerGenre {
     @PutMapping
     public ResponseEntity<ResponseGenre1> upsert(@RequestBody RequestGenre1Upsert request) {
 
-        var x = genreService.upsert(request);
-        return ResponseEntity.ok(x);
+        ResponseGenre1 result = genreService.upsert(request);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("identifier")
@@ -36,26 +36,26 @@ public class ControllerGenre {
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) boolean deleted) {
-        var x = genreService.getByIdentifier(id, name, deleted);
-        return ResponseEntity.ok(x);
+        ResponseGenre1 result = genreService.getByIdentifier(id, name, deleted);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("blogs")
     @Operation(summary = "given array ids[] -> genre1s -> blogs group by genre")
     public ResponseEntity<Collection<ResponseGenre1Blogs>> getPartitionBy(@RequestParam HashSet<Long> ids, @RequestParam(defaultValue = "10") Integer size) {
-        var rs = blogQuery.findPartitionByGenre1Ids(ids, size);
-        return ResponseEntity.ok(rs);
+        Collection<ResponseGenre1Blogs> results = blogQuery.findPartitionByGenre1Ids(ids, size);
+        return ResponseEntity.ok(results);
     }
 
     @GetMapping
     public ResponseEntity<ResponseGenre1[]> getAllGenres() {
-        var x = genreService.getAllGenres();
-        return ResponseEntity.ok(x);
+        ResponseGenre1[] results = genreService.getAllGenres();
+        return ResponseEntity.ok(results);
     }
 
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ResponseGenre1> delete(long id) {
+    public ResponseEntity<ResponseGenre1> delete(@PathVariable("id") long id) {
         genreService.deleteGenre(id);
         return ResponseEntity.ok().build();
     }

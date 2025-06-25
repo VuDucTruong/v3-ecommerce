@@ -26,10 +26,6 @@ public enum RoleEnum {
     private final String[] roles;
     private final int power;
 
-    public boolean equals(String role) {
-        return this.name().equals(role);
-    }
-
     public boolean lt(RoleEnum role) {
         return this.power < role.power;
     }
@@ -38,13 +34,6 @@ public enum RoleEnum {
         return this.power > role.power;
     }
 
-    boolean gte(RoleEnum role) {
-        return this.power >= role.power;
-    }
-
-    public boolean lte(RoleEnum role) {
-        return this.power <= role.power;
-    }
 
 
 }

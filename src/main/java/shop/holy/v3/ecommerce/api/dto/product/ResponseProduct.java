@@ -6,6 +6,7 @@ import shop.holy.v3.ecommerce.api.dto.product.description.ResponseDescription;
 import shop.holy.v3.ecommerce.shared.constant.ProductStatus;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public record ResponseProduct(
         @Schema(example = "1234") long id,
@@ -28,4 +29,14 @@ public record ResponseProduct(
 //        @Schema(example = "2023-01-01T00:00:00Z") Date deletedAt,
         ResponseProductMetadata[] variants
 ) {
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ResponseProduct that)) return false;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

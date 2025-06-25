@@ -10,6 +10,7 @@ import shop.holy.v3.ecommerce.shared.constant.OrderStatus;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public record ResponseOrder(
         long id,
@@ -25,6 +26,17 @@ public record ResponseOrder(
         String sentMail,
         String reason
 ) {
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ResponseOrder that)) return false;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
     public record ResponseOrderDetail(
             Long id,
             BigDecimal price,
@@ -44,6 +56,17 @@ public record ResponseOrder(
         long quantity;
         String[] tags;
         List<String> keys;
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof ResponseOrderItem that)) return false;
+            return id == that.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(id);
+        }
     }
 
 }
