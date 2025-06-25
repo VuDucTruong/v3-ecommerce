@@ -54,6 +54,7 @@ public record ResponseComment(
             String content,
             ResponseReply[] replies
     ) {
+
         @Override
         public boolean equals(Object o) {
             if (!(o instanceof Light light)) return false;
@@ -78,7 +79,6 @@ public record ResponseComment(
                     '}';
         }
     }
-
 
     public record Flattened(
             long id,
