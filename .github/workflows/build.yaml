@@ -25,6 +25,11 @@ jobs:
       - name: Run tests and generate coverage
         run: mvn clean verify
 
+      - name: Check if jacoco.xml exists
+        run: |
+          ls -lah target/site/jacoco
+          cat target/site/jacoco/jacoco.xml || echo "jacoco.xml not found"
+
       - name: Trivy FS Scan
         uses: aquasecurity/trivy-action@master
         with:
