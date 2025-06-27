@@ -5,6 +5,7 @@ on:
     workflows: ["Setup Nginx Ingress"]
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   check-ingress-controller:
