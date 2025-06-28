@@ -21,10 +21,10 @@ SET row_security = off;
 --
 
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (2, '2025-04-17 14:11:35.385778', NULL, '2026-04-17', 'customer@gmail.com', '2025-04-17', false, NULL, NULL, 'string', 'CUSTOMER', NULL);
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (8, '2025-05-08 11:08:58.873873', NULL, NULL, 'cus2@gmail.com', NULL, false, NULL, NULL, '123456', 'CUSTOMER', NULL);
+INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (9, '2025-05-08 11:16:25.04038', NULL, NULL, '21522458@gm.uit.edu.vn', NULL, false, NULL, NULL, '123456789', 'CUSTOMER', NULL);
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (6, '2025-05-08 10:59:23.342558', NULL, '2025-05-14', 'cus1@gmail.com', '2025-05-13', false, NULL, NULL, 'string', 'CUSTOMER', NULL);
 INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (1, '2025-04-17 14:03:37.543768', NULL, '2026-04-17', 'phong@gmail.com', '2025-04-17', true, '803045', '2025-05-30 10:00:27.709892', 'string', 'ADMIN', NULL);
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (8, '2025-05-08 11:08:58.873873', '2025-06-23 17:53:01', NULL, 'cus2@gmail.com', NULL, false, NULL, NULL, '123456', 'CUSTOMER', NULL);
-INSERT INTO public.accounts (id, created_at, deleted_at, disable_date, email, enable_date, is_verified, otp, otp_expiry, password, role, verification_code) VALUES (9, '2025-05-08 11:16:25.04038', NULL, NULL, '21522458@gm.uit.edu.vn', NULL, false, '804291', '2025-06-24 21:08:23.792381', '123456789', 'CUSTOMER', NULL);
 
 
 --
@@ -44,17 +44,13 @@ INSERT INTO public.profiles (id, created_at, deleted_at, account_id, full_name, 
 -- Data for Name: blogs; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (5, '2025-05-21 18:43:25.194611', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth', NULL);
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (7, '2025-05-27 14:08:20.407236', NULL, '<p>you can have jetbrains product at cheap price at holy shop</p><p>with just $20</p><p>but hey, it''s 10% cheaper</p><p>OK WITH extra contents</p>', 'ecommerce/blog/bdef69b1-30dd-4f3d-af67-63226d5174ea.png', 4, '2025-05-27 14:36:00', 'A very good product at cheap price', 'Jetbrains for Education - AI powered', '2025-06-22 16:11:11.067');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (3, '2025-05-21 18:42:05.171284', '2025-06-23 04:43:28.730084', '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth', NULL);
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (11, '2025-06-28 12:06:36.626692', NULL, '<p>lorem ipsum 4</p>', NULL, 4, '2025-06-28 12:00:12.439', 'technologia 4', 'New Episode of MSI 4', '2025-06-28 14:27:59.902');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (10, '2025-06-28 12:06:17.000381', NULL, '<p>lorem ipsum 3</p>', NULL, 4, '2025-06-28 12:00:12.439', 'technologia 3', 'New Episode of MSI 3', '2025-06-28 14:28:02.009');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (9, '2025-06-28 12:06:09.675913', NULL, '<p>lorem ipsum 2</p>', NULL, 4, '2025-06-28 12:00:12.439', 'technologia 2', 'New Episode of MSI 2', '2025-06-28 14:28:03.329');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (8, '2025-06-28 12:05:52.546657', NULL, '<p>lorem ipsum</p>', NULL, 4, '2025-06-28 12:00:12.439', 'technologia', 'New Episode of MSI', '2025-06-28 14:28:04.671');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (6, '2025-05-21 18:45:21.956605', NULL, 'well another content', 'ecommerce/blog/265b3783-9465-4a9e-8dfc-4df3e3e6271f.png', 4, '2025-05-27 13:30:23.285', 'olka subtitle', 'olka', '2025-06-28 14:28:06.081');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (2, '2025-05-18 00:40:01.774669', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string', '2025-06-28 14:28:07.931');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (4, '2025-05-21 18:43:09.769097', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth', '2025-06-28 14:28:12.457');
-INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title, approved_at) VALUES (1, '2025-05-18 00:38:35.529595', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string', NULL);
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (1, '2025-05-18 00:38:35.529595', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (2, '2025-05-18 00:40:01.774669', NULL, '<p>string</p>', NULL, 4, '2025-05-18 00:30:18.654', 'string', 'string');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (3, '2025-05-21 18:42:05.171284', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (4, '2025-05-21 18:43:09.769097', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (5, '2025-05-21 18:43:25.194611', NULL, '<p>alkjsdlkajskdjkajsdjfkla<p/>', NULL, 4, '2025-05-21 18:41:31.409', 'sth', 'sth');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (6, '2025-05-21 18:45:21.956605', NULL, 'well another content', 'ecommerce/blog/265b3783-9465-4a9e-8dfc-4df3e3e6271f.png', 4, '2025-05-27 13:30:23.285', 'olka subtitle', 'olka');
+INSERT INTO public.blogs (id, created_at, deleted_at, content, image_url_id, profile_id, published_at, subtitle, title) VALUES (7, '2025-05-27 14:08:20.407236', NULL, '<p>you can have jetbrains product at cheap price at holy shop</p><p>with just $20</p><p>but hey, it''s 10% cheaper</p><p>OK WITH extra contents</p>', 'ecommerce/blog/bdef69b1-30dd-4f3d-af67-63226d5174ea.png', 4, '2025-05-27 14:36:00', 'A very good product at cheap price', 'Jetbrains for Education - AI powered');
 
 
 --
@@ -99,18 +95,6 @@ INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (7, 5);
 INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (7, 6);
 INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (7, 11);
 INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (7, 9);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (8, 5);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (8, 6);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (8, 8);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (9, 5);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (9, 6);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (9, 7);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (10, 5);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (10, 6);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (10, 7);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (11, 5);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (11, 6);
-INSERT INTO public.blogs_genres (blog_id, genre2_id) VALUES (11, 9);
 
 
 --
@@ -132,7 +116,6 @@ INSERT INTO public.categories (id, created_at, deleted_at, description, image_ur
 INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name) VALUES (13, '2025-06-17 04:34:14.065643', NULL, 'Các công cụ tiện ích cho máy tính', 'ecommerce/category/6c113c65-6fae-4954-9fc0-5a0869522b14.png', 'Tiện ích hệ thống');
 INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name) VALUES (14, '2025-06-17 04:35:05.215963', NULL, 'Các phầm mềm trò chơi', 'ecommerce/category/6e9fb679-43fb-4205-9f17-907aaa686c92.png', 'Games');
 INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name) VALUES (15, '2025-06-17 14:06:38.894633', NULL, 'Các sản phẩm thuộc Steam Wallet', 'ecommerce/category/fcb41648-ee26-49a6-88a3-70123f79a124.png', 'Steam Wallet');
-INSERT INTO public.categories (id, created_at, deleted_at, description, image_url_id, name) VALUES (16, '2025-06-23 16:46:43.331629', '2025-06-23 16:47:32.395275', 'OK cái này delete r', 'ecommerce/product/f86565d1-bb17-4c6b-b526-331c33a39938.jpg', 'Deleted Category');
 
 
 --
@@ -404,7 +387,6 @@ INSERT INTO public.coupons (id, created_at, deleted_at, available_from, availabl
 -- Data for Name: notification_prod_keys_fail; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
-INSERT INTO public.notification_prod_keys_fail (id, created_at, email, order_id, retry1, retry2, reason) VALUES (0, '2025-06-22 09:20:35.991624', '21522458@gm.uit.edu.vn', 1, NULL, NULL, NULL);
 
 
 --
@@ -417,20 +399,18 @@ INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_
 INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (152, '2025-06-18 13:25:30.232258', 'phong@gmail.com', 3, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":3,"metas":{"141":{"productName":"Steam Wallet Code 240 HKD (~796.560 VNĐ)","quantity":1,"keys":[{"id":562,"productKey":"HMDS-K7QU-UB5O-HQW4-DW4F-B0L8","duration":"1 month"}]}}}');
 INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (203, '2025-06-19 19:22:00.073396', 'phong@gmail.com', 5, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":5,"metas":{"140":{"productName":"Steam Wallet Code 300 TWD (~264.900 VNĐ)","quantity":1,"keys":[{"id":552,"productKey":"O22Y-L70E-WDGO-5LNN-HK7B-W5GF","duration":"1 month"}]}}}');
 INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (253, '2025-06-20 17:32:30.137381', 'phong@gmail.com', 6, NULL, NULL, '{"email":"phong@gmail.com","fullName":"abc","orderId":6,"metas":{"139":{"productName":"Steam Wallet Code 100 HKD (~331.900 VNĐ)","quantity":2,"keys":[{"id":566,"productKey":"SLWQ-5LHV-76H9-DWSQ-1BHG-KJSP","duration":"1 month"},{"id":567,"productKey":"XP93-7PIV-W1YT-O93P-38BQ-DXT7","duration":"1 month"}]}}}');
-INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (303, '2025-06-22 19:20:30.05083', '21522458@gm.uit.edu.vn', 1, NULL, NULL, '{"email":"21522458@gm.uit.edu.vn","fullName":"thanh phong","orderId":1,"metas":{"8":{"productName":"the jakarta product","quantity":1,"keys":[]}}}');
-INSERT INTO public.notification_prod_keys_success (id, created_at, email, order_id, retry1, retry2, mail_prod_key_json) VALUES (304, '2025-06-22 19:20:35.734561', '21522458@gm.uit.edu.vn', 1, NULL, NULL, '{"email":"21522458@gm.uit.edu.vn","fullName":"thanh phong","orderId":1,"metas":{"8":{"productName":"the jakarta product","quantity":1,"keys":[]}}}');
 
 
 --
 -- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: phong
 --
 
+INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (1, '2025-05-07 20:08:05.216177', NULL, 100000.00, NULL, 100000.00, NULL, '{"email": "string", "additionalProp2": "string", "additionalProp3": "string"}', 'PROCESSING');
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (2, '2025-06-18 12:26:28.878952', NULL, 1625400.00, 3, 1806000.00, 4, '{}', 'PROCESSING');
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (3, '2025-06-18 13:05:25.165694', NULL, 822000.00, NULL, 822000.00, 4, '{}', 'COMPLETED');
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (4, '2025-06-19 19:19:45.506687', NULL, 258000.00, NULL, 258000.00, 4, '{}', 'PROCESSING');
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (5, '2025-06-19 19:20:47.189688', NULL, 258000.00, NULL, 258000.00, 4, '{}', 'COMPLETED');
 INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (6, '2025-06-20 17:30:51.155465', NULL, 621000.00, 2, 690000.00, 4, '{}', 'COMPLETED');
-INSERT INTO public.orders (id, created_at, deleted_at, amount, coupon_id, original_amount, profile_id, request_info, status) VALUES (1, '2025-05-07 20:08:05.216177', '2025-06-22 20:39:25.190916', 100000.00, NULL, 100000.00, NULL, '{"email": "string", "additionalProp2": "string", "additionalProp3": "string"}', 'COMPLETED');
 
 
 --
@@ -1430,14 +1410,14 @@ SELECT pg_catalog.setval('public.accounts_id_seq', 9, true);
 -- Name: blogs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.blogs_id_seq', 40, true);
+SELECT pg_catalog.setval('public.blogs_id_seq', 7, true);
 
 
 --
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 16, true);
+SELECT pg_catalog.setval('public.categories_id_seq', 15, true);
 
 
 --
@@ -1479,7 +1459,7 @@ SELECT pg_catalog.setval('public.keywords_id_seq', 1, false);
 -- Name: notification_prod_keys_seq; Type: SEQUENCE SET; Schema: public; Owner: phong
 --
 
-SELECT pg_catalog.setval('public.notification_prod_keys_seq', 351, true);
+SELECT pg_catalog.setval('public.notification_prod_keys_seq', 301, true);
 
 
 --
