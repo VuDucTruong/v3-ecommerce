@@ -61,20 +61,48 @@ public class BlogQuery {
     }
 
     public Collection<ResponseGenre1Blogs> findPartitionByGenre1Ids(HashSet<Long> genre1Ids, int size) {
-        List<ProQ_BlogRow_Genre1Id> rows = blogRepository.findBlogsLateral(genre1Ids.toArray(Long[]::new), size);
-        Collection<ResponseGenre1Blogs> response = rows.stream().map(r -> {
-            ResponseProfile responseProfile = new ResponseProfile(r.profileId(), r.fullName(), AppDateUtils.toLocalDate(r.profileCratedAt()), r.profileImageUrlId());
-            ResponseBlog responseBlog = new ResponseBlog(r.blogId(), r.title(), r.subtitle(), null, r.approvedAt(), responseProfile, List.of(), r.publishedAt(), commonMapper.genUrl(r.blogImageUrlId()), r.content());
-            ArrayList<ResponseBlog> singleItemList = new ArrayList<>(1);
-            singleItemList.add(responseBlog);
-            return new ResponseGenre1Blogs(r.genre1Id(), singleItemList);
-        }).collect(Collectors.toMap(ResponseGenre1Blogs::id, res -> res,
-                (v1, v2) -> {
-                    v1.blogs().addAll(v2.blogs());
-                    return v1;
-                })).values();
+        List<ProQ_BlogRow_Genre1Id> rows = blogRepository.findBlogsLateralNotDeleted(genre1Ids.toArray(Long[]::new), size);
+
+        // Group by genre1Id -> blogId
+        Map<Long, Map<Long, List<ProQ_BlogRow_Genre1Id>>> grouped = rows.stream()
+                .collect(Collectors.groupingBy(ProQ_BlogRow_Genre1Id::genre1Id,
+                        Collectors.groupingBy(ProQ_BlogRow_Genre1Id::blogId)));
+
+        Collection<ResponseGenre1Blogs> response = grouped.entrySet().stream().map(genreEntry -> {
+            long genre1Id = genreEntry.getKey();
+
+            List<ResponseBlog> blogs = genreEntry.getValue().entrySet().stream().map(blogEntry -> {
+                List<ProQ_BlogRow_Genre1Id> blogRows = blogEntry.getValue();
+                ProQ_BlogRow_Genre1Id sample = blogRows.getFirst(); // all same blog
+
+                List<Long> g2Ids = blogRows.stream()
+                        .map(ProQ_BlogRow_Genre1Id::g2Id)
+                        .distinct()
+                        .toList();
+
+                ResponseProfile responseProfile = new ResponseProfile(
+                        sample.profileId(),
+                        sample.fullName(),
+                        AppDateUtils.toLocalDate(sample.profileCratedAt()),
+                        sample.profileImageUrlId());
+
+                return new ResponseBlog(
+                        sample.blogId(),
+                        sample.title(),
+                        sample.subtitle(),
+                        null,
+                        sample.approvedAt(),
+                        responseProfile,
+                        g2Ids,
+                        sample.publishedAt(),
+                        commonMapper.genUrl(sample.blogImageUrlId()),
+                        sample.content()
+                );
+            }).toList();
+            return new ResponseGenre1Blogs(genre1Id, blogs);
+        }).toList();
+
         return response;
     }
-
 
 }

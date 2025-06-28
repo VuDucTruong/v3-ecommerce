@@ -15,5 +15,7 @@ public record ProQ_BlogRow_Genre1Id(
         Long profileId,
         String fullName,
         Date profileCratedAt,
-        String profileImageUrlId
-) {}
+        String profileImageUrlId,
+        Long g2Id
+) {
+}

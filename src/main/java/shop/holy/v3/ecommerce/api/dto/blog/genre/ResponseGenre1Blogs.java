@@ -8,6 +8,4 @@ public record ResponseGenre1Blogs(
         long id,
         List<ResponseBlog> blogs
 ) {
-
-
 }

@@ -33,7 +33,8 @@ select *
 from coupons;
 
 select *
-from genre1;
+from genre1 g1
+JOIN genre2 g2 on g1.id = g2.genre1_id;
 select *
 from genre2;
 
@@ -142,12 +143,16 @@ where id = 8;
 SELECT *
 FROM notification_prod_keys_success;
 
-UPDATE blogs
-SET deleted_at = now()
-where id = 3;
-
-
 SELECT * FROM accounts;
+
+SELECT g1.id, g1.name,b.* FROM blogs b
+JOIN public.blogs_genres bg on b.id = bg.blog_id
+JOIN genre2 g2 on bg.genre2_id = g2.id
+JOIN genre1 g1 ON g2.genre1_id = g1.id;
+
+SELECT g1.id, g1.name, g2.* FROM genre2 g2
+JOIN genre1 g1 ON g2.genre1_id = g1.id;
+
 
 SELECT * FROM orders o
 join notification_prod_keys_success npk
@@ -155,3 +160,5 @@ ON o.id = npk.order_id;
 
 SELECT * FROM notification_prod_keys_success npks
 where order_id = 6;
+
+SELECT * FROM blogs b;

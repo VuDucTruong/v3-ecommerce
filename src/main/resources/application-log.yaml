@@ -14,7 +14,7 @@ logging:
         config:
           openapi:
             OpenApiConfig: INFO
-    root: INFO
+    root: error
     sql: INFO
 
 openapi:

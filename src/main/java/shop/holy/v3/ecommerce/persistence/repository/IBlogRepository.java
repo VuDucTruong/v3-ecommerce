@@ -48,19 +48,21 @@ public interface IBlogRepository extends JpaRepository<Blog, Long>, JpaSpecifica
     @Query(value = """
             SELECT gid, r.id, r.title, r.subtitle, r.content,
                    r.created_at, r.published_at, r.approved_at, r.image_url_id,
-                   p.id, p.full_name, p.created_at, p.image_url_id
+                   p.id, p.full_name, p.created_at, p.image_url_id, r.g2Id
                 FROM unnest(:genre1Ids) AS gid
                 JOIN LATERAL (
-                    SELECT DISTINCT b.*
+                    SELECT DISTINCT b.*, g2.id as g2Id
                     FROM blogs b
                     JOIN blogs_genres bg ON bg.blog_id = b.id
                     JOIN genre2 g2 ON bg.genre2_id = g2.id
                     WHERE g2.genre1_id = gid
+                          AND b.deleted_at IS NULL
+                          AND b.approved_at IS NOT NULL
                     ORDER BY b.published_at DESC NULLS LAST
                     LIMIT :size
                 ) r join profiles p on p.id= r.profile_id ON TRUE
             """, nativeQuery = true)
-    List<ProQ_BlogRow_Genre1Id> findBlogsLateral(Long[] genre1Ids, int size);
+    List<ProQ_BlogRow_Genre1Id> findBlogsLateralNotDeleted(Long[] genre1Ids, int size);
 
 
     @Modifying
