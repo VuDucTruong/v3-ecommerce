@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.shared.mapper;
 
 import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import org.mapstruct.Mapper;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.Mapping;
@@ -52,19 +53,18 @@ public abstract class BlogMapper {
                 return criteriaBuilder.conjunction();
 
             var predicate = criteriaBuilder.conjunction();
-            Join<Blog, Genre2> genre2s = root.join("genre2s");
             if (!query.getResultType().equals(Long.class)) {
-                genre2s.join("genre1");
-                root.fetch("profile");
+                var genre2sJoin = root.fetch("genre2s", JoinType.LEFT);
+                genre2sJoin.fetch("genre1", JoinType.LEFT);
+                root.fetch("profile", JoinType.LEFT);
             }
 
             if (searchReq.search() != null) {
                 predicate = criteriaBuilder.and(predicate, SqlUtils.likeIgnoreCase(criteriaBuilder, root.get("title"), searchReq.search()));
             }
 
-            ///  TODO: IGNORING GENRES????
             if (!CollectionUtils.isEmpty(searchReq.genreIds())) {
-                predicate = criteriaBuilder.and(predicate, genre2s.get("id").in(searchReq.genreIds()));
+                predicate = criteriaBuilder.and(predicate, root.get("genre2s").get("id").in(searchReq.genreIds()));
             }
 
             if (searchReq.publishedFrom() != null) {

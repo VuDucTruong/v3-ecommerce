@@ -80,8 +80,7 @@ public abstract class ProductMapper {
 
             // Filter by category IDs
             if (!CollectionUtils.isEmpty(searchReq.categoryIds())) {
-                Join<Product, Category> categoryJoin = root.join("categories", JoinType.INNER);
-                predicate = criteriaBuilder.and(predicate, categoryJoin.get("id").in(searchReq.categoryIds()));
+                predicate = criteriaBuilder.and(predicate, root.get("categories").get("id").in(searchReq.categoryIds()));
             }
 
             // Search by name or slug
