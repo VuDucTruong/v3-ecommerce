@@ -5,7 +5,8 @@ on:
     workflows: ["Docker Push and Scan For Production"]
     types:
       - completed
-  
+  workflow_dispatch: 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

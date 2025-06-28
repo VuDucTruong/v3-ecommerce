@@ -4,7 +4,7 @@ on:
     workflows: ["Build and Scan Source Code Security/Quality"]
     types:
       - completed
-
+  workflow_dispatch:
 
 jobs:
   docker:

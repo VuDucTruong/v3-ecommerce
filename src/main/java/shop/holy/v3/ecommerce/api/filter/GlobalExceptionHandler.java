@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseError<?> handleUnCaughtException(Exception ex, WebRequest webRequest) {
         log.error(buildErrorMessage(ex));
-        ex.printStackTrace();
+        ///ex.printStackTrace();
         return new ResponseError<>(webRequest.getContextPath(), 100, ex.getMessage(), null);
     }
 
