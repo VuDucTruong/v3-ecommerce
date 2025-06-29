@@ -25,6 +25,7 @@ import java.util.Set;
 })
 public class Product extends EntityBase {
 
+    @Column(name = "slug", unique = true)
     private String slug;
     private String name;
     private String imageUrlId;

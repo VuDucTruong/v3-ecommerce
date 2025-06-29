@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
+import shop.holy.v3.ecommerce.service.ViolationDetectionService;
 import shop.holy.v3.ecommerce.service.biz.notification.NotificationQuery;
 import shop.holy.v3.ecommerce.service.smtp.SmtpService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
@@ -27,14 +28,12 @@ import shop.holy.v3.ecommerce.shared.util.SecurityUtil;
 public class ControllerTest {
 
     private final SmtpService smtpService;
-    private final NotificationQuery notificationQuery;
+    private final ViolationDetectionService violationDetectionService;
 
-    @GetMapping("testnoti")
-    public ResponseEntity<?> getnoti() {
-        var rs = notificationQuery.getNotificationProdKeys();
-        return ResponseEntity.ok().build();
+    @GetMapping("violations")
+    public ResponseEntity<String> getError(@RequestParam String constraintName) {
+        return ResponseEntity.ok(violationDetectionService.getErrorMessage(constraintName));
     }
-
 
     @GetMapping("/biz-errors")
     public ResponseEntity<?> testBizErrors(@RequestParam("e") BizErrors error) {

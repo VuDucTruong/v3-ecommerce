@@ -51,6 +51,8 @@ public class UserCommand {
             profile.setId(account.getId());
         }
         account.setVerified(true);
+        if (account.getRole() == null)
+            account.setRole(RoleEnum.STAFF.name());
 
         Account savedAccount = accountRepository.save(account);
         profile.setAccountId(savedAccount.getId());

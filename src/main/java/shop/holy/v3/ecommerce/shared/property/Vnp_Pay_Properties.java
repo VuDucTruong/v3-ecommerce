@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +22,18 @@ public class Vnp_Pay_Properties {
     private String vnp_Command;
     private String orderType;
 
-    public Map<String, String> buildParamsMap(String transRef,String orderInfo, String returnUrl) {
+    public Map<String, String> buildParamsMap(String transRef, String orderInfo, String returnUrl) {
         Map<String, String> vnpParamsMap = new HashMap<>();
         vnpParamsMap.put("vnp_Version", this.vnp_Version);
         vnpParamsMap.put("vnp_Command", this.vnp_Command);
         vnpParamsMap.put("vnp_TmnCode", this.vnp_TmnCode);
         vnpParamsMap.put("vnp_CurrCode", "VND");
-        vnpParamsMap.put("vnp_TxnRef",  transRef);
-        vnpParamsMap.put("vnp_OrderInfo", orderInfo);
+        vnpParamsMap.put("vnp_TxnRef", transRef);
+        if (StringUtils.hasText(orderInfo)) {
+            vnpParamsMap.put("vnp_OrderInfo", orderInfo);
+        }else {
+            vnpParamsMap.put("vnp_OrderInfo", "No message");
+        }
         vnpParamsMap.put("vnp_OrderType", this.orderType);
         vnpParamsMap.put("vnp_Locale", "en");
         vnpParamsMap.put("vnp_ReturnUrl", returnUrl);

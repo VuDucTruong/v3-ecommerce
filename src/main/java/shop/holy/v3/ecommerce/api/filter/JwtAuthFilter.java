@@ -38,6 +38,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         String accessToken = null;
         String refreshToken = null;
         boolean hitRefreshToken = false;
+        boolean hitException = false;
 
         if (cookies != null) {
 
@@ -52,17 +53,21 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         AuthAccount authAccount = null;
 
         // Validate and Trust access token at first
-        if (accessToken != null && !jwtUtil.isTokenExpired(accessToken, true)) {
-            long userId = Long.parseLong(jwtUtil.extractId(accessToken, true));
-            authAccount = authAccountService.findAccountById(userId);
-        }
-        /// If access token is expired, try to trust refresh token
-        else {
-            if (refreshToken != null && !jwtUtil.isTokenExpired(refreshToken, false)) {
-                hitRefreshToken = true;
-                long userId = Long.parseLong(jwtUtil.extractId(refreshToken, true));
+        try {
+            if (accessToken != null && !jwtUtil.isTokenExpired(accessToken, true)) {
+                long userId = Long.parseLong(jwtUtil.extractId(accessToken, true));
                 authAccount = authAccountService.findAccountById(userId);
             }
+            /// If access token is expired, try to trust refresh token
+            else {
+                if (refreshToken != null && !jwtUtil.isTokenExpired(refreshToken, false)) {
+                    hitRefreshToken = true;
+                    long userId = Long.parseLong(jwtUtil.extractId(refreshToken, true));
+                    authAccount = authAccountService.findAccountById(userId);
+                }
+            }
+        } catch (Exception _) {
+            hitException = true;
         }
         // If both tokens are invalid, continue without authentication
         // if next chain allow anonymous access -> then OK
@@ -76,6 +81,12 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         chain.doFilter(request, response);
         if (hitRefreshToken) {
             grantNewTokensOnResponse(response, authAccount);
+        }
+        if (hitException) {
+            Cookie[] resCookies = authAccountService.removeAuthCookies();
+            for (Cookie cookie : resCookies) {
+                response.addCookie(cookie);
+            }
         }
     }
 

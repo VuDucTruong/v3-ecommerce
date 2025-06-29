@@ -106,7 +106,7 @@ public class MailCommand {
                 if (noti.getRetry1() == null)
                     notificationCommand.handleRetry1(noti.getId(), noti.getOrderId());
                 else {
-                    notificationCommand.handleFailed(noti, "Error occurred while sending email");
+                    notificationCommand.handleFailed(noti, "Error occurred while    sending email");
                 }
                 /// NOT INSERT, SO THAT WE GONNA RESOLVE IN NEXT CYCLE
                 log.error("Scheduler smtp error ", e);

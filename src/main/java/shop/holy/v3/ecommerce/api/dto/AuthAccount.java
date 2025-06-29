@@ -12,9 +12,7 @@ import shop.holy.v3.ecommerce.shared.constant.RoleEnum;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 import static shop.holy.v3.ecommerce.shared.constant.DefaultValues.ClaimKeys;
 
@@ -41,6 +39,8 @@ public class AuthAccount implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(role==null)
+            return new ArrayList<>(0);
         return Arrays.stream(role.getRoles())
                 .map(role -> (GrantedAuthority) () -> role)
                 .toList();

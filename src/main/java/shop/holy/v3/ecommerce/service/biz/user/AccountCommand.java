@@ -12,6 +12,7 @@ import shop.holy.v3.ecommerce.api.dto.account.RequestMailVerification;
 import shop.holy.v3.ecommerce.api.dto.account.RequestOTP;
 import shop.holy.v3.ecommerce.api.dto.account.RequestPasswordUpdate;
 import shop.holy.v3.ecommerce.persistence.entity.Account;
+import shop.holy.v3.ecommerce.persistence.entity.Profile;
 import shop.holy.v3.ecommerce.persistence.repository.IAccountRepository;
 import shop.holy.v3.ecommerce.persistence.repository.IProfileRepository;
 import shop.holy.v3.ecommerce.service.security.AuthService;
@@ -105,6 +106,9 @@ public class AccountCommand {
         if (queriedAccount == null) {
             Account account = accountMapper.fromRegistrationRequestToEntity(registration);
             accountRepository.save(account);
+            Profile profile = account.getProfile();
+            profile.setAccountId(account.getId());
+            profileRepository.save(profile);
             return;
         }
 

@@ -162,3 +162,54 @@ SELECT * FROM notification_prod_keys_success npks
 where order_id = 6;
 
 SELECT * FROM blogs b;
+SELECT * FROM accounts a;
+
+SELECT * FROM coupons c ;
+SELECT * FROM notification_prod_keys_fail
+
+
+
+
+SELECT * FROM products p
+where p.slug like '%adobe-photoshop-2024-1-year%';
+
+
+WITH ranked AS (
+    SELECT
+        id,
+        slug,
+        slug || '-' || ROW_NUMBER() OVER (PARTITION BY slug ORDER BY id) AS new_slug,
+        ROW_NUMBER() OVER (PARTITION BY slug ORDER BY id) AS rn
+    FROM products
+),
+     to_update AS (
+         SELECT id, new_slug
+         FROM ranked
+         WHERE rn > 1
+     )
+UPDATE products p
+SET slug = tu.new_slug
+FROM to_update tu
+WHERE p.id = tu.id;
+
+
+SELECT
+    conrelid::regclass::text                                   AS table_name,
+    conname                                                    AS constraint_name,
+    contype                                                AS constraint_type,
+    string_agg(att.attname, ',' ORDER BY att.attnum)           AS columns,
+    CASE WHEN contype = 'f' THEN confrelid::regclass::text END AS referenced_table,
+    CASE
+        WHEN contype = 'f' THEN (
+            SELECT string_agg(att2.attname, ',' ORDER BY att2.attnum)
+            FROM unnest(c.confkey) AS colnum
+                     JOIN pg_attribute att2 ON att2.attrelid = c.confrelid AND att2.attnum = colnum
+        )
+        END                                                    AS referenced_columns
+FROM pg_constraint c
+         JOIN pg_namespace ns ON ns.oid = c.connamespace
+         JOIN pg_class cl ON cl.oid = c.conrelid
+         JOIN unnest(c.conkey) AS colnum ON TRUE
+         JOIN pg_attribute att ON att.attrelid = cl.oid AND att.attnum = colnum
+WHERE ns.nspname = 'public'
+GROUP BY conrelid, conname, contype, confrelid, c.confkey;

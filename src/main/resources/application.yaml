@@ -58,7 +58,7 @@ phong:
   mail:
     to: ${MAIL_TO:21522458@gm.uit.edu.vn}
     enable-fallback: ${MAIL_ENABLE_FALLBACK:true}
-    banner-url: ${BANNER_URL:https://blog.nebrass.fr/images/jetbrains-banner.webp}
+    banner-url: ${BANNER_URL:https://res.cloudinary.com/dm45tt6nt/image/upload/v1751191772/popqmvsqxxb2sqzjskdz.png}
     scheduled:
       cron: "0/30 * * * * *"
   cloudinary:

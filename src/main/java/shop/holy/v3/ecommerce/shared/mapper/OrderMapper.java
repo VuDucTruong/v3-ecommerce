@@ -106,7 +106,7 @@ public abstract class OrderMapper {
             }
             AuthAccount authAccount = SecurityUtil.getAuthNonNull();
             if (Objects.equals(authAccount.getRole(), RoleEnum.CUSTOMER)) {
-                predicate = criteriaBuilder.equal(root.get("profileId"), authAccount.getId());
+                predicate = criteriaBuilder.equal(root.get("profileId"), authAccount.getProfileId());
             }
 
             return predicate;

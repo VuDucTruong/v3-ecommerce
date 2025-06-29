@@ -2,23 +2,21 @@ package shop.holy.v3.ecommerce.api.filter;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import shop.holy.v3.ecommerce.api.dto.FieldErrorResponse;
 import shop.holy.v3.ecommerce.api.dto.ResponseError;
+import shop.holy.v3.ecommerce.service.ViolationDetectionService;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.exception.BadRequestException;
 import shop.holy.v3.ecommerce.shared.exception.ForbiddenException;
@@ -34,7 +32,9 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @Slf4j
 @Hidden
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    private final ViolationDetectionService  violationDetectionService;
 
     private static final String COMMON_ERROR_MESSAGE_TEMPLATE = "Got error: [%s], with Message: [%s]";
 
@@ -49,6 +49,18 @@ public class GlobalExceptionHandler {
         log.error(buildErrorMessage(ex));
         ///ex.printStackTrace();
         return new ResponseError<>(webRequest.getContextPath(), 100, ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError<?> handleDataIntegrityViolationException(Exception ex, WebRequest webRequest) {
+        log.error(buildErrorMessage(ex));
+        if (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException hibernateEx) {
+            String constraintName = hibernateEx.getConstraintName();
+            String errorMessage = violationDetectionService.getErrorMessage(constraintName);
+            return  new ResponseError<>(webRequest.getContextPath(), 400, errorMessage, constraintName);
+        }
+        return new ResponseError<>(webRequest.getContextPath(), 400, "Unknown error for data integrity", null);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
