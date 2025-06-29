@@ -82,10 +82,14 @@ spec:
           volumeMounts:
             - name: init-scripts
               mountPath: /docker-entrypoint-initdb.d
+            - name: postgres-storage # ✅ add this
+              mountPath: /var/lib/postgresql/data # ✅ critical for resetting data
       volumes:
         - name: init-scripts
           configMap:
             name: postgres-init-scripts # optional if you want to put .sql files here
+        - name: postgres-storage
+          emptyDir: { } # ✅ ephemeral volume to clear data on each pod creation
 ---
 # --- Postgres Service ---
 apiVersion: v1
