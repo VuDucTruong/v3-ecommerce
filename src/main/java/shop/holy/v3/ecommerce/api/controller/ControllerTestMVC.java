@@ -5,10 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import shop.holy.v3.ecommerce.api.dto.mail.MailProductKeys;
-import shop.holy.v3.ecommerce.service.biz.notification.MailCommand;
 import shop.holy.v3.ecommerce.service.smtp.SmtpService;
-
-import java.util.Date;
 
 @Controller
 @RequiredArgsConstructor
