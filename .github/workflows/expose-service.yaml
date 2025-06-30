@@ -61,7 +61,20 @@ jobs:
         resource-group: ${{ secrets.RESOURCE_NAME }}
         cluster-name: ${{ secrets.CLUSTER_NAME }}
 
-    - name: Apply ingress.yaml
+    - name: Install cert-manager
+      run: |
+        helm repo add jetstack https://charts.jetstack.io
+        helm repo update
+        helm upgrade --install cert-manager jetstack/cert-manager \
+          --namespace cert-manager \
+          --create-namespace \
+          --set installCRDs=true
+
+    - name: Apply ClusterIssuer (Let's Encrypt)
+      run: kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
+
+
+    - name: Apply Ingress Resources (with TLS)
       run: |
         kubectl apply -f k8s/ingress/backend-ingress.yaml
         kubectl apply -f k8s/ingress/grafana-ingress.yaml
