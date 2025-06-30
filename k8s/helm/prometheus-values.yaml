@@ -6,4 +6,4 @@ server:
     - job_name: 'backend'
       metrics_path: /actuator/prometheus
       static_configs:
-        - targets: ['phoenix-backend-service.default.svc.cluster.local:8080']
+        - targets: ['phoenix-backend-service.default.svc.cluster.local:80']
