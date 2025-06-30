@@ -13,7 +13,7 @@ data:
   SPRING_FLYWAY_ENABLED: "true"
   VNP_PAY_URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   VNP_TMN_CODE: ETGKRGNL
-  VNP_RETURN_URL: http://localhost:3007/cart/payment
+  VNP_RETURN_URL: https://software-retail-shop.vercel.app/cart/payment
   VNP_VERSION: "2.1.0"
   VNP_COMMAND: pay
   VNP_ORDER_TYPE: other
