@@ -4,23 +4,17 @@ metadata:
   name: grafana-ingress
   namespace: monitoring
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    cert-manager.io/http01-edit-in-place: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - vdt64.duckdns.org
-      secretName: duckdns-grafana-tls
   rules:
-    - host: vdt64.duckdns.org
-      http:
-        paths:
-          - path: /grafana
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: kube-prometheus-stack-grafana
-                port:
-                  number: 80
+  - host: vdt64.duckdns.org
+    http:
+      paths:
+      - path: /grafana
+        pathType: Prefix
+        backend:
+          service:
+            name: kube-prometheus-stack-grafana
+            port:
+              number: 80
