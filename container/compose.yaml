@@ -12,7 +12,7 @@ services:
     build:
       dockerfile: container/Dockerfile
       context: ..
-#    image: truong642003/phoenix-backend-dev:latest
+#    image: truong642003/phoenix-backend-prod:latest
     env_file:
       - ../env/dev.env
     ports:

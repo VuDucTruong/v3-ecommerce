@@ -27,52 +27,15 @@ jobs:
     - name: Add Helm Repos
       run: |
         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-        helm repo add grafana https://grafana.github.io/helm-charts
         helm repo update
 
     - name: Create Namespace
       run: |
         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
-    - name: Create Grafana Secret
-      shell: bash
+    - name: Install kube-prometheus-stack with custom values
       run: |
-        kubectl create secret generic grafana-admin-credentials \
-        --from-literal=admin-user=admin \
-        --from-literal=admin-password=${{ secrets.GRAFANA_PASSWORD }} \
-        -n monitoring --dry-run=client -o yaml | kubectl apply -f -
-
-    - name: Create Dashboard ConfigMap
-      run: |
-        kubectl create configmap spring-boot-dashboard \
-          --from-file=k8s/helm/dashboards/ \
-          -n monitoring \
-          --dry-run=client -o yaml | kubectl apply -f -
-
-    - name: Label ConfigMap
-      run: |
-        kubectl label configmap spring-boot-dashboard grafana_dashboard=true -n monitoring --overwrite
-    
-    
-    
-
-    - name: Deploy Prometheus
-      shell: bash
-      run: |
-        helm upgrade --install prometheus prometheus-community/prometheus \
-          --namespace monitoring \
-          -f k8s/helm/prometheus-values.yaml
-
-    - name: Deploy Loki
-      shell: bash
-      run: |
-        helm upgrade --install loki grafana/loki-stack \
-          --namespace monitoring \
-          -f k8s/helm/loki-values.yaml
-
-    - name: Deploy Grafana
-      shell: bash
-      run: |
-        helm upgrade --install grafana grafana/grafana \
-          --namespace monitoring \
-          -f k8s/helm/grafana-values.yaml
+        helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+          -f k8s/helm/values.yaml \
+          --set grafana.adminPassword=${{ secrets.GRAFANA_PASSWORD }} \
+          --namespace monitoring

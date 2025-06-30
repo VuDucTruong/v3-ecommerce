@@ -1,0 +1,19 @@
+grafana:
+  enabled: true
+  adminUser: admin
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  grafana.ini:
+    server:
+      root_url: "%(protocol)s://%(domain)s/grafana"
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    additionalScrapeConfigs:
+      - job_name: 'backend'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['phoenix-backend-service.default.svc.cluster.local:80']

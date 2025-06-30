@@ -13,7 +13,7 @@ data:
   SPRING_FLYWAY_ENABLED: "true"
   VNP_PAY_URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   VNP_TMN_CODE: ETGKRGNL
-  VNP_RETURN_URL: http://localhost:3007/cart/payment
+  VNP_RETURN_URL: https://software-retail-shop.vercel.app/cart/payment
   VNP_VERSION: "2.1.0"
   VNP_COMMAND: pay
   VNP_ORDER_TYPE: other
@@ -34,6 +34,8 @@ data:
   SPRING_OTEL_EXPORT_URL: http://otel-collector:4318/v1/metrics
   SPRING_OTEL_TRACE_URL: http://otel-collector:4318/v1/traces
   SPRING_OTEL_LOG_URL: http://otel-collector:4318
+
+  TZ: Asia/Ho_Chi_Minh
 ---
 # --- ConfigMap: Postgres Initialization Scripts ---
 apiVersion: v1
@@ -85,7 +87,7 @@ spec:
       volumes:
         - name: init-scripts
           configMap:
-            name: postgres-init-scripts # optional if you want to put .sql files here
+            name: postgres-init-scripts
 ---
 # --- Postgres Service ---
 apiVersion: v1
