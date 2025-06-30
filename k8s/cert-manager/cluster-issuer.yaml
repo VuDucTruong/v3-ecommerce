@@ -4,10 +4,10 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    email: lmhtusa523@gmail.com       # 🔁 change this
     server: https://acme-v02.api.letsencrypt.org/directory
+    email: lmhtusa523@gmail.com
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: letsencrypt-prod-key
     solvers:
       - http01:
           ingress:

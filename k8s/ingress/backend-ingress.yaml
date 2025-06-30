@@ -5,28 +5,20 @@ metadata:
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
     cert-manager.io/http01-edit-in-place: "true"
-    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/http01-ingress-path-type: ImplementationSpecific
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - vdt64.duckdns.org
-      secretName: duckdns-backend-tls
+      secretName: duckdns-backend-cert-tls
   rules:
     - host: vdt64.duckdns.org
       http:
         paths:
-          - path: /.well-known/acme-challenge/.*
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: cm-acme-http-solver
-                port:
-                  number: 8089
-          - path: /.*
-            pathType: ImplementationSpecific
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: phoenix-backend-service
