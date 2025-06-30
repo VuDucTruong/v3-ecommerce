@@ -11,5 +11,6 @@ prometheus:
     serviceMonitorSelectorNilUsesHelmValues: false
     additionalScrapeConfigs:
       - job_name: 'backend'
+        metrics_path: /actuator/prometheus
         static_configs:
           - targets: ['phoenix-backend-service.default.svc.cluster.local:80']
