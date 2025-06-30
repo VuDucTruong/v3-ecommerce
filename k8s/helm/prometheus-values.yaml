@@ -2,7 +2,7 @@ server:
   service:
     type: ClusterIP
 
-  extraScrapeConfigs:
+  extraScrapeConfigs: |
     - job_name: 'backend'
       metrics_path: /actuator/prometheus
       static_configs:
