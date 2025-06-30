@@ -39,7 +39,8 @@ jobs:
           --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux \
           --set controller.service.externalTrafficPolicy=Local \
           --set controller.publishService.enabled=true \
-          --set controller.defaultBackend.enabled=true
+          --set controller.defaultBackend.enabled=true \
+          --set controller.admissionWebhooks.strictValidatePathType=false
       
     - name: Verify deployment
       run: |
