@@ -1,10 +1,10 @@
 package shop.holy.v3.ecommerce.service.biz.user;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import shop.holy.v3.ecommerce.api.dto.account.RequestAccountRegistration;
@@ -57,7 +57,7 @@ public class AccountCommand {
 
 
     @Transactional
-    public Cookie[] changePassword(RequestPasswordUpdate request) {
+    public ResponseCookie[] changePassword(RequestPasswordUpdate request) {
         Account account = accountRepository.findByEmail(request.email());
         if (account == null)
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
@@ -77,7 +77,7 @@ public class AccountCommand {
     }
 
     @Transactional
-    public Cookie[] verifyEmail(RequestMailVerification request) {
+    public ResponseCookie[] verifyEmail(RequestMailVerification request) {
         Account account = accountRepository.findByEmail(request.email());
         if (account == null)
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();

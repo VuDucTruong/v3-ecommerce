@@ -1,20 +1,12 @@
 logging:
   level:
-    net:
-      ttddyy:
-        dsproxy:
-          listener: debug
+    net.ttddyy.dsproxy.listener: debug
     org:
-      springframework:
-        cache: debug
+      springframework.cache: debug
       flywaydb.core.internal.sqlscript.DefaultSqlScriptExecutor: debug
       flywaydb.core.FlywayExecutor: debug
-    shop.holy.v3.ecommerce:
-      shared:
-        config:
-          openapi:
-            OpenApiConfig: INFO
-    root: INFO
+    shop.holy.v3.ecommerce: INFO
+    root: ERROR
     sql: INFO
 
 openapi:

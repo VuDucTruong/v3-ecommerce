@@ -4,6 +4,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 
@@ -37,6 +38,17 @@ public class WebMVCConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new CustomDateConverter());
+    }
+
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+//                .allowedOriginPatterns("*")
+                .allowedOrigins("http://192.168.1.15:3000")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(true); // or true with exact origins
     }
 
 }

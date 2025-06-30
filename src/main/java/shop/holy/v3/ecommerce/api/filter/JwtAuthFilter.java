@@ -7,11 +7,15 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
+import shop.holy.v3.ecommerce.api.dto.account.token.ResponseLogin;
 import shop.holy.v3.ecommerce.service.security.AuthService;
 import shop.holy.v3.ecommerce.service.security.JwtService;
 import shop.holy.v3.ecommerce.shared.property.JwtProperties;
@@ -25,7 +29,7 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
     private final JwtService jwtUtil;
     private final JwtProperties jwtProperties;
     private final AuthService authAccountService;
-//    private final String[] whiteListedEndpoints = {"/accounts/tokens", "/accounts"};
+
 
     @Override
     protected void doFilterInternal(
@@ -82,12 +86,12 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
         if (hitRefreshToken) {
             grantNewTokensOnResponse(response, authAccount);
         }
-        if (hitException) {
-            Cookie[] resCookies = authAccountService.removeAuthCookies();
-            for (Cookie cookie : resCookies) {
-                response.addCookie(cookie);
-            }
-        }
+//        if (hitException) {
+//            ResponseCookie[] resCookies = authAccountService.removeAuthCookies();
+//            for (ResponseCookie cookie : resCookies) {
+//                response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+//            }
+//        }
     }
 
     private void grantAuthorisationBeforeNextChain(HttpServletRequest request, AuthAccount authAccount) {
@@ -101,16 +105,12 @@ public class JwtAuthFilter extends org.springframework.web.filter.OncePerRequest
 
         String newAccessToken = jwtUtil.generateAccessToken(authAccount);
         String newRefreshToken = jwtUtil.generateRefreshToken(String.valueOf(authAccount.getId()));
+        ResponseLogin responseLogin = new ResponseLogin(newAccessToken,newRefreshToken, null);
+        ResponseCookie[] cookies = authAccountService.makeCookies(responseLogin);
+        for (ResponseCookie cookie : cookies) {
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        }
 
-        Cookie accessTokenCookie = new Cookie("accessToken", newAccessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setMaxAge((int) jwtProperties.getAccessTokenExpirationMinutes() * 60);
-        response.addCookie(accessTokenCookie);
-
-        Cookie refreshTokenCookie = new Cookie("refreshToken", newRefreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setMaxAge((int) jwtProperties.getRefreshTokenExpirationMinutes() * 60);
-        response.addCookie(refreshTokenCookie);
 
     }
 

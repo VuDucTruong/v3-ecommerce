@@ -1,0 +1,7 @@
+accessToken=eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ1VTVE9NRVIiLCJpc1ZlcmlmaWVkIjp0cnVlLCJwcm9maWxlSWQiOjksImlkIjoxMiwic3ViIjoiMTIiLCJpc3MiOiJob2x5LXNob3AiLCJhdWQiOiJob2x5LXNob3AiLCJpYXQiOjE3NTEyOTg4MzEsImV4cCI6MTc3NTI5ODgzMX0.ow1be5CYxL_17enLL2KI1HtDsQEAMnr0pvRotwH8tlI;
+ Max-Age=604800;
+  Expires=Mon, 07 Jul 2025 15:53:51 GMT;
+   Path=/;
+    Secure;
+     HttpOnly;
+      SameSite=None

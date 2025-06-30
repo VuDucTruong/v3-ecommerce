@@ -3,8 +3,8 @@ package shop.holy.v3.ecommerce.service.security;
 
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import shop.holy.v3.ecommerce.api.dto.AuthAccount;
 import shop.holy.v3.ecommerce.api.dto.account.token.RequestLogin;
@@ -18,6 +18,8 @@ import shop.holy.v3.ecommerce.shared.constant.CacheKeys;
 import shop.holy.v3.ecommerce.shared.constant.CookieKeys;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
 
+import java.time.Duration;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -25,6 +27,11 @@ public class AuthService {
     private final AccountMapper accountMapper;
     private final JwtService jwtService;
     private final CacheService cacheService;
+
+    @Value("${same-site}")
+    private String SAME_SITE;
+    @Value("${is-secure}")
+    private Boolean IS_SECURE;
 
     private final IAccountRepository accountRepository;
 
@@ -57,36 +64,34 @@ public class AuthService {
         );
     }
 
-    public Cookie[] makeCookies(ResponseLogin loginResponse) {
-        Cookie accessTokenCookie = new Cookie(CookieKeys.ACCESS_TOKENS, loginResponse.accessToken());
-        Cookie refreshTokenCookie = new Cookie(CookieKeys.REFRESH_TOKENS, loginResponse.refreshToken());
-        accessTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setHttpOnly(true);
+    public ResponseCookie[] makeCookies(ResponseLogin loginResponse) {
+        ResponseCookie accessTokenCookie = ResponseCookie.from(CookieKeys.ACCESS_TOKENS, loginResponse.accessToken())
+                .httpOnly(true)
+                .path("/")
+                .maxAge(Duration.ofDays(7))
+                .build();
 
-//        accessTokenCookie.setSecure(true);
-//        refreshTokenCookie.setSecure(true);
-
-        accessTokenCookie.setPath("/");
-        refreshTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(60 * 60 * 24 * 7);
-        refreshTokenCookie.setMaxAge(60 * 60 * 24 * 7);
-        return new Cookie[]{accessTokenCookie, refreshTokenCookie};
+        ResponseCookie refreshTokenCookie = ResponseCookie.from(CookieKeys.REFRESH_TOKENS, loginResponse.refreshToken())
+                .httpOnly(true)
+                .path("/")
+                .maxAge(Duration.ofDays(7))
+                .build();
+        return new ResponseCookie[]{accessTokenCookie, refreshTokenCookie};
     }
 
-    public Cookie[] removeAuthCookies() {
-        Cookie accessTokenCookie = new Cookie("accessToken", null);
-        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
-        accessTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setHttpOnly(true);
+    public ResponseCookie[] removeAuthCookies() {
+        ResponseCookie accessTokenCookie = ResponseCookie.from(CookieKeys.ACCESS_TOKENS, "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(Duration.ZERO)
+                .build();
 
-//        accessTokenCookie.setSecure(true);
-//        refreshTokenCookie.setSecure(true);
+        ResponseCookie refreshTokenCookie = ResponseCookie.from(CookieKeys.REFRESH_TOKENS, "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(Duration.ZERO)
+                .build();
 
-        accessTokenCookie.setPath("/");
-        refreshTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(0);
-        refreshTokenCookie.setMaxAge(0);
-        return new Cookie[]{accessTokenCookie, refreshTokenCookie};
+        return new ResponseCookie[]{accessTokenCookie, refreshTokenCookie};
     }
-
 }
