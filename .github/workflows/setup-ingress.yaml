@@ -40,9 +40,7 @@ jobs:
           --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux \
           --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
           --set controller.service.externalTrafficPolicy=Local \
-          --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux \
-          --set controller.service.loadBalancerIP=57.155.62.73 \
-          --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-resource-group"=${{ secrets.RESOURCE_NAME }}
+          --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
       
     - name: Verify deployment
       run: |
