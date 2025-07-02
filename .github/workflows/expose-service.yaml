@@ -75,10 +75,6 @@ jobs:
     - name: Apply ClusterIssuer (Let's Encrypt)
       run: kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
 
-
-    - name: Apply Certificate
-      run: kubectl apply -f k8s/cert-manager/certificate.yaml
-
     - name: Apply Ingress Resources (with TLS)
       run: |
         kubectl apply -f k8s/ingress/backend-ingress.yaml
