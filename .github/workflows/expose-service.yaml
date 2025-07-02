@@ -63,12 +63,14 @@ jobs:
 
     - name: Install cert-manager
       run: |
+        kubectl label namespace ingress-nginx cert-manager.io/disable-validation=true
         helm repo add jetstack https://charts.jetstack.io
         helm repo update
         helm upgrade --install cert-manager jetstack/cert-manager \
-          --namespace cert-manager \
-          --create-namespace \
-          --set crds.enabled=true
+          --namespace ingress-nginx \
+          --version=v1.8.0 \
+          --set installCRDs=true \
+          --set nodeSelector."kubernetes\.io/os"=linux
 
     - name: Apply ClusterIssuer (Let's Encrypt)
       run: kubectl apply -f k8s/cert-manager/cluster-issuer.yaml
