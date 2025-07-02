@@ -4,12 +4,12 @@ metadata:
   name: duckdns-backend-cert
   namespace: default
 spec:
-  secretName: duckdns-backend-cert-tls
+  secretName: backend-tls-secret
   duration: 2160h # 90 ngày
   renewBefore: 360h # tự động renew trước 15 ngày
   commonName: vdt64.duckdns.org
   dnsNames:
     - vdt64.duckdns.org
   issuerRef:
-    name: letsencrypt-prod
+    name: letsencrypt
     kind: ClusterIssuer
