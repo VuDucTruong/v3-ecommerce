@@ -36,16 +36,30 @@ jobs:
     - name: Add Helm Repos
       run: |
         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo add grafana https://grafana.github.io/helm-charts
         helm repo update
 
     - name: Create Namespace
       run: |
         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
+    - name: Create Kubernetes secret with SMTP password
+      run: |
+        kubectl create secret generic grafana-smtp-secret \
+        --from-literal=GF_SMTP_PASSWORD="${{ steps.getsecret.outputs.grafana-email-password }}" \
+        -n monitoring --dry-run=client -o yaml | kubectl apply -f -
+
     - name: Install kube-prometheus-stack with custom values
       run: |
         helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
           -f k8s/helm/values.yaml \
-          --set grafana.adminPassword=${{ secrets.GRAFANA_PASSWORD }} \
-          --set grafana.grafana.ini.smtp.password=${{ steps.getsecret.outputs.grafana-email-password }} \
+          --set grafana.adminPassword=admin123 \
           --namespace monitoring
+
+          
+    - name: Install Loki Stack
+      run: |
+        helm upgrade --install loki grafana/loki-stack \
+          --namespace monitoring \
+          --set grafana.enabled=false \
+          --set promtail.enabled=true
