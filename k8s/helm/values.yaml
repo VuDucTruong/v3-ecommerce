@@ -1,5 +1,5 @@
 grafana:
-  extraEnvFromSecret: grafana-smtp-secret
+  assertNoLeakedSecrets: false
   enabled: true
   adminUser: admin
   service:
@@ -15,7 +15,6 @@ grafana:
       enabled: true
       host: smtp.gmail.com:587
       user: phong741258963@gmail.com
-      password: $__env{GF_SMTP_PASSWORD}
       skip_verify: false
       from_address: phong741258963@gmail.com
       from_name: Grafana Alerts

@@ -43,17 +43,12 @@ jobs:
       run: |
         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
-    - name: Create Kubernetes secret with SMTP password
-      run: |
-        kubectl create secret generic grafana-smtp-secret \
-        --from-literal=GF_SMTP_PASSWORD="${{ steps.getsecret.outputs.grafana-email-password }}" \
-        -n monitoring --dry-run=client -o yaml | kubectl apply -f -
-
     - name: Install kube-prometheus-stack with custom values
       run: |
         helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
           -f k8s/helm/values.yaml \
-          --set grafana.adminPassword=admin123 \
+          --set grafana.adminPassword=${{ secrets.GRAFANA_PASSWORD }} \
+          --set grafana."grafana\.ini".smtp.password=${{ steps.getsecret.outputs.grafana-email-password }} \
           --namespace monitoring
 
           
