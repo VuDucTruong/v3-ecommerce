@@ -59,7 +59,7 @@ public interface IOrderRepository extends JpaRepository<Order, Long>, JpaSpecifi
     @EntityGraph(attributePaths = {"payment"})
     List<Order> findAllByCreatedAtAfterAndCreatedAtBefore(Date createdAtBefore, Date createdAtAfter);
 
-    long countByStatusAndCreatedAtLessThanAndCreatedAtGreaterThan(String status, Date lowerBound, Date upperBound);
+    long countByStatusAndCreatedAtAfterAndCreatedAtBefore(String status, Date lowerBound, Date upperBound);
 
     @Query("""
                 select cast(o.createdAt as date) as date, sum(o.amount) as revenue

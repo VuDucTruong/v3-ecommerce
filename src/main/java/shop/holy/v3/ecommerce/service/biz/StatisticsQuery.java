@@ -43,9 +43,9 @@ public class StatisticsQuery {
         Date to = AppDateUtils.toEndOfDay(fromTo.to());
 
         CompletableFuture<Integer> totalNewCustomers = CompletableFuture.supplyAsync(
-                () -> accountRepository.countAccountByRoleAndCreatedAtBeforeAndCreatedAtAfter(RoleEnum.CUSTOMER.name(), from, to));
+                () -> accountRepository.countAccountByRoleAndCreatedAtAfterAndCreatedAtBefore(RoleEnum.CUSTOMER.name(), from, to));
         CompletableFuture<Long> totalOrders = CompletableFuture.supplyAsync(() -> {
-            return orderRepository.countByStatusAndCreatedAtLessThanAndCreatedAtGreaterThan(OrderStatus.COMPLETED.name(), from, to);
+            return orderRepository.countByStatusAndCreatedAtAfterAndCreatedAtBefore(OrderStatus.COMPLETED.name(), from, to);
         });
         CompletableFuture<BigDecimal> revenue = CompletableFuture.supplyAsync(() -> {
             return orderRepository.findSumTotalByRecentTime(OrderStatus.COMPLETED.name(), from, to).orElse(BigDecimal.ZERO);

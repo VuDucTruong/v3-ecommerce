@@ -1,7 +1,10 @@
 package shop.holy.v3.ecommerce.shared.property;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
@@ -9,10 +12,12 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Getter
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "payment.vnp")
+@ToString
 public class Vnp_Pay_Properties {
     private String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     private String vnp_ReturnUrl;
@@ -41,4 +46,8 @@ public class Vnp_Pay_Properties {
         return vnpParamsMap;
     }
 
+    @PostConstruct
+    public void init() {
+        log.info("Vnp_Pay_Properties init: {}", this);
+    }
 }
