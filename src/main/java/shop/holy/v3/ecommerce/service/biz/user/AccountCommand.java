@@ -1,6 +1,7 @@
 package shop.holy.v3.ecommerce.service.biz.user;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +58,7 @@ public class AccountCommand {
 
 
     @Transactional
-    public ResponseCookie[] changePassword(RequestPasswordUpdate request) {
+    public ResponseCookie[] changePassword(RequestPasswordUpdate request, HttpServletRequest servletRequest) {
         Account account = accountRepository.findByEmail(request.email());
         if (account == null)
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
@@ -73,11 +74,11 @@ public class AccountCommand {
         if (changes == 0) {
             throw BizErrors.INVALID_OTP.exception();
         }
-        return authService.removeAuthCookies();
+        return authService.removeAuthCookies(servletRequest);
     }
 
     @Transactional
-    public ResponseCookie[] verifyEmail(RequestMailVerification request) {
+    public ResponseCookie[] verifyEmail(RequestMailVerification request, HttpServletRequest servletRequest) {
         Account account = accountRepository.findByEmail(request.email());
         if (account == null)
             throw BizErrors.ACCOUNT_NOT_FOUND.exception();
@@ -86,7 +87,7 @@ public class AccountCommand {
         if (changes == 0) {
             throw BizErrors.INVALID_OTP.exception();
         }
-        return authService.removeAuthCookies();
+        return authService.removeAuthCookies(servletRequest);
     }
 
     public void checkOtp(String accountOtp, Date accountOtpExpiry, String _requestOtp) {

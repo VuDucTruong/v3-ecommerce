@@ -3,6 +3,7 @@ package shop.holy.v3.ecommerce.api.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -36,8 +37,8 @@ public class ControllerAccount {
 
     @PutMapping(value = "password")
     @Operation(description = "change password -> Remove cookies -> must route user to login !!")
-    public ResponseEntity<Integer> changePassword(@RequestBody RequestPasswordUpdate request, HttpServletResponse response) {
-        var cookies = accountService.changePassword(request);
+    public ResponseEntity<Integer> changePassword(@RequestBody RequestPasswordUpdate request, HttpServletRequest servletRequest, HttpServletResponse response) {
+        var cookies = accountService.changePassword(request,servletRequest);
         for (ResponseCookie cookie : cookies) {
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         }
@@ -46,8 +47,8 @@ public class ControllerAccount {
 
     @PutMapping(value = "verification")
     @Operation(description = "setVerified -> Remove Cookies -> must route to login !!")
-    public ResponseEntity<Integer> setVerification(@RequestBody RequestMailVerification request, HttpServletResponse response) {
-        var cookies = accountService.verifyEmail(request);
+    public ResponseEntity<Integer> setVerification(@RequestBody RequestMailVerification request, HttpServletRequest servletRequest, HttpServletResponse response) {
+        var cookies = accountService.verifyEmail(request, servletRequest);
         for (ResponseCookie cookie : cookies) {
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         }
@@ -64,9 +65,9 @@ public class ControllerAccount {
 
     @PostMapping("login")
     @Operation(description = "login a user -> route to home with profile as client's global context")
-    public ResponseEntity<ResponseLogin> login(@RequestBody RequestLogin loginRequest, HttpServletResponse response) {
+    public ResponseEntity<ResponseLogin> login(@RequestBody RequestLogin loginRequest, HttpServletRequest request, HttpServletResponse response) {
         ResponseLogin loginResponse = authService.authenticateAccount(loginRequest);
-        ResponseCookie[] cookies = authService.makeCookies(loginResponse);
+        ResponseCookie[] cookies = authService.makeCookies(loginResponse,request);
         for (ResponseCookie cookie : cookies) {
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         }
@@ -75,8 +76,8 @@ public class ControllerAccount {
 
     @DeleteMapping("logout")
     @Operation(description = "logout a user -> remove cookies, must route to login page")
-    public ResponseEntity<Integer> logout(HttpServletResponse response) {
-        ResponseCookie[] cookies = authService.removeAuthCookies();
+    public ResponseEntity<Integer> logout(HttpServletResponse response, HttpServletRequest request) {
+        ResponseCookie[] cookies = authService.removeAuthCookies(request);
         for (ResponseCookie cookie : cookies) {
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         }

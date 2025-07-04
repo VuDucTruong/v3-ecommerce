@@ -2,6 +2,7 @@ package shop.holy.v3.ecommerce.service.security;
 
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
@@ -17,6 +18,7 @@ import shop.holy.v3.ecommerce.shared.constant.BizErrors;
 import shop.holy.v3.ecommerce.shared.constant.CacheKeys;
 import shop.holy.v3.ecommerce.shared.constant.CookieKeys;
 import shop.holy.v3.ecommerce.shared.mapper.AccountMapper;
+import shop.holy.v3.ecommerce.shared.util.MyUtils;
 
 import java.time.Duration;
 
@@ -28,10 +30,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final CacheService cacheService;
 
-    @Value("${same-site}")
-    private String SAME_SITE;
-    @Value("${is-secure}")
-    private Boolean IS_SECURE;
+
 
     private final IAccountRepository accountRepository;
 
@@ -64,33 +63,47 @@ public class AuthService {
         );
     }
 
-    public ResponseCookie[] makeCookies(ResponseLogin loginResponse) {
-        ResponseCookie accessTokenCookie = ResponseCookie.from(CookieKeys.ACCESS_TOKENS, loginResponse.accessToken())
+    public ResponseCookie[] makeCookies(ResponseLogin loginResponse, HttpServletRequest servletRequest) {
+        boolean isLocal = MyUtils.isLocalhost(servletRequest);
+        ResponseCookie.ResponseCookieBuilder accessTokenCookieBuilder = ResponseCookie.from(CookieKeys.ACCESS_TOKENS, loginResponse.accessToken())
                 .httpOnly(true)
                 .path("/")
-                .maxAge(Duration.ofDays(7))
-                .build();
+                .maxAge(Duration.ofDays(7));
+        accessTokenCookieBuilder.secure(true);
+        accessTokenCookieBuilder.sameSite("none");
 
-        ResponseCookie refreshTokenCookie = ResponseCookie.from(CookieKeys.REFRESH_TOKENS, loginResponse.refreshToken())
+        ResponseCookie accessTokenCookie = accessTokenCookieBuilder.build();
+
+        ResponseCookie.ResponseCookieBuilder refreshTokenCookieBuilder = ResponseCookie.from(CookieKeys.REFRESH_TOKENS, loginResponse.refreshToken())
                 .httpOnly(true)
                 .path("/")
-                .maxAge(Duration.ofDays(7))
-                .build();
+                .maxAge(Duration.ofDays(7));
+        refreshTokenCookieBuilder.secure(true);
+        refreshTokenCookieBuilder.sameSite("none");
+        ResponseCookie refreshTokenCookie = refreshTokenCookieBuilder.build();
+
         return new ResponseCookie[]{accessTokenCookie, refreshTokenCookie};
     }
 
-    public ResponseCookie[] removeAuthCookies() {
-        ResponseCookie accessTokenCookie = ResponseCookie.from(CookieKeys.ACCESS_TOKENS, "")
+    public ResponseCookie[] removeAuthCookies(HttpServletRequest request) {
+        boolean isLocal = MyUtils.isLocalhost(request);
+        ResponseCookie.ResponseCookieBuilder accessTokenCookieBuilder = ResponseCookie.from(CookieKeys.ACCESS_TOKENS, "")
                 .httpOnly(true)
                 .path("/")
-                .maxAge(Duration.ZERO)
-                .build();
+                .maxAge(Duration.ZERO);
+        accessTokenCookieBuilder.secure(true);
+        accessTokenCookieBuilder.sameSite("none");
+        ResponseCookie accessTokenCookie = accessTokenCookieBuilder.build();
 
-        ResponseCookie refreshTokenCookie = ResponseCookie.from(CookieKeys.REFRESH_TOKENS, "")
+        ResponseCookie.ResponseCookieBuilder refreshTokenCookieBuilder = ResponseCookie.from(CookieKeys.REFRESH_TOKENS, "")
                 .httpOnly(true)
                 .path("/")
-                .maxAge(Duration.ZERO)
-                .build();
+                .maxAge(Duration.ZERO);
+
+        refreshTokenCookieBuilder.secure(true);
+        refreshTokenCookieBuilder.sameSite("none");
+        ResponseCookie refreshTokenCookie = refreshTokenCookieBuilder.build();
+
 
         return new ResponseCookie[]{accessTokenCookie, refreshTokenCookie};
     }

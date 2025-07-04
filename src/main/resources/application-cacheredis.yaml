@@ -1,15 +1,15 @@
 spring:
   config:
     activate:
-      on-profile: redis
+      on-profile: cacheredis
   cache:
     type: simple
     redis:
       time-to-live: 5s
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
       client-name: ecommerce
       client-type: lettuce
       timeout: 10s
