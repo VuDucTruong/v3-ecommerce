@@ -41,6 +41,23 @@ jobs:
 
         echo "✅ Ingress Controller External IP: $IP"
 
+    - name: Update DuckDNS
+      run: |
+        EXTERNAL_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        echo "External IP is: $EXTERNAL_IP"
+        
+        RESPONSE=$(curl -s "https://www.duckdns.org/update?domains=vdt64&token=${{ secrets.DUCK_TOKEN }}&ip=$EXTERNAL_IP")
+        echo "DuckDNS response: $RESPONSE"
+        
+        if [ "$RESPONSE" = "OK" ]; then
+          echo "✅ DuckDNS update successful"
+        else
+          echo "❌ DuckDNS update failed"
+          exit 1
+        fi
+        
+      
+
   deploy-ingress:
     name: Deploy Ingress Resources
     runs-on: ubuntu-latest
