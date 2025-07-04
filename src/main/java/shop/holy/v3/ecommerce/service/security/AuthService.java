@@ -63,8 +63,11 @@ public class AuthService {
         accessTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setHttpOnly(true);
 
-//        accessTokenCookie.setSecure(true);
-//        refreshTokenCookie.setSecure(true);
+        accessTokenCookie.setSecure(true);
+        refreshTokenCookie.setSecure(true);
+
+        accessTokenCookie.setAttribute("SameSite", "None");
+        refreshTokenCookie.setAttribute("SameSite", "None");
 
         accessTokenCookie.setPath("/");
         refreshTokenCookie.setPath("/");
@@ -79,8 +82,11 @@ public class AuthService {
         accessTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setHttpOnly(true);
 
-//        accessTokenCookie.setSecure(true);
-//        refreshTokenCookie.setSecure(true);
+        accessTokenCookie.setSecure(true);
+        refreshTokenCookie.setSecure(true);
+
+        accessTokenCookie.setAttribute("SameSite", "None");
+        refreshTokenCookie.setAttribute("SameSite", "None");
 
         accessTokenCookie.setPath("/");
         refreshTokenCookie.setPath("/");

@@ -24,9 +24,19 @@ jobs:
         resource-group: ${{ secrets.RESOURCE_NAME }}
         cluster-name: ${{ secrets.CLUSTER_NAME }}
 
+
+    - name: Get email password from Azure Key Vault
+      id: getsecret
+      uses: azure/get-keyvault-secrets@v1
+      with:
+        keyvault: ${{ secrets.VAULT_NAME }}
+        secrets: |
+          grafana-email-password
+
     - name: Add Helm Repos
       run: |
         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo add grafana https://grafana.github.io/helm-charts
         helm repo update
 
     - name: Create Namespace
@@ -38,4 +48,13 @@ jobs:
         helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
           -f k8s/helm/values.yaml \
           --set grafana.adminPassword=${{ secrets.GRAFANA_PASSWORD }} \
+          --set grafana."grafana\.ini".smtp.password=${{ steps.getsecret.outputs.grafana-email-password }} \
           --namespace monitoring
+
+          
+    - name: Install Loki Stack
+      run: |
+        helm upgrade --install loki grafana/loki-stack \
+          --namespace monitoring \
+          --set grafana.enabled=false \
+          --set promtail.enabled=true

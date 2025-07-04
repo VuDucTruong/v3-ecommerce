@@ -5,16 +5,23 @@ metadata:
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - vdt64.duckdns.org
+      secretName: backend-tls-secret
   rules:
-  - host: vdt64.duckdns.org
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: phoenix-backend-service
-            port:
-              number: 8080
+    - host: vdt64.duckdns.org
+      http:
+        paths:
+          - path: /(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: phoenix-backend-service
+                port:
+                  number: 80

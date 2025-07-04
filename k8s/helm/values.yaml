@@ -1,4 +1,5 @@
 grafana:
+  assertNoLeakedSecrets: false
   enabled: true
   adminUser: admin
   service:
@@ -7,7 +8,26 @@ grafana:
     enabled: false
   grafana.ini:
     server:
-      root_url: "%(protocol)s://%(domain)s/grafana"
+      root_url: http://vdt64.duckdns.org/grafana/
+      serve_from_sub_path: true
+    
+    smtp:
+      enabled: true
+      host: smtp.gmail.com:587
+      user: phong741258963@gmail.com
+      skip_verify: false
+      from_address: phong741258963@gmail.com
+      from_name: Grafana Alerts
+
+    emails:
+      welcome_email_on_sign_up: true
+
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki:3100
+
 
 prometheus:
   prometheusSpec:
