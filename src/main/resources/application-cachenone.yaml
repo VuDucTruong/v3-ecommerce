@@ -4,3 +4,9 @@ spring:
     - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
     - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
     - org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration
+    - org.springframework.boot.actuate.autoconfigure.tracing.OpenTelemetryTracingAutoConfiguration
+    - org.springframework.boot.actuate.autoconfigure.logging.OpenTelemetryLoggingAutoConfiguration
+    - org.springframework.boot.actuate.autoconfigure.opentelemetry.OpenTelemetryAutoConfiguration
+    - org.springframework.boot.actuate.autoconfigure.logging.otlp.OtlpLoggingAutoConfiguration
+    - org.springframework.boot.actuate.autoconfigure.metrics.export.otlp.OtlpMetricsExportAutoConfiguration
+    - org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpTracingAutoConfiguration

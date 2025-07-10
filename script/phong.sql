@@ -34,7 +34,7 @@ from coupons;
 
 select *
 from genre1 g1
-JOIN genre2 g2 on g1.id = g2.genre1_id;
+         JOIN genre2 g2 on g1.id = g2.genre1_id;
 select *
 from genre2;
 
@@ -143,69 +143,70 @@ where id = 8;
 SELECT *
 FROM notification_prod_keys_success;
 
-SELECT * FROM accounts;
+SELECT *
+FROM accounts;
 
-SELECT g1.id, g1.name,b.* FROM blogs b
-JOIN public.blogs_genres bg on b.id = bg.blog_id
-JOIN genre2 g2 on bg.genre2_id = g2.id
-JOIN genre1 g1 ON g2.genre1_id = g1.id;
+SELECT g1.id, g1.name, b.*
+FROM blogs b
+         JOIN public.blogs_genres bg on b.id = bg.blog_id
+         JOIN genre2 g2 on bg.genre2_id = g2.id
+         JOIN genre1 g1 ON g2.genre1_id = g1.id;
 
-SELECT g1.id, g1.name, g2.* FROM genre2 g2
-JOIN genre1 g1 ON g2.genre1_id = g1.id;
+SELECT g1.id, g1.name, g2.*
+FROM genre2 g2
+         JOIN genre1 g1 ON g2.genre1_id = g1.id;
 
 
-SELECT * FROM orders o
-join notification_prod_keys_success npk
-ON o.id = npk.order_id;
+SELECT *
+FROM orders o
+         join notification_prod_keys_success npk
+              ON o.id = npk.order_id;
 
-SELECT * FROM notification_prod_keys_success npks
+SELECT *
+FROM notification_prod_keys_success npks
 where order_id = 6;
 
-SELECT * FROM blogs b;
-SELECT * FROM accounts a;
+SELECT *
+FROM blogs b;
+SELECT *
+FROM accounts a;
 
-SELECT * FROM coupons c ;
-SELECT * FROM notification_prod_keys_fail
+SELECT *
+FROM coupons c;
+SELECT *
+FROM notification_prod_keys_fail
 
 
 
-
-SELECT * FROM products p
+SELECT *
+FROM products p
 where p.slug like '%adobe-photoshop-2024-1-year%';
 
 
-WITH ranked AS (
-    SELECT
-        id,
-        slug,
-        slug || '-' || ROW_NUMBER() OVER (PARTITION BY slug ORDER BY id) AS new_slug,
-        ROW_NUMBER() OVER (PARTITION BY slug ORDER BY id) AS rn
-    FROM products
-),
-     to_update AS (
-         SELECT id, new_slug
-         FROM ranked
-         WHERE rn > 1
-     )
+WITH ranked AS (SELECT id,
+                       slug,
+                       slug || '-' || ROW_NUMBER() OVER (PARTITION BY slug ORDER BY id) AS new_slug,
+                       ROW_NUMBER() OVER (PARTITION BY slug ORDER BY id)                AS rn
+                FROM products),
+     to_update AS (SELECT id, new_slug
+                   FROM ranked
+                   WHERE rn > 1)
 UPDATE products p
 SET slug = tu.new_slug
 FROM to_update tu
 WHERE p.id = tu.id;
 
 
-SELECT
-    conrelid::regclass::text                                   AS table_name,
-    conname                                                    AS constraint_name,
-    contype                                                AS constraint_type,
-    string_agg(att.attname, ',' ORDER BY att.attnum)           AS columns,
-    CASE WHEN contype = 'f' THEN confrelid::regclass::text END AS referenced_table,
-    CASE
-        WHEN contype = 'f' THEN (
-            SELECT string_agg(att2.attname, ',' ORDER BY att2.attnum)
-            FROM unnest(c.confkey) AS colnum
-                     JOIN pg_attribute att2 ON att2.attrelid = c.confrelid AND att2.attnum = colnum
-        )
-        END                                                    AS referenced_columns
+SELECT conrelid::regclass::text                                   AS table_name,
+       conname                                                    AS constraint_name,
+       contype                                                    AS constraint_type,
+       string_agg(att.attname, ',' ORDER BY att.attnum)           AS columns,
+       CASE WHEN contype = 'f' THEN confrelid::regclass::text END AS referenced_table,
+       CASE
+           WHEN contype = 'f' THEN (SELECT string_agg(att2.attname, ',' ORDER BY att2.attnum)
+                                    FROM unnest(c.confkey) AS colnum
+                                             JOIN pg_attribute att2 ON att2.attrelid = c.confrelid AND att2.attnum = colnum)
+           END                                                    AS referenced_columns
 FROM pg_constraint c
          JOIN pg_namespace ns ON ns.oid = c.connamespace
          JOIN pg_class cl ON cl.oid = c.conrelid
@@ -213,3 +214,44 @@ FROM pg_constraint c
          JOIN pg_attribute att ON att.attrelid = cl.oid AND att.attnum = colnum
 WHERE ns.nspname = 'public'
 GROUP BY conrelid, conname, contype, confrelid, c.confkey;
+
+SELECT *
+FROM products
+where id in (17, 18);
+
+select p1_0.id,
+       c1_0.product_id,
+       c1_1.id,
+       c1_1.created_at,
+       c1_1.deleted_at,
+       c1_1.description,
+       c1_1.image_url_id,
+       c1_1.name,
+       p1_0.created_at,
+       p1_0.deleted_at,
+       p1_0.group_id,
+       p1_0.image_url_id,
+       p1_0.name,
+       p1_0.original_price,
+       p1_0.price,
+       p1_0.prod_desc_id,
+       pd1_0.id,
+       pd1_0.created_at,
+       pd1_0.deleted_at,
+       pd1_0.description,
+       pd1_0.info,
+       pd1_0.platform,
+       pd1_0.policy,
+       pd1_0.tutorial,
+       p1_0.quantity,
+       p1_0.represent,
+       p1_0.slug,
+       t1_0.product_id,
+       t1_0.name
+from public.products p1_0
+         left join public.products_categories c1_0 on p1_0.id = c1_0.product_id
+         left join public.categories c1_1 on c1_1.id = c1_0.category_id
+         left join public.product_description pd1_0 on pd1_0.id = p1_0.prod_desc_id
+         left join public.product_tags t1_0 on p1_0.id = t1_0.product_id
+where p1_0.id in (14)
+order by p1_0.id
