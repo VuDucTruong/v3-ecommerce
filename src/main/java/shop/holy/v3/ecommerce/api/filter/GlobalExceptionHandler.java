@@ -109,18 +109,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError<?> handleSchedulerException(BadRequestException ex, HttpServletRequest webRequest) {
+        ex.printStackTrace();
+
         return new ResponseError<>(webRequest.getContextPath(), 2, ex.getMessage(), null);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseError<?> handleResourceAccessException(ResourceNotFoundException ex, HttpServletRequest webRequest) {
+        ex.printStackTrace();
+
         return new ResponseError<>(webRequest.getContextPath(), 11, ex.getMessage(), null);
     }
 
     @ExceptionHandler(UnAuthorisedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseError<?> handleUnAuthorisedException(UnAuthorisedException ex, HttpServletRequest webRequest) {
+        ex.printStackTrace();
 
         return new ResponseError<>(webRequest.getContextPath(), 12, ex.getMessage(), null);
     }
@@ -129,12 +134,15 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseError<?> handleAuthorizationDeniedException(AuthorizationDeniedException ex, HttpServletRequest webRequest) {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ex.printStackTrace();
         return new ResponseError<>(webRequest.getContextPath(), 13, BizErrors.AUTHORISATION_INVALID.exception().getMessage(), null);
     }
 
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseError<?> handleForbiddenException(ForbiddenException ex, HttpServletRequest webRequest) {
+        ex.printStackTrace();
+
         return new ResponseError<>(webRequest.getContextPath(), 12, ex.getMessage(), null);
     }
 }

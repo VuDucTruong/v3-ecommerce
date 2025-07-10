@@ -19,6 +19,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
   #    volumes:
   #      - ./mirroring:/BOOT-INF/
   db:
@@ -41,6 +43,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6380:6379"
+    command: redis-server --save "" --appendonly no
 
   prometheus:
     container_name: prometheus
@@ -75,6 +83,9 @@ services:
     image: grafana/grafana
     ports:
       - "3999:3000"
+    volumes:
+      - ./grafana-volume/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana-volume/provisioning/:/etc/grafana/provisioning/
 
   tempo:
     image: grafana/tempo:latest
